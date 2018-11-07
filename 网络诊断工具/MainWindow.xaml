@@ -3,9 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpf="clr-namespace:Phenom.WPF;assembly=Phenom.WPF"
         xmlns:local="clr-namespace:网络诊断工具"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Closing="Window_Closing"
+        Closed="Window_Closed"
         Title="网络诊断工具" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="200"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
     <TabControl>
         <TabItem Header="Ping">
             <Grid>
@@ -108,12 +115,14 @@
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Label Height="30" Grid.Column="0" Content="IP地址段"></Label>
-                        <TextBox Height="30" Grid.Column="1" Name="gateway_area" Text="192.168.1"></TextBox>
-                        <Label Content="超时" Grid.Column="2" Height="30"></Label>
-                        <TextBox Height="30" Name="scan_timeout" Text="3000" Grid.Column="3"></TextBox>
-                        <Button Content="开始扫描" Name="start_ip_scan" Click="start_ip_scan_Click" Grid.Column="5"></Button>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label  VerticalContentAlignment="Center" Height="30" Grid.Column="0" Content="IP地址段"></Label>
+                        <TextBox VerticalContentAlignment="Center" Height="30" Grid.Column="1" Name="gateway_area" Text="192.168.1"></TextBox>
+                            <Label  VerticalContentAlignment="Center" Content="超时" Grid.Column="2" Height="30"></Label>
+                            <TextBox  VerticalContentAlignment="Center" Height="30" Name="scan_timeout" Text="3000" Grid.Column="3"></TextBox>
+                        <Button Content="开始扫描" Name="start_ip_scan" Click="start_ip_scan_Click" Grid.Column="4"></Button>
+                            <CheckBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Checked="enable_mdns_invent_Checked" Unchecked="enable_mdns_invent_Unchecked" Content="mDNS发现" Name="enable_mdns_invent"  Grid.Column="5"></CheckBox>
                     </Grid>
                 </Grid>
                 <ListView Name="ipscan" Grid.Row="1">
@@ -138,11 +147,52 @@
                 <ListView Name="mdns_result" Grid.Row="0">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="IP地址"></GridViewColumn>
+                            <GridViewColumn Header="地址" DisplayMemberBinding="{Binding Domain}"></GridViewColumn>
+                            <GridViewColumn Header="类型" DisplayMemberBinding="{Binding Type}"></GridViewColumn>
+                            <GridViewColumn Header="主机名" DisplayMemberBinding="{Binding Hostname}"></GridViewColumn>
+                            <GridViewColumn Header="端口" DisplayMemberBinding="{Binding Port}"></GridViewColumn>
+                            <GridViewColumn Header="Instance" DisplayMemberBinding="{Binding Instance}"></GridViewColumn>
+
                         </GridView>
                     </ListView.View>
                 </ListView>
             </Grid>
         </TabItem>
+            <TabItem Header="网络诊断">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ListView Grid.Row="0" Name="diagon_result">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="项目" DisplayMemberBinding="{Binding ProjectName}"></GridViewColumn>
+                                <GridViewColumn Header="结果" DisplayMemberBinding="{Binding  Result}"></GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button Content="诊断" Name="diagonstick" Click="diagonstick_Click" Grid.Row="1"></Button>
+                </Grid>
+            </TabItem>
+            <TabItem Header="工具箱">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Column="0" Grid.Row="0" Name="refresh_dns" Content="刷新DNS缓存" Click="refresh_dns_Click"></Button>
+                </Grid>
+            </TabItem>
     </TabControl>
+        <GroupBox Header="调试信息" Grid.Column="1">
+            <wpf:DebugRichBox Name="debug"></wpf:DebugRichBox>
+        </GroupBox>
+    </Grid>
 </Window>

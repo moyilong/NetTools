@@ -7,6 +7,14 @@ using System.Net.NetworkInformation;
 using System.Windows;
 using static Phenom.WPF.ParentForm;
 using Zeroconf;
+using System;
+using Tmds.MDns;
+using Tmds;
+using System.Diagnostics;
+using System.Threading;
+using Phenom.Logger;
+using Phenom.ProgramMethod;
+using System.IO;
 
 namespace 网络诊断工具
 {
@@ -15,11 +23,13 @@ namespace 网络诊断工具
     /// </summary>
     public partial class MainWindow : Window
     {
+        DebugNode node = new DebugNode("NetDiagon");
         public MainWindow()
         {
             InitializeComponent();
             ping_test_table.ItemsSource = tester;
             dns_table.ItemsSource = DNSList;
+            DebugNode.Registry(debug);
         }
         ObservableCollection<PingTester> tester = new ObservableCollection<PingTester>();
 
@@ -57,9 +67,10 @@ namespace 网络诊断工具
             foreach (var i in WebClient.IPList)
                 data["本机IP地址"] = i.ToString();
             foreach (var i in NetworkInterface.GetAllNetworkInterfaces())
-            {
+
                 data["NIC:" + i.Name] = JObject.FromObject(i).ToString();
-            }
+            foreach (var i in DriveInfo.GetDrives())
+                data["Disk:" + i.Name] = JObject.FromObject(i).ToString();
             machin_info.ItemsSource = data;
         }
         ObservableCollection<DNSReslove> DNSList = new ObservableCollection<DNSReslove>();
@@ -98,7 +109,60 @@ namespace 网络诊断工具
 
         private void refresh_mdns_Click(object sender, RoutedEventArgs e)
         {
+            Async.NoneWaitStart(() =>
+            {
+                node.Push("开始扫描MDNS");
+                ServiceBrowser browser = new ServiceBrowser();
+                SynchronizationContext context = new SynchronizationContext();
 
+                browser.StartBrowse("*", context);
+                Thread.Sleep(3000);
+                browser.StopBrowse();
+                node.Push("更新结果");
+                Dispatcher.Invoke(() => mdns_result.ItemsSource = browser.Services);
+            }, () => Dispatcher.Invoke(() => refresh_mdns.IsEnabled = false), () => Dispatcher.Invoke(() => refresh_mdns.IsEnabled = true));
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!OldDialog.Confirm("是否退出?"))
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void Window_Closed(object sender, System.EventArgs e)
+        {
+            try
+            {
+                Environment.Exit(0);
+            }
+            catch
+            {
+                Process.GetCurrentProcess().Kill();
+            }
+        }
+        
+        private void enable_mdns_invent_Checked(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void enable_mdns_invent_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void diagonstick_Click(object sender, RoutedEventArgs e)
+        {
+            diagon_result.ItemsSource = Diagon.RunResult(this,
+                () => Dispatcher.Invoke(() => diagonstick.IsEnabled = false),
+                () => Dispatcher.Invoke(() => diagonstick.IsEnabled = true)
+                );
+        }
+
+        private void refresh_dns_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("ipconfig", "/flushdns");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ARSoft.Tools.Net.Dns;
 using Phenom.Extension;
+using Phenom.Logger;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +12,7 @@ namespace 网络诊断工具
 {
     class DNSReslove : INotifyPropertyChanged
     {
+        static DebugNode node = new DebugNode("DNS");
         public DNSReslove(string DNS)
         {
             Server = DNS;
@@ -21,13 +23,16 @@ namespace 网络诊断工具
         public void Reslover(string domain)
         {
             Domain = domain;
+            node.Push("连接DNS服务器..........");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Domain"));
             DnsClient client = new DnsClient(Server.ToIPAddress(), 1000);
             TimeSpan span_begin = new TimeSpan();
+            node.Push("请求响应......");
             DnsMessage message = client.Resolve(new ARSoft.Tools.Net.DomainName(new string[]{
                 domain
             }), RecordType.Any, RecordClass.INet);
             TimeSpan span_end = new TimeSpan();
+            node.Push("处理结果");
             if (message == null)
             {
                 if (message == null)

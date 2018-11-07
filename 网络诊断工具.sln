@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2048
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "网络诊断工具", "网络诊断工具\网络诊断工具.csproj", "{A46B9E6C-673E-42C3-9C25-3F21D9150DA0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A46B9E6C-673E-42C3-9C25-3F21D9150DA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A46B9E6C-673E-42C3-9C25-3F21D9150DA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A46B9E6C-673E-42C3-9C25-3F21D9150DA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A46B9E6C-673E-42C3-9C25-3F21D9150DA0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3D86DC11-5E4C-4E12-A18F-5C4654EF9729}
+	EndGlobalSection
+EndGlobal
