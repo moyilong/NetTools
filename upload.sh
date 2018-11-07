@@ -1,2 +1,2 @@
 #!/bin/sh
-git push master git@github.com:moyilong/NetTools 
+git push git@github.com:moyilong/NetTools master --force
