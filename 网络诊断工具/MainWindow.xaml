@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wpf="clr-namespace:Phenom.WPF;assembly=Phenom.WPF"
-        xmlns:local="clr-namespace:网络诊断工具"
         mc:Ignorable="d" Closing="Window_Closing"
         Closed="Window_Closed"
         Title="网络诊断工具" Height="450" Width="800">
@@ -13,166 +12,172 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition Width="200"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-    <TabControl>
-        <TabItem Header="Ping">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition ></ColumnDefinition>
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                </Grid.RowDefinitions>
-                <ListView Name="ping_test_table" Grid.Row="0" Grid.ColumnSpan="2">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="域名" DisplayMemberBinding="{Binding Domain}"></GridViewColumn>
-                            <GridViewColumn Header="请求次数" DisplayMemberBinding="{Binding RequestCount}"></GridViewColumn>
-                            <GridViewColumn Header="平均响应" DisplayMemberBinding="{Binding AvgDelay}"></GridViewColumn>
-                            <GridViewColumn Header="最高响应" DisplayMemberBinding="{Binding MaxDelay}"></GridViewColumn>
-                            <GridViewColumn Header="最低响应" DisplayMemberBinding="{Binding MinDelay}"></GridViewColumn>
-                            <GridViewColumn Header="错误率" DisplayMemberBinding="{Binding FaildCount}"></GridViewColumn>
-                            <GridViewColumn Header="结果" DisplayMemberBinding="{Binding LastResult}"></GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <Grid Grid.Row="1" Grid.ColumnSpan="2">
-                    <Label Width="50" Content="新域名" HorizontalAlignment="Left"></Label>
-                    <TextBox Name="new_domain" Margin="55,0,55,0" ></TextBox>
-                    <Button Name="add_new_domain" Click="add_new_domain_Click" Width="50" HorizontalAlignment="Right" Content="添加"></Button>
-                </Grid>
-                <Grid Grid.Row="2" Grid.ColumnSpan="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Name="add_generic_list" Click="add_generic_list_Click" Content="添加常用列表"></Button>
-                    <Button Grid.Column="1" Content="开始监听" Name="start_monit" Click="start_monit_Click"></Button>
-                    <Button Grid.Column="2" Content="停止监听" Name="stop_listen" Click="stop_listen_Click" ></Button>
-                </Grid>
-            </Grid>
-        </TabItem>
-        <TabItem Header="DNS">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="1">
-                    <Label Content="测试域名" Width="60" HorizontalAlignment="Left"/>
-                    <TextBox Name="dns_test_domain" Margin="65,0,55,0"></TextBox>
-                    <Button Name="test_domain" Width="50" HorizontalAlignment="Right" Content="测试" Click="test_domain_Click"></Button>
-                </Grid>
-                <Grid Grid.Row="2">
-                    <Label Content="添加DNS" Width="60" HorizontalAlignment="Left"/>
-                    <TextBox Name="new_dns_server" Margin="65,0,165,0"></TextBox>
-                    <Button Margin="0,0,105,0" Name="add_dns_server" Width="50" HorizontalAlignment="Right" Click="add_dns_server_Click" Content="添加"></Button>
-                    <Button  Name="add_generic_server" Click="add_generic_server_Click" Width="100" HorizontalAlignment="Right" Content="添加常用DNS"></Button>
-                </Grid>
-                <ListView Name="dns_table" Grid.Row="0">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn DisplayMemberBinding="{Binding Server}" Header="DNS服务器"></GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding TimeOut}" Header="耗时"></GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Result}" Header="结果"></GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
-        </TabItem>
-        <TabItem Header="本机信息">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="115*"/>
-                    <ColumnDefinition Width="278*"/>
-                </Grid.ColumnDefinitions>
-                <ListView Name="machin_info" Margin="0,0,0,35" Grid.ColumnSpan="2">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="项目" DisplayMemberBinding="{Binding Key}"></GridViewColumn>
-                            <GridViewColumn Header="参数" DisplayMemberBinding="{Binding Value}"></GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <Button Content="刷新" VerticalAlignment="Bottom" Height="30" Name="refresh_machine_info" Click="refresh_machine_info_Click" Grid.ColumnSpan="2"></Button>
-            </Grid>
-        </TabItem>
-        <TabItem Header="IP扫描">
-            <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition></ColumnDefinition>
+        <TabControl>
+            <TabItem Header="网络工具">
+                <TabControl>
+                    <TabItem Header="Ping">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition ></ColumnDefinition>
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <Label  VerticalContentAlignment="Center" Height="30" Grid.Column="0" Content="IP地址段"></Label>
-                        <TextBox VerticalContentAlignment="Center" Height="30" Grid.Column="1" Name="gateway_area" Text="192.168.1"></TextBox>
-                            <Label  VerticalContentAlignment="Center" Content="超时" Grid.Column="2" Height="30"></Label>
-                            <TextBox  VerticalContentAlignment="Center" Height="30" Name="scan_timeout" Text="3000" Grid.Column="3"></TextBox>
-                        <Button Content="开始扫描" Name="start_ip_scan" Click="start_ip_scan_Click" Grid.Column="4"></Button>
-                            <CheckBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Checked="enable_mdns_invent_Checked" Unchecked="enable_mdns_invent_Unchecked" Content="mDNS发现" Name="enable_mdns_invent"  Grid.Column="5"></CheckBox>
-                    </Grid>
-                </Grid>
-                <ListView Name="ipscan" Grid.Row="1">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="IP地址" DisplayMemberBinding="{Binding IP}"></GridViewColumn>
-                            <GridViewColumn Header="状态"  DisplayMemberBinding="{Binding Status}"></GridViewColumn>
-                            <GridViewColumn Header="响应时间" DisplayMemberBinding="{Binding Timeout}"></GridViewColumn>
-                            <GridViewColumn Header="命中率" DisplayMemberBinding="{Binding Hint}"></GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                </Grid>
-        </TabItem>
-        <TabItem Header="mDNS扫描">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition Height="35"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Button Grid.Row="1" Content="刷新" Name="refresh_mdns" Click="refresh_mdns_Click"></Button>
-                <ListView Name="mdns_result" Grid.Row="0">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="地址" DisplayMemberBinding="{Binding Domain}"></GridViewColumn>
-                            <GridViewColumn Header="类型" DisplayMemberBinding="{Binding Type}"></GridViewColumn>
-                            <GridViewColumn Header="主机名" DisplayMemberBinding="{Binding Hostname}"></GridViewColumn>
-                            <GridViewColumn Header="端口" DisplayMemberBinding="{Binding Port}"></GridViewColumn>
-                            <GridViewColumn Header="Instance" DisplayMemberBinding="{Binding Instance}"></GridViewColumn>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <ListView Name="ping_test_table" Grid.Row="0" Grid.ColumnSpan="2">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="域名" DisplayMemberBinding="{Binding Domain}"></GridViewColumn>
+                                        <GridViewColumn Header="请求次数" DisplayMemberBinding="{Binding RequestCount}"></GridViewColumn>
+                                        <GridViewColumn Header="平均响应" DisplayMemberBinding="{Binding AvgDelay}"></GridViewColumn>
+                                        <GridViewColumn Header="最高响应" DisplayMemberBinding="{Binding MaxDelay}"></GridViewColumn>
+                                        <GridViewColumn Header="最低响应" DisplayMemberBinding="{Binding MinDelay}"></GridViewColumn>
+                                        <GridViewColumn Header="错误率" DisplayMemberBinding="{Binding FaildCount}"></GridViewColumn>
+                                        <GridViewColumn Header="结果" DisplayMemberBinding="{Binding LastResult}"></GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                                <Label Width="50" Content="新域名" HorizontalAlignment="Left"></Label>
+                                <TextBox Name="new_domain" Margin="55,0,55,0" ></TextBox>
+                                <Button Name="add_new_domain" Click="add_new_domain_Click" Width="50" HorizontalAlignment="Right" Content="添加"></Button>
+                            </Grid>
+                            <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" Name="add_generic_list" Click="add_generic_list_Click" Content="添加常用列表"></Button>
+                                <Button Grid.Column="1" Content="开始监听" Name="start_monit" Click="start_monit_Click"></Button>
+                                <Button Grid.Column="2" Content="停止监听" Name="stop_listen" Click="stop_listen_Click" ></Button>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="DNS">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="1">
+                                <Label Content="测试域名" Width="60" HorizontalAlignment="Left"/>
+                                <TextBox Name="dns_test_domain" Margin="65,0,55,0"></TextBox>
+                                <Button Name="test_domain" Width="50" HorizontalAlignment="Right" Content="测试" Click="test_domain_Click"></Button>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Label Content="添加DNS" Width="60" HorizontalAlignment="Left"/>
+                                <TextBox Name="new_dns_server" Margin="65,0,165,0"></TextBox>
+                                <Button Margin="0,0,105,0" Name="add_dns_server" Width="50" HorizontalAlignment="Right" Click="add_dns_server_Click" Content="添加"></Button>
+                                <Button  Name="add_generic_server" Click="add_generic_server_Click" Width="100" HorizontalAlignment="Right" Content="添加常用DNS"></Button>
+                            </Grid>
+                            <ListView Name="dns_table" Grid.Row="0">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Server}" Header="DNS服务器"></GridViewColumn>
+                                        <GridViewColumn DisplayMemberBinding="{Binding TimeOut}" Header="耗时"></GridViewColumn>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Result}" Header="结果"></GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                    </TabItem>
+                   
+                    <TabItem Header="IP扫描">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Label  VerticalContentAlignment="Center" Height="30" Grid.Column="0" Content="IP地址段"></Label>
+                                    <TextBox VerticalContentAlignment="Center" Height="30" Grid.Column="1" Name="gateway_area" Text="192.168.1"></TextBox>
+                                    <Label  VerticalContentAlignment="Center" Content="超时" Grid.Column="2" Height="30"></Label>
+                                    <TextBox  VerticalContentAlignment="Center" Height="30" Name="scan_timeout" Text="3000" Grid.Column="3"></TextBox>
+                                    <Button Content="开始扫描" Name="start_ip_scan" Click="start_ip_scan_Click" Grid.Column="4"></Button>
+                                    <CheckBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Checked="enable_mdns_invent_Checked" Unchecked="enable_mdns_invent_Unchecked" Content="mDNS发现" Name="enable_mdns_invent"  Grid.Column="5"></CheckBox>
+                                </Grid>
+                            </Grid>
+                            <ListView Name="ipscan" Grid.Row="1">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="IP地址" DisplayMemberBinding="{Binding IP}"></GridViewColumn>
+                                        <GridViewColumn Header="状态"  DisplayMemberBinding="{Binding Status}"></GridViewColumn>
+                                        <GridViewColumn Header="响应时间" DisplayMemberBinding="{Binding Timeout}"></GridViewColumn>
+                                        <GridViewColumn Header="命中率" DisplayMemberBinding="{Binding Hint}"></GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="mDNS扫描">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition Height="35"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="1" Content="刷新" Name="refresh_mdns" Click="refresh_mdns_Click"></Button>
+                            <ListView Name="mdns_result" Grid.Row="0">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="地址" DisplayMemberBinding="{Binding Domain}"></GridViewColumn>
+                                        <GridViewColumn Header="类型" DisplayMemberBinding="{Binding Type}"></GridViewColumn>
+                                        <GridViewColumn Header="主机名" DisplayMemberBinding="{Binding Hostname}"></GridViewColumn>
+                                        <GridViewColumn Header="端口" DisplayMemberBinding="{Binding Port}"></GridViewColumn>
+                                        <GridViewColumn Header="Instance" DisplayMemberBinding="{Binding Instance}"></GridViewColumn>
 
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
-        </TabItem>
-            <TabItem Header="网络诊断">
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="网络诊断">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <ListView Grid.Row="0" Name="diagon_result">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="项目" DisplayMemberBinding="{Binding ProjectName}"></GridViewColumn>
+                                        <GridViewColumn Header="结果" DisplayMemberBinding="{Binding  Result}"></GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <Button Content="诊断" Name="diagonstick" Click="diagonstick_Click" Grid.Row="1"></Button>
+                        </Grid>
+                    </TabItem>
+
+                </TabControl>
+            </TabItem>
+            <TabItem Header="本机信息">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition Height="30"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <ListView Grid.Row="0" Name="diagon_result">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="115*"/>
+                        <ColumnDefinition Width="278*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView Name="machin_info" Margin="0,0,0,35" Grid.ColumnSpan="2">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="项目" DisplayMemberBinding="{Binding ProjectName}"></GridViewColumn>
-                                <GridViewColumn Header="结果" DisplayMemberBinding="{Binding  Result}"></GridViewColumn>
+                                <GridViewColumn Header="项目" DisplayMemberBinding="{Binding Key}"></GridViewColumn>
+                                <GridViewColumn Header="参数" DisplayMemberBinding="{Binding Value}"></GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <Button Content="诊断" Name="diagonstick" Click="diagonstick_Click" Grid.Row="1"></Button>
+                    <Button Content="刷新" VerticalAlignment="Bottom" Height="30" Name="refresh_machine_info" Click="refresh_machine_info_Click" Grid.ColumnSpan="2"></Button>
                 </Grid>
             </TabItem>
             <TabItem Header="工具箱">
@@ -190,7 +195,8 @@
                     <Button Grid.Column="0" Grid.Row="0" Name="refresh_dns" Content="刷新DNS缓存" Click="refresh_dns_Click"></Button>
                 </Grid>
             </TabItem>
-    </TabControl>
+        </TabControl>
+     
         <GroupBox Header="调试信息" Grid.Column="1">
             <wpf:DebugRichBox Name="debug"></wpf:DebugRichBox>
         </GroupBox>

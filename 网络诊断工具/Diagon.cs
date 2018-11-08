@@ -13,7 +13,7 @@ using SpeedTest.Models;
 
 namespace 网络诊断工具
 {
-   static public class Diagon
+   static class Diagon
     {
         public class DiagonResult : INotifyPropertyChanged
         {

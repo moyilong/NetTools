@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace 网络诊断工具
 {
-    public class PingTester : INotifyPropertyChanged,IDisposable
+    class PingTester : INotifyPropertyChanged,IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public string Domain { get;private set; }

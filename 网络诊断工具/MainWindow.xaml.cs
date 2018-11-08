@@ -5,16 +5,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.NetworkInformation;
 using System.Windows;
-using static Phenom.WPF.ParentForm;
-using Zeroconf;
 using System;
 using Tmds.MDns;
-using Tmds;
 using System.Diagnostics;
 using System.Threading;
 using Phenom.Logger;
 using Phenom.ProgramMethod;
 using System.IO;
+using Phenom.WPF.Extension;
 
 namespace 网络诊断工具
 {
@@ -45,7 +43,7 @@ namespace 网络诊断工具
             new_domain.Text = new_domain.Text.Trim();
             if (new_domain.Text.IsEmpty())
             {
-                OldDialog.Error("请输入域名");
+                this.Error("请输入域名");
                 return;
             }
             tester.Add(new PingTester(new_domain.Text));
@@ -84,7 +82,7 @@ namespace 网络诊断工具
         {
             if (new_dns_server.Text.IsEmpty())
             {
-                OldDialog.Error("请输入DNS服务器地址");
+                this.Error("请输入DNS服务器地址");
                 return;
             }
             DNSList.Add(new DNSReslove(new_dns_server.Text.Trim()));
@@ -95,7 +93,7 @@ namespace 网络诊断工具
         {
             if (dns_test_domain.Text.IsEmpty())
             {
-                OldDialog.Error("请输入域名");
+                this.Error("请输入域名");
                 return;
             }
             foreach (var i in DNSList)
@@ -114,7 +112,6 @@ namespace 网络诊断工具
                 node.Push("开始扫描MDNS");
                 ServiceBrowser browser = new ServiceBrowser();
                 SynchronizationContext context = new SynchronizationContext();
-
                 browser.StartBrowse("*", context);
                 Thread.Sleep(3000);
                 browser.StopBrowse();
@@ -125,7 +122,7 @@ namespace 网络诊断工具
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (!OldDialog.Confirm("是否退出?"))
+            if (!this.Confirm("是否退出?"))
             {
                 e.Cancel = true;
             }
