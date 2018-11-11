@@ -4,6 +4,5 @@
              xmlns:local="clr-namespace:网络诊断工具"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
     </Application.Resources>
 </Application>

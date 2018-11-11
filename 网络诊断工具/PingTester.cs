@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Phenom.Extension;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace 网络诊断工具
 {
-    class PingTester : INotifyPropertyChanged,IDisposable
+    internal class PingTester : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public string Domain { get;private set; }
+
+        public string Domain { get; private set; }
         public double MaxDelay { get; set; } = double.MinValue;
         public double MinDelay { get; set; } = double.MaxValue;
         public int RequestCount { get; set; } = 0;
@@ -20,10 +19,53 @@ namespace 网络诊断工具
         public double FaildPercent => (double)FaildCount / RequestCount;
         public double LastDelay { get; set; } = 0;
         public string LastResult { get; set; } = "";
-        static System.Timers.Timer timer = new System.Timers.Timer()
+
+        public PingTester()
+        {
+            PropertyChanged += PingTester_PropertyChanged;
+        }
+
+        private void PingTester_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != "StatusView")
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StatusView"));
+        }
+
+        public string StatusView
+        {
+            get
+            {
+                List<string> faild_list = new List<string>();
+                if (RequestCount != 0)
+                {
+                    double faild_percent = FaildCount / RequestCount;
+                    if (faild_percent > 0.01)
+                        faild_list.Add("丢包率高");
+                }
+                else
+                {
+                    faild_list.Add("未响应");
+                }
+                if (AvgDelay > 300 || LastDelay > 800)
+                    faild_list.Add("延迟高");
+
+                if (faild_list.Count == 0)
+                    return "好";
+                else
+                {
+                    string ret = "";
+                    foreach (var i in faild_list)
+                        ret += i + ";";
+                    return ret;
+                }
+            }
+        }
+
+        private static System.Timers.Timer timer = new System.Timers.Timer()
         {
             Interval = 1000,
         };
+
         public static bool Enable
         {
             get => timer.Enabled;
@@ -36,7 +78,7 @@ namespace 网络诊断工具
             timer.Elapsed += TimeCallBack;
         }
 
-        void TimeCallBack(object sender,EventArgs e)
+        private void TimeCallBack(object sender, EventArgs e)
         {
             RequestCount++;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RequestCount"));
@@ -69,17 +111,15 @@ namespace 网络诊断工具
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastDelay"));
                     LastResult = time.ToString();
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastResult"));
-
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LastResult = ex.ToString();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastResult"));
                 FaildCount++;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FaildCount"));
             }
-
         }
 
         public void Dispose()

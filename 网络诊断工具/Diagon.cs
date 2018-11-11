@@ -1,37 +1,36 @@
 ﻿using Phenom.Network;
 using Phenom.ProgramMethod;
+using SpeedTest;
+using SpeedTest.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
-using SpeedTest;
-using SpeedTest.Models;
 
 namespace 网络诊断工具
 {
-   static class Diagon
+    internal static class Diagon
     {
         public class DiagonResult : INotifyPropertyChanged
         {
             public string ProjectName { get; set; }
-            string _Result = "";
+            private string _Result = "";
 
             public event PropertyChangedEventHandler PropertyChanged;
 
             public string Result
             {
                 get => _Result;
-                set {
+                set
+                {
                     _Result = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Result"));
                 }
             }
         }
-        static Tuple<string, Func<DiagonResult, bool>, bool>[] TestProject = new Tuple<string, Func<DiagonResult, bool>, bool>[]
+
+        private static Tuple<string, Func<DiagonResult, bool>, bool>[] TestProject = new Tuple<string, Func<DiagonResult, bool>, bool>[]
         {
             new Tuple<string, Func<DiagonResult, bool>, bool>("本地连接测试",result=>PingTest("127.0.0.1",result),true),
             new Tuple<string, Func<DiagonResult, bool>, bool>("IP检测",result=>
@@ -69,7 +68,8 @@ namespace 网络诊断工具
                 }
             },false)
         };
-        static bool WebContentTest(string domain, DiagonResult result)
+
+        private static bool WebContentTest(string domain, DiagonResult result)
         {
             result.Result = "请求中...";
             try
@@ -89,11 +89,12 @@ namespace 网络诊断工具
                 return false;
             }
         }
-        static bool PingTest(string domain,DiagonResult result)
+
+        private static bool PingTest(string domain, DiagonResult result)
         {
             try
             {
-                PingReply reply= new Ping().Send(domain);
+                PingReply reply = new Ping().Send(domain);
                 if (reply.Status == IPStatus.Success)
                 {
                     result.Result = "成功! " + reply.RoundtripTime.ToString();
@@ -105,13 +106,14 @@ namespace 网络诊断工具
                     return false;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.Result = e.ToString();
                 return false;
             }
         }
-        public static ObservableCollection<DiagonResult> RunResult(MainWindow window,Action OnInit,Action OnExit)
+
+        public static ObservableCollection<DiagonResult> RunResult(MainWindow window, Action OnInit, Action OnExit)
         {
             ObservableCollection<DiagonResult> ret = new ObservableCollection<DiagonResult>();
             Async.NoneWaitStart(() =>
@@ -124,7 +126,7 @@ namespace 网络诊断工具
                     if (!i.Item2(diagon) && i.Item3)
                         break;
                 }
-            },OnInit,OnExit);
+            }, OnInit, OnExit);
             return ret;
         }
     }

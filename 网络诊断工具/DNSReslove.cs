@@ -1,14 +1,17 @@
 ﻿using ARSoft.Tools.Net.Dns;
 using Phenom.Extension;
 using Phenom.Logger;
+using Phenom.ProgramMethod;
 using System;
 using System.ComponentModel;
+using System.Net;
 
 namespace 网络诊断工具
 {
-    class DNSReslove : INotifyPropertyChanged
+    internal class DNSReslove : INotifyPropertyChanged
     {
-        static DebugNode node = new DebugNode("DNS");
+        private static DebugNode node = new DebugNode("DNS");
+
         public DNSReslove(string DNS)
         {
             Server = DNS;
@@ -18,6 +21,28 @@ namespace 网络诊断工具
 
         public void Reslover(string domain)
         {
+            if (Server == "本机直查")
+            {
+                try
+                {
+                    TimeStamp stamp = new TimeStamp();
+                    stamp.Start();
+                    IPAddress[] address = Dns.GetHostAddresses(domain);
+                    stamp.Stop();
+                    foreach (var i in address)
+                    {
+                        Result += i.ToString() + Environment.NewLine;
+                    }
+                    TimeOut = stamp.Diff.TotalMilliseconds;
+                }
+                catch (Exception e)
+                {
+                    Result = e.ToString();
+                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Result"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeOut"));
+                return;
+            }
             Domain = domain;
             node.Push("连接DNS服务器..........");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Domain"));
@@ -59,6 +84,7 @@ namespace 网络诊断工具
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Result"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeOut"));
         }
+
         public string Domain { get; set; }
         public string Result { get; set; }
         public double TimeOut { get; set; } = double.MaxValue;
