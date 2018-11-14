@@ -8,10 +8,6 @@
         Closed="Window_Closed"
         Title="诊断工具" Height="450" Width="800">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="200"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
         <TabControl>
             <TabItem Header="网络工具">
                 <TabControl>
@@ -200,7 +196,7 @@
                     </TabItem>
                 </TabControl>
             </TabItem>
-            <TabItem Header="工具箱">
+            <TabItem Header="工具箱" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -240,7 +236,7 @@
                             <Button Content="刷新" Name="refresh_disk_info" Click="refresh_disk_info_Click" Grid.Row="1"></Button>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="读写完成性测试">
+                    <TabItem Header="磁盘测试" Loaded="TabItem_Loaded_1" Margin="-1,-2,-3,0.2">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"></RowDefinition>
@@ -249,13 +245,14 @@
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0" Name="disk_write_test">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition ></ColumnDefinition>
+                                    <ColumnDefinition ></ColumnDefinition>
+                                    <ColumnDefinition ></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <ComboBox Name="disk_write_text_disk_select"></ComboBox>
-                                <Button Name="disk_write_test_disk_select_refresh" Click="disk_write_test_disk_select_refresh_Click" Content="刷新" Grid.Column="1"></Button>
+                                <ComboBox Name="disk_write_text_disk_select" Grid.Column="0" ></ComboBox>
+                                <Button Name="disk_write_test_disk_select_refresh" Click="disk_write_test_disk_select_refresh_Click" Content="刷新" Grid.Column="1" ></Button>
                                 <ComboBox Name="disk_write_text_disk_size" Grid.Column="2">
                                     <ComboBox.Items>
                                         <ComboBoxItem IsSelected="True">16M</ComboBoxItem>
@@ -266,9 +263,14 @@
                                         <ComboBoxItem>512M</ComboBoxItem>
                                     </ComboBox.Items>
                                 </ComboBox>
-                                <Button Content="开始" Name="disk_write_test_disk_begin" Click="disk_write_test_disk_begin_Click" Grid.Column="3"></Button>
+                                <ComboBox Name="disk_test_type" Grid.Column="3">
+                                    <ComboBoxItem IsSelected="True">黑卡测试</ComboBoxItem>
+                                    <ComboBoxItem>性能测试</ComboBoxItem>
+                                    <ComboBoxItem>块大小测试</ComboBoxItem>
+                                </ComboBox>
+                                    <Button Content="开始" Name="disk_write_test_disk_begin" Click="disk_write_test_disk_begin_Click" Grid.Column="4"  ></Button>
                             </Grid>
-                            <RichTextBox Name="disk_wrtie_test_output" Grid.Row="1">
+                            <RichTextBox IsReadOnly="True" Name="disk_wrtie_test_output" Grid.Row="1">
                                 <FlowDocument>
                                     <Paragraph>
                                         <Run Name="disk_write_text_info">请开始</Run>
@@ -278,14 +280,8 @@
                             <ProgressBar Name="disk_write_test_progress" Grid.Row="2"></ProgressBar>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="性能测试">
-                    </TabItem>
                 </TabControl>
             </TabItem>
         </TabControl>
-
-        <GroupBox Header="调试信息" Grid.Column="1">
-            <wpf:DebugRichBox Name="debug"></wpf:DebugRichBox>
-        </GroupBox>
     </Grid>
 </Window>

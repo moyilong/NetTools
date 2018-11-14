@@ -30,7 +30,7 @@ namespace 网络诊断工具
             }
         }
 
-        private static Tuple<string, Func<DiagonResult, bool>, bool>[] TestProject = new Tuple<string, Func<DiagonResult, bool>, bool>[]
+        private static readonly Tuple<string, Func<DiagonResult, bool>, bool>[] TestProject = new Tuple<string, Func<DiagonResult, bool>, bool>[]
         {
             new Tuple<string, Func<DiagonResult, bool>, bool>("本地连接测试",result=>PingTest("127.0.0.1",result),true),
             new Tuple<string, Func<DiagonResult, bool>, bool>("IP检测",result=>
@@ -120,8 +120,10 @@ namespace 网络诊断工具
             {
                 foreach (var i in TestProject)
                 {
-                    DiagonResult diagon = new DiagonResult();
-                    diagon.ProjectName = i.Item1;
+                    DiagonResult diagon = new DiagonResult
+                    {
+                        ProjectName = i.Item1
+                    };
                     window.Dispatcher.Invoke(() => ret.Add(diagon));
                     if (!i.Item2(diagon) && i.Item3)
                         break;

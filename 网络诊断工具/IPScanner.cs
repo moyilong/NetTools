@@ -31,7 +31,7 @@ namespace 网络诊断工具
             return ret;
         }
 
-        private double xot = 3000;
+        private readonly double xot = 3000;
         private ObservableCollection<IPScanner> Parent = null;
         private MainWindow father = null;
 

@@ -29,7 +29,6 @@ namespace 网络诊断工具
             InitializeComponent();
             ping_test_table.ItemsSource = tester;
             dns_table.ItemsSource = DNSList;
-            DebugNode.Registry(debug);
         }
 
         private ObservableCollection<PingTester> tester = new ObservableCollection<PingTester>();
@@ -176,97 +175,24 @@ namespace 网络诊断工具
 
         private void disk_write_test_disk_begin_Click(object sender, RoutedEventArgs e)
         {
-            DriveInfo info = disk_write_text_disk_select.SelectedItem as DriveInfo;
-            if (info == null)
+            if (!(disk_write_text_disk_select.SelectedItem is DriveInfo info))
             {
                 this.Error("请选择磁盘");
                 return;
             }
-            ulong BlockLength = ulong.Parse(disk_write_text_disk_size.Text.Trim('M')) * 1024 * 1024;
-            ulong BlockSize = (((ulong)info.AvailableFreeSpace) / BlockLength) - 1;
-            node.Push($"容量:{BlockSize.ToString()} {BlockLength.ToString()}");
-            if (info.DriveType == DriveType.Fixed)
-                BlockSize = BlockSize / 100;
-            if (!this.Confirm($"测试大小:{BlockLength.ToString()} x {BlockSize.ToString()}"))
-                return;
-            disk_write_test_progress.Maximum = BlockLength * 2;
-            disk_write_test_progress.Value = 0;
-            void PushMessage(string message)
+            switch (disk_test_type.SelectedIndex)
             {
-                Dispatcher.Invoke(() =>
-                {
-                    if (disk_write_text_info.Text.Length > 1000)
-                        disk_write_text_info.Text = "";
-                    disk_write_text_info.Text += message + Environment.NewLine;
-                    disk_wrtie_test_output.ScrollToEnd();
-                });
+                case 0:
+                    DiskBlackFLashTest(info);
+                    break;
+                case 1:
+                    PerformanceTest(info);
+                    break;
+                case 2:
+                    BlockTest(info);
+                    break;
             }
-            void UpdateProgress()
-            {
-                Dispatcher.Invoke(() => disk_write_test_progress.Value += 1);
-            }
-            string ComputeFilePath(ulong id)
-            {
-                return info.RootDirectory.ToString() + Path.DirectorySeparatorChar + "TestData" + Path.DirectorySeparatorChar + "IDW_TEST_0x" + id.ToString("X8");
-            }
-            Directory.CreateDirectory(Path.GetDirectoryName(ComputeFilePath(0)));
-            Dictionary<ulong, string> HashTable = new Dictionary<ulong, string>((int)BlockSize);
-            Async.StartOnce(() =>
-            {
-                try
-                {
-                    byte[] data = new byte[BlockSize];
-                    new Random().NextBytes(data);
-                    PushMessage("开始写入文件");
-                    for (ulong n = 0; n < BlockSize; n++)
-                    {
-                        PushMessage("准备数据...");
-                        for (int nx = 0; nx < 32; nx++)
-                        {
-                            data[new Random().Next(0, data.Length)] = (byte)new Random().Next();
-                            data[new Random().Next(0, data.Length)] = (byte)new Random().Next();
-                        }
-                        PushMessage("计算哈希值...");
-                        HashTable[n] = data.GenericHash(new MD5CryptoServiceProvider());
-                        string file = ComputeFilePath(n);
-                        PushMessage("写入文件:" + file);
-                        File.WriteAllBytes(file, data);
-                        UpdateProgress();
-                    }
-                    ulong faild_count = 0;
-                    PushMessage("写入成功!");
-                    for (ulong n = 0; n < BlockSize; n++)
-                    {
-                        string file = ComputeFilePath(n);
-                        byte[] xdata = File.ReadAllBytes(file);
-                        File.Delete(file);
-                        string md5 = xdata.GenericHash(new MD5CryptoServiceProvider());
-                        if (md5 != HashTable[n])
-                        {
-                            faild_count++;
-                            PushMessage($"校验失败:0x{n.ToString("X8")} {HashTable[n]} != {md5}");
-                        }
-                        UpdateProgress();
-                    }
-                    PushMessage("结束，统计中");
-                    double finish = (BlockSize - faild_count) / BlockSize;
-                    Dispatcher.Invoke(() =>
-                    {
-                        this.Tips($"结束，成功率:{finish.ToString()} 估计容量:{info.TotalSize * finish}");
-                    });
-                }
-                catch (Exception xe)
-                {
-                    this.Error("发生错误:" + xe.ToString());
-                    return;
-                }
-            }, () =>
-             {
-                 Dispatcher.Invoke(() => disk_write_test.IsEnabled = false);
-             }, () =>
-             {
-                 Dispatcher.Invoke(() => disk_write_test.IsEnabled = true);
-             });
+          
         }
 
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
@@ -287,6 +213,11 @@ namespace 网络诊断工具
             proces.Start();
             proces.WaitForExit();
             CPUID_TEXT.Text = File.ReadAllText("cpuid.txt");
+        }
+
+        private void TabItem_Loaded_1(object sender, RoutedEventArgs e)
+        {
+            disk_write_test_disk_select_refresh_Click(null, null);
         }
     }
 }

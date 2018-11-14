@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
 	fprintf(fp, "CCPUID.InfoCount:\t%d\n", ccid.InfoCount());
 	fprintf(fp, "CCPUID.LFuncStd:\t%.8Xh\n", ccid.LFuncStd());
 	fprintf(fp, "CCPUID.LFuncExt:\t%.8Xh\n", ccid.LFuncExt());
-	fprintf(fp, "CCPUID.Vendor:\t%s\n", ccid.Vendor());
+	fprintf(fp, "CCPUID.Vendor:  \t%s\n", ccid.Vendor());
 	//fprintf(fp,"CCPUID.Brand:\t%s\n", ccid.Brand());
 	fprintf(fp, "CCPUID.BrandTrim:\t%s\n", ccid.BrandTrim());
 

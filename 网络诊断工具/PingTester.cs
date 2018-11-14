@@ -38,14 +38,11 @@ namespace 网络诊断工具
                 List<string> faild_list = new List<string>();
                 if (RequestCount != 0)
                 {
-                    double faild_percent = FaildCount / RequestCount;
-                    if (faild_percent > 0.01)
+                    if (FaildCount / RequestCount > 0.01)
                         faild_list.Add("丢包率高");
                 }
                 else
-                {
                     faild_list.Add("未响应");
-                }
                 if (AvgDelay > 300 || LastDelay > 800)
                     faild_list.Add("延迟高");
 
