@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Net.NetworkInformation;
 using System.Threading;
 
-namespace 网络诊断工具
+namespace 诊断工具
 {
     internal class IPScanner : INotifyPropertyChanged
     {

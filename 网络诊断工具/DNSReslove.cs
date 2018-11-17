@@ -4,9 +4,10 @@ using Phenom.Logger;
 using Phenom.ProgramMethod;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Net;
 
-namespace 网络诊断工具
+namespace 诊断工具
 {
     internal class DNSReslove : INotifyPropertyChanged
     {
@@ -25,7 +26,7 @@ namespace 网络诊断工具
             {
                 try
                 {
-                    TimeStamp stamp = new TimeStamp();
+                    Stopwatch stamp = new Stopwatch();
                     stamp.Start();
                     IPAddress[] address = Dns.GetHostAddresses(domain);
                     stamp.Stop();
@@ -33,7 +34,7 @@ namespace 网络诊断工具
                     {
                         Result += i.ToString() + Environment.NewLine;
                     }
-                    TimeOut = stamp.Diff.TotalMilliseconds;
+                    TimeOut = stamp.ElapsedMilliseconds;
                 }
                 catch (Exception e)
                 {

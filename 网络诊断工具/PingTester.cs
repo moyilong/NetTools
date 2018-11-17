@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net.NetworkInformation;
 
-namespace 网络诊断工具
+namespace 诊断工具
 {
     internal class PingTester : INotifyPropertyChanged, IDisposable
     {

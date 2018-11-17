@@ -2,13 +2,14 @@
 using Phenom.WPF.Extension;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace 网络诊断工具
+namespace 诊断工具
 {
    partial class  MainWindow
     {
@@ -60,19 +61,33 @@ namespace 网络诊断工具
                     List<double> ReadResult = new List<double>();
                     for (int n = 0; n < 128; n++)
                     {
-                        byte[] test_data = new byte[i];
-                        new Random().NextBytes(test_data);
-                        TimeStamp stamp = new TimeStamp();
-                        stamp.Start();
-                        File.WriteAllBytes(filename, test_data);
-                        stamp.Stop();
-                        WriteResult.Add(1000 * i / stamp.Diff.TotalMilliseconds);
-                        stamp.Start();
-                        File.ReadAllBytes(filename);
-                        stamp.Stop();
-                        ReadResult.Add(1000 * i / stamp.Diff.TotalMilliseconds);
+                        try
+                        {
+                            byte[] test_data = new byte[i];
+                            new Random().NextBytes(test_data);
+                            Stopwatch stamp = new Stopwatch();
+                            stamp.Start();
+                            File.WriteAllBytes(filename, test_data);
+                            stamp.Stop();
+                            WriteResult.Add(1000 * i / (ulong)stamp.ElapsedMilliseconds);
+                            stamp.Start();
+                            File.ReadAllBytes(filename);
+                            stamp.Stop();
+                            ReadResult.Add(1000 * i / (ulong)stamp.ElapsedMilliseconds);
+                        }
+                        catch
+                        {
+                            
+                        }
                     }
-                    PushMessage($"块大小:{i.ToString()} 读取:{ReadResult.Average().ToString()} 写入:{WriteResult.Average().ToString()}");
+                    try
+                    {
+                        PushMessage($"块大小:{i.ToString()} 读取:{ReadResult.Average().ToString()} 写入:{WriteResult.Average().ToString()}");
+                    }
+                    catch
+                    {
+                        PushMessage($"块大小:{i.ToString()} MaxedOut!");
+                    }
                 }
             });
         }

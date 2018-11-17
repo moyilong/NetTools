@@ -1,14 +1,14 @@
 ﻿using Phenom.Network;
 using Phenom.ProgramMethod;
-using SpeedTest;
-using SpeedTest.Models;
+/*using SpeedTest;
+using SpeedTest.Models;*/
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.NetworkInformation;
 
-namespace 网络诊断工具
+namespace 诊断工具
 {
     internal static class Diagon
     {
@@ -50,7 +50,7 @@ namespace 网络诊断工具
             new Tuple<string, Func<DiagonResult, bool>, bool>("百度内容测试",result => WebContentTest("http://www.baidu.com",result),true),
             new Tuple<string, Func<DiagonResult, bool>, bool>("谷歌基本连接测试",result=>PingTest("www.google.com",result),false),
             new Tuple<string, Func<DiagonResult, bool>, bool>("SpeedTest服务器测试",result=>PingTest("www.speedtest.net",result),true),
-            new Tuple<string, Func<DiagonResult, bool>, bool>("快速速度检测", result =>
+            /*new Tuple<string, Func<DiagonResult, bool>, bool>("快速速度检测", result =>
             {
                 try{
                     result.Result="准备中";
@@ -66,7 +66,7 @@ namespace 网络诊断工具
                     result.Result = e.ToString();
                     return false;
                 }
-            },false)
+            },false)*/
         };
 
         private static bool WebContentTest(string domain, DiagonResult result)

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace 网络诊断工具.Properties {
+namespace 诊断工具.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

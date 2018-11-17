@@ -15,7 +15,7 @@ using System.Threading;
 using System.Windows;
 using Tmds.MDns;
 
-namespace 网络诊断工具
+namespace 诊断工具
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
