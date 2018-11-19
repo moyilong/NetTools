@@ -50,9 +50,7 @@ namespace 诊断工具
             DnsClient client = new DnsClient(Server.ToIPAddress(), 1000);
             TimeSpan span_begin = new TimeSpan();
             node.Push("请求响应......");
-            DnsMessage message = client.Resolve(new ARSoft.Tools.Net.DomainName(new string[]{
-                domain
-            }), RecordType.Any, RecordClass.INet);
+            DnsMessage message = client.Resolve(new ARSoft.Tools.Net.DomainName(new string[] { domain }), RecordType.Any, RecordClass.INet);
             TimeSpan span_end = new TimeSpan();
             node.Push("处理结果");
             if (message == null)
