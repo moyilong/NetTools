@@ -95,6 +95,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\Disk.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Network.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SerialPort.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,9 +115,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\Disk.xaml.cs">
+      <DependentUpon>Disk.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Network.xaml.cs">
+      <DependentUpon>Network.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SerialPort.xaml.cs">
+      <DependentUpon>SerialPort.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Methods\CommandGroup.cs" />
     <Compile Include="Methods\Diagon.cs" />
-    <Compile Include="DiskTestMethod.cs" />
     <Compile Include="Methods\DNSReslove.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Methods\ImageWrite.cs" />

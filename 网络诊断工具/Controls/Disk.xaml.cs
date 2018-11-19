@@ -1,17 +1,153 @@
 ﻿using Phenom.Extension;
 using Phenom.ProgramMethod;
-using Phenom.WPF.Extension;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using Phenom.WPF;
+using Phenom.WPF.Extension;
+using System.Diagnostics;
+using Path = System.IO.Path;
+using Phenom.Logger;
+using 诊断工具.Methods;
+using Microsoft.Win32;
 
-namespace 诊断工具
+namespace 诊断工具.Controls
 {
-    partial class MainWindow
+    /// <summary>
+    /// Disk.xaml 的交互逻辑
+    /// </summary>
+    public partial class Disk : UserControl
     {
+        public Disk()
+        {
+            InitializeComponent();
+        }
+
+        private void refresh_disk_info_Click(object sender, RoutedEventArgs e)
+        {
+            disk_info.ItemsSource = DriveInfo.GetDrives();
+        }
+
+        private void disk_write_test_disk_select_refresh_Click(object sender, RoutedEventArgs e)
+        {
+            disk_write_text_disk_select.ItemsSource = DriveInfo.GetDrives();
+        }
+
+        private void disk_write_test_disk_begin_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(disk_write_text_disk_select.SelectedItem is DriveInfo info))
+            {
+                this.Error("请选择磁盘");
+                return;
+            }
+            switch (disk_test_type.SelectedIndex)
+            {
+                case 0:
+                    DiskBlackFLashTest(info);
+                    break;
+
+                case 1:
+                    PerformanceTest(info);
+                    break;
+
+                case 2:
+                    BlockTest(info);
+                    break;
+            }
+        }
+
+        private void disk_write_refresh_Click(object sender, RoutedEventArgs e)
+        {
+            disk_write_disk.ItemsSource = WriteLib.DiskList;
+        }
+
+        private void disk_write_browse_img_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog()
+            {
+                Title = "镜像",
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Multiselect = false
+            };
+            if ((bool)dialog.ShowDialog())
+                disk_write_image.Text = dialog.FileName;
+        }
+
+        private void disk_wrte_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(disk_write_disk.SelectedItem is DriverInfo info))
+            {
+                this.Error("请选择磁盘");
+                return;
+            }
+            if (disk_write_image.IsEmpty())
+            {
+                this.Error("请选择文件");
+                return;
+            }
+            if (!File.Exists(disk_write_image.Text))
+            {
+                this.Error("文件不存在!");
+                return;
+            }
+            if (!this.Confirm($"即将写入磁盘{info.DispName}{Environment.NewLine}容量:{info.DiskSize.FormatStroageUnit()}文件:{disk_write_image.Text}{Environment.NewLine}磁盘上的所有数据将被删除"))
+            {
+                this.Tips("操作已经取消!");
+                return;
+            }
+            Async.NoneWaitStart(() =>
+            {
+                using (FileStream fs = new FileStream(disk_write_image.Text, FileMode.Open))
+                    WriteLib.Write(info.PathName, true, fs, UpdateDiskWriteProgress);
+            }, () =>
+            {
+                Dispatcher.Invoke(() => disk_wrte.IsEnabled = false);
+            },
+            () =>
+            {
+                Dispatcher.Invoke(() => disk_wrte.IsEnabled = true);
+            });
+        }
+        private void UpdateDiskWriteProgress(long Max, long Cur, long Min, string Tips, WorkingMode mode)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (Tips != null)
+                {
+                    disk_write_result_run.Text += Tips + Environment.NewLine;
+                    disk_write_result_box.ScrollToEnd();
+                }
+                disk_write_progress.Maximum = Max;
+                disk_write_progress.Minimum = Min;
+                disk_write_progress.Value = Cur;
+                switch (mode)
+                {
+                    case WorkingMode.Syncing:
+                        disk_write_title.Header = "同步";
+                        break;
+                    case WorkingMode.Verifying:
+                        disk_write_title.Header = "校验";
+                        break;
+                    case WorkingMode.Writting:
+                        disk_write_title.Header = "写入";
+                        break;
+                }
+            });
+        }
         private void PushMessage(string message)
         {
             Dispatcher.Invoke(() =>
@@ -33,12 +169,12 @@ namespace 诊断工具
         }
 
         private void DisktestThread(Action self) => Async.StartOnce(self, () =>
-         {
-             Dispatcher.Invoke(() => disk_write_test.IsEnabled = false);
-         }, () =>
-         {
-             Dispatcher.Invoke(() => disk_write_test.IsEnabled = true);
-         });
+        {
+            Dispatcher.Invoke(() => disk_write_test.IsEnabled = false);
+        }, () =>
+        {
+            Dispatcher.Invoke(() => disk_write_test.IsEnabled = true);
+        });
 
         private void BlockTest(DriveInfo info)
         {
@@ -91,7 +227,7 @@ namespace 诊断工具
                             stamp.Start();
                             fs.Seek(0, SeekOrigin.Begin);
                             fs.Read(read_data, 0, (int)i);
-                         //   File.ReadAllBytes(filename);
+                            //   File.ReadAllBytes(filename);
                             stamp.Stop();
                             ReadResult.Add(1000 * i / stamp.ElapsedMilliseconds);
                         }
@@ -109,11 +245,11 @@ namespace 诊断工具
                     {
                         PushMessage($"块大小:{i.FormatStroageUnit()} 读取:{ReadResult.Average().FormatStroageUnit()} 写入:{WriteResult.Average().FormatStroageUnit()}");
                     }
-                    catch(InvalidOperationException)
+                    catch (InvalidOperationException)
                     {
                         PushMessage($"块大小:{i.FormatStroageUnit()} MaxedOut!");
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         PushMessage($"块大小{i.FormatStroageUnit()}错误:{Environment.NewLine}{e.ToString()}");
                     }
@@ -130,7 +266,7 @@ namespace 诊断工具
                 data[new Random().Next(0, data.Length)] = (byte)new Random().Next();
             }
         }
-
+        static DebugNode node = new DebugNode("Disk");
         private void DiskBlackFLashTest(DriveInfo info)
         {
             ulong BlockLength = ulong.Parse(disk_write_text_disk_size.Text.Trim('M')) * 1024 * 1024;
@@ -153,9 +289,9 @@ namespace 诊断工具
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(ComputeFilePath(0)));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                this.Error(ex,"创建测试目录失败");
+                this.Error(ex, "创建测试目录失败");
                 return;
             }
             Dictionary<ulong, string> HashTable = new Dictionary<ulong, string>((int)BlockSize);
@@ -207,5 +343,6 @@ namespace 诊断工具
                 }
             });
         }
-    }
+    
+}
 }
