@@ -4,6 +4,7 @@ using Phenom.Logger;
 using Phenom.Network;
 using Phenom.ProgramMethod;
 using Phenom.WPF;
+using Phenom.WPF.Converter;
 using Phenom.WPF.Extension;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,12 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Net.NetworkInformation;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using Tmds.MDns;
-using Phenom.WPF.Control;
-using Phenom.WPF.Converter;
+
 namespace 诊断工具
 {
     /// <summary>
@@ -28,7 +27,8 @@ namespace 诊断工具
     public partial class MainWindow : Window
     {
         private DebugNode node = new DebugNode("网络诊断");
-        SizeToHumanRead SizeConverter = new SizeToHumanRead();
+        private SizeToHumanRead SizeConverter = new SizeToHumanRead();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -46,13 +46,13 @@ namespace 诊断工具
             mute.Add(send_box, MuteController.MuteInvert);
             mute.MuteStatus = false;
             bool[,] Map = new bool[toolbox.ColumnDefinitions.Count, toolbox.RowDefinitions.Count];
-            foreach(var i in CommandGroup.CMDS)
+            foreach (var i in CommandGroup.CMDS)
             {
                 Button btn = new Button()
                 {
                     Content = i.Key,
                 };
-                btn.Click += (e,s)=>i.Value();
+                btn.Click += (e, s) => i.Value();
                 for (int n = 0; n < toolbox.ColumnDefinitions.Count; n++)
                 {
                     bool success = false;
@@ -71,12 +71,8 @@ namespace 诊断工具
                     if (success)
                         break;
                 }
-
             }
         }
-
-        
-
 
         private ObservableCollection<PingTester> tester = new ObservableCollection<PingTester>();
 
@@ -113,6 +109,7 @@ namespace 诊断工具
             Dictionary<string, string> data = new Dictionary<string, string>();
             foreach (var i in WebClient.IPList)
                 data["本机IP地址"] = i.ToString();
+            data["系统内存"] = Process.GetCurrentProcess().PagedMemorySize64.FormatStroageUnit();
             foreach (var i in NetworkInterface.GetAllNetworkInterfaces())
                 data["NIC:" + i.Name] = JObject.FromObject(i).ToString();
             foreach (var i in DriveInfo.GetDrives())
@@ -232,14 +229,15 @@ namespace 诊断工具
                 case 0:
                     DiskBlackFLashTest(info);
                     break;
+
                 case 1:
                     PerformanceTest(info);
                     break;
+
                 case 2:
                     BlockTest(info);
                     break;
             }
-
         }
 
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
@@ -267,17 +265,14 @@ namespace 诊断工具
             disk_write_test_disk_select_refresh_Click(null, null);
         }
 
-        private void refresh_serial_port_Click(object sender, RoutedEventArgs e)
-        {
-            serialport_detail.ItemsSource = SerialPort.GetPortNames();
-        }
-
         private void serial_port_assistant_refresh_port_Click(object sender, RoutedEventArgs e)
         {
             serial_assistant_port.ItemsSource = SerialPort.GetPortNames();
         }
-        MuteController mute = null;
-        SerialPort MonitedPort = null;
+
+        private MuteController mute = null;
+        private SerialPort MonitedPort = null;
+
         private void serial_port_assistant_switch_stat_Click(object sender, RoutedEventArgs e)
         {
             if (MonitedPort == null || !MonitedPort.IsOpen)
@@ -299,12 +294,15 @@ namespace 诊断工具
                     case "0":
                         MonitedPort.StopBits = StopBits.None;
                         break;
+
                     case "1":
                         MonitedPort.StopBits = StopBits.One;
                         break;
+
                     case "1.5":
                         MonitedPort.StopBits = StopBits.OnePointFive;
                         break;
+
                     case "2":
                         MonitedPort.StopBits = StopBits.Two;
                         break;
@@ -321,8 +319,6 @@ namespace 诊断工具
                     return;
                 }
                 mute.MuteStatus = true;
-
-
             }
             else
             {
@@ -331,7 +327,8 @@ namespace 诊断工具
                 MonitedPort = null;
             }
         }
-        void UpdateSerialPortAssistantCount()
+
+        private void UpdateSerialPortAssistantCount()
         {
             Dispatcher.Invoke(() =>
             {
@@ -339,14 +336,15 @@ namespace 诊断工具
                 serial_assistant_send_bytes.Content = $"发送:{MonitedPort.BytesToWrite.ToString()}";
             });
         }
+
         private void MonitedPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             try
             {
                 string data = MonitedPort.ReadExisting();
                 StringBuilder builder = new StringBuilder();
-                    for (int n = 0; n < data.Length; n++)
-                        builder.Append($"{((byte)data[n]).ToString("X2")} ");
+                for (int n = 0; n < data.Length; n++)
+                    builder.Append($"{((byte)data[n]).ToString("X2")} ");
                 Dispatcher.Invoke(() =>
                 {
                     ascii_show_run.Text += data;
@@ -354,16 +352,15 @@ namespace 诊断工具
                     hex_show_run.Text += builder.ToString();
                     hex_show_box.ScrollToEnd();
                     UpdateSerialPortAssistantCount();
-
                 });
-                
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this.Error(ex);
             }
         }
-        void SendData(bool IsHexMode)
+
+        private void SendData(bool IsHexMode)
         {
             byte[] ready_to_send = null;
             if (IsHexMode)
@@ -371,17 +368,17 @@ namespace 诊断工具
                 List<byte> ret = new List<byte>();
                 Async.ForEach(serial_port_assistant_input_run.Text.Split(' '), (self, id) =>
                 {
-                    if (ret !=null)
-                    try
-                    {
-                        ret.Add(byte.Parse(self));
-                    }
-                    catch
-                    {
-                        ret = null;
-                    }
+                    if (ret != null)
+                        try
+                        {
+                            ret.Add(byte.Parse(self));
+                        }
+                        catch
+                        {
+                            ret = null;
+                        }
                 }, false);
-                if (ret==null)
+                if (ret == null)
                 {
                     this.Error("解析HEX数据失败!");
                     return;
@@ -393,6 +390,7 @@ namespace 诊断工具
             MonitedPort.Write(ready_to_send, 0, ready_to_send.Length);
             UpdateSerialPortAssistantCount();
         }
+
         private void serial_assistant_send_by_ascii_Click(object sender, RoutedEventArgs e)
         {
             SendData(false);

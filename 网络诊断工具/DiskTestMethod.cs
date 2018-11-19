@@ -1,4 +1,5 @@
-﻿using Phenom.ProgramMethod;
+﻿using Phenom.Extension;
+using Phenom.ProgramMethod;
 using Phenom.WPF.Extension;
 using System;
 using System.Collections.Generic;
@@ -6,14 +7,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace 诊断工具
 {
-   partial class  MainWindow
+    partial class MainWindow
     {
-        void PushMessage(string message)
+        private void PushMessage(string message)
         {
             Dispatcher.Invoke(() =>
             {
@@ -23,24 +22,25 @@ namespace 诊断工具
                 disk_wrtie_test_output.ScrollToEnd();
             });
         }
-        void UpdateProgress()
+
+        private void UpdateProgress()
         {
             Dispatcher.Invoke(() => disk_write_test_progress.Value += 1);
         }
 
-        void PerformanceTest(DriveInfo info)
+        private void PerformanceTest(DriveInfo info)
         {
-
         }
 
-        void DisktestThread(Action self) => Async.StartOnce(self, () =>
-        {
-            Dispatcher.Invoke(() => disk_write_test.IsEnabled = false);
-        }, () =>
-        {
-            Dispatcher.Invoke(() => disk_write_test.IsEnabled = true);
-        });
-        void BlockTest(DriveInfo info)
+        private void DisktestThread(Action self) => Async.StartOnce(self, () =>
+         {
+             Dispatcher.Invoke(() => disk_write_test.IsEnabled = false);
+         }, () =>
+         {
+             Dispatcher.Invoke(() => disk_write_test.IsEnabled = true);
+         });
+
+        private void BlockTest(DriveInfo info)
         {
             ulong[] block_split = new ulong[]
             {
@@ -77,21 +77,21 @@ namespace 诊断工具
                         }
                         catch
                         {
-                            
                         }
                     }
                     try
                     {
-                        PushMessage($"块大小:{i.ToString()} 读取:{ReadResult.Average().ToString()} 写入:{WriteResult.Average().ToString()}");
+                        PushMessage($"块大小:{i.FormatStroageUnit()} 读取:{ReadResult.Average().FormatStroageUnit()} 写入:{WriteResult.Average().FormatStroageUnit()}");
                     }
                     catch
                     {
-                        PushMessage($"块大小:{i.ToString()} MaxedOut!");
+                        PushMessage($"块大小:{i.FormatStroageUnit()} MaxedOut!");
                     }
                 }
             });
         }
-        void DiskBlackFLashTest(DriveInfo info)
+
+        private void DiskBlackFLashTest(DriveInfo info)
         {
             ulong BlockLength = ulong.Parse(disk_write_text_disk_size.Text.Trim('M')) * 1024 * 1024;
             ulong BlockSize = (((ulong)info.AvailableFreeSpace) / BlockLength) - 1;
@@ -150,7 +150,7 @@ namespace 诊断工具
                     double finish = (BlockSize - faild_count) / BlockSize;
                     Dispatcher.Invoke(() =>
                     {
-                        this.Tips($"结束，成功率:{(100 * finish).ToString()}%{Environment.NewLine}估计容量:{info.TotalSize * finish}{Environment.NewLine}标称容量:{info.TotalSize.ToString()}");
+                        this.Tips($"结束，成功率:{(100 * finish).ToString()}%{Environment.NewLine}估计容量:{(info.TotalSize * finish).FormatStroageUnit()}{Environment.NewLine}标称容量:{info.TotalSize.FormatStroageUnit()}");
                     });
                 }
                 catch (Exception xe)

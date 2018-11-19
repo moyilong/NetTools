@@ -1,7 +1,6 @@
 ﻿using ARSoft.Tools.Net.Dns;
 using Phenom.Extension;
 using Phenom.Logger;
-using Phenom.ProgramMethod;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -53,7 +52,7 @@ namespace 诊断工具
             DnsMessage message = client.Resolve(new ARSoft.Tools.Net.DomainName(new string[] { domain }), RecordType.Any, RecordClass.INet);
             TimeSpan span_end = new TimeSpan();
             node.Push("处理结果");
-            if (message == null)
+            if (message == null || message.ReturnCode != ReturnCode.NoError || message.AnswerRecords.Count==0)
             {
                 if (message == null)
                     Result = "空结果";
@@ -62,7 +61,6 @@ namespace 诊断工具
             }
             else
             {
-                //Result = (message.AnswerRecords[0] as ARecord).Address.ToString();
                 Result = $"共查询到{message.AnswerRecords.Count.ToString()}个记录" + Environment.NewLine;
                 foreach (var record in message.AnswerRecords)
                 {

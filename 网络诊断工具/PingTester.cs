@@ -1,5 +1,4 @@
-﻿using Phenom.Extension;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net.NetworkInformation;

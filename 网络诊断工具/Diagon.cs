@@ -1,11 +1,12 @@
 ﻿using Phenom.Network;
 using Phenom.ProgramMethod;
+
 /*using SpeedTest;
 using SpeedTest.Models;*/
+
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Net.NetworkInformation;
 
 namespace 诊断工具
