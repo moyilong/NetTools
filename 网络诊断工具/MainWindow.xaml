@@ -97,14 +97,12 @@
                                         <ColumnDefinition></ColumnDefinition>
                                         <ColumnDefinition></ColumnDefinition>
                                         <ColumnDefinition></ColumnDefinition>
-                                        <ColumnDefinition></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <Label  VerticalContentAlignment="Center" Height="30" Grid.Column="0" Content="IP地址段"></Label>
                                     <TextBox VerticalContentAlignment="Center" Height="30" Grid.Column="1" Name="gateway_area" Text="192.168.1"></TextBox>
                                     <Label  VerticalContentAlignment="Center" Content="超时" Grid.Column="2" Height="30"></Label>
                                     <TextBox  VerticalContentAlignment="Center" Height="30" Name="scan_timeout" Text="3000" Grid.Column="3"></TextBox>
                                     <Button Content="开始扫描" Name="start_ip_scan" Click="start_ip_scan_Click" Grid.Column="4"></Button>
-                                    <CheckBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Checked="enable_mdns_invent_Checked" Unchecked="enable_mdns_invent_Unchecked" Content="mDNS发现" Name="enable_mdns_invent"  Grid.Column="5"></CheckBox>
                                 </Grid>
                             </Grid>
                             <ListView Name="ipscan" Grid.Row="1">
@@ -277,6 +275,60 @@
                                 </FlowDocument>
                             </RichTextBox>
                             <ProgressBar Name="disk_write_test_progress" Grid.Row="2"></ProgressBar>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="磁盘写入">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Label Height="30"  Grid.Row="0" Foreground="Red">*警告:本程序不会检查写入磁盘的合理性，请在写入前确认选择的硬盘是否正确!</Label>
+                            <GroupBox Header="写入" Grid.Row="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition></ColumnDefinition>
+                                            <ColumnDefinition></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Label VerticalContentAlignment="Center" Content="磁盘" Grid.Row="0"></Label>
+                                        <Button Content="刷新磁盘" Grid.Row="0" Grid.Column="1" Name="disk_write_refresh" Click="disk_write_refresh_Click"></Button>
+                                        <ComboBox Name="disk_write_disk"  Grid.Row="1" Grid.ColumnSpan="2"></ComboBox>
+
+                                        <Label Content="镜像" VerticalContentAlignment="Center" Grid.Row="2" Grid.Column="0"></Label>
+                                        <Button  Content="浏览" Grid.Column="1" Grid.Row="2" Name="disk_write_browse_img" Click="disk_write_browse_img_Click"></Button>
+                                        <TextBox IsReadOnly="True" Name="disk_write_image" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3"></TextBox>
+                                        <Button Content="刷写" Name="disk_wrte" Click="disk_wrte_Click" Grid.ColumnSpan="2" Grid.Row="4"></Button>
+                                    </Grid>
+                                    <GroupBox Header="消息" Name="disk_write_title" Grid.Column="1">
+                                        <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition Height="30"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <RichTextBox Name="disk_write_result_box" IsReadOnly="True" Grid.Row="0">
+                                            <FlowDocument>
+                                                <Paragraph>
+                                                    <Run Name="disk_write_result_run"></Run>
+                                                </Paragraph>
+                                            </FlowDocument>
+                                        </RichTextBox>
+                                        <ProgressBar Name="disk_write_progress"  Grid.Row="1"></ProgressBar>
+                                    </Grid>
+                                    </GroupBox>
+                                </Grid>
+                            </GroupBox>
                         </Grid>
                     </TabItem>
                 </TabControl>

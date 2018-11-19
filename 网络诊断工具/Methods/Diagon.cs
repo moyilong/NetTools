@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.NetworkInformation;
 
-namespace 诊断工具
+namespace 诊断工具.Methods
 {
     internal static class Diagon
     {

@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
 
-namespace 诊断工具
+namespace 诊断工具.Methods
 {
     internal class DNSReslove : INotifyPropertyChanged
     {
@@ -52,16 +52,11 @@ namespace 诊断工具
             DnsMessage message = client.Resolve(new ARSoft.Tools.Net.DomainName(new string[] { domain }), RecordType.Any, RecordClass.INet);
             TimeSpan span_end = new TimeSpan();
             node.Push("处理结果");
-            if (message == null || message.ReturnCode != ReturnCode.NoError || message.AnswerRecords.Count==0)
-            {
-                if (message == null)
-                    Result = "空结果";
-                else
-                    Result = message.ReturnCode.ToString();
-            }
+            if (message == null)
+                Result = "空结果";
             else
             {
-                Result = $"共查询到{message.AnswerRecords.Count.ToString()}个记录" + Environment.NewLine;
+                Result = $"共查询到{message.AnswerRecords.Count.ToString()}个记录{message.ReturnCode.ToString()}{Environment.NewLine}";
                 foreach (var record in message.AnswerRecords)
                 {
                     Result += record.GetType().Name + "记录:";
@@ -75,9 +70,10 @@ namespace 诊断工具
                         Result += (record as PtrRecord).PointerDomainName.ToString();
                     else
                         Result += record.ToString() + Environment.NewLine;
+
                 }
-                TimeOut = (span_begin - span_end).TotalMilliseconds;
             }
+            TimeOut = (span_begin - span_end).TotalMilliseconds;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Result"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeOut"));
         }

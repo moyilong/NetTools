@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace 诊断工具
+namespace 诊断工具.Methods
 {
     internal static class CommandGroup
     {

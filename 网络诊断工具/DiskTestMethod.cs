@@ -42,19 +42,35 @@ namespace 诊断工具
 
         private void BlockTest(DriveInfo info)
         {
-            ulong[] block_split = new ulong[]
+            long[] block_split = new long[]
             {
                 128,
+                256,
                 512,
+                1024,
+                2048,
                 4096,
+                8192,
+                16*1024,
+                32*1024,
+                64*1024,
                 128 *1024,
+                256 *1024,
                 512*1024,
+                1024*1024,
+                2048*1024,
                 4096*1024,
-                16*1024*1024
+                8192*1024,
+                16*1024*1024,
+                32*1024*1024,
             };
             string filename = info.RootDirectory.FullName + Path.DirectorySeparatorChar + "test_file.idx";
             DisktestThread(() =>
             {
+                byte[] test_data = new byte[block_split.Max()];
+                byte[] read_data = new byte[block_split.Max()];
+                new Random().NextBytes(test_data);
+                FileStream fs = File.Open(filename, FileMode.OpenOrCreate);
                 foreach (var i in block_split)
                 {
                     List<double> WriteResult = new List<double>();
@@ -63,42 +79,69 @@ namespace 诊断工具
                     {
                         try
                         {
-                            byte[] test_data = new byte[i];
-                            new Random().NextBytes(test_data);
+                            fs.Seek(0, SeekOrigin.Begin);
+                            int begin = new Random().Next(0, test_data.Length - (int)i);
+                            HalfRandom(test_data);
                             Stopwatch stamp = new Stopwatch();
                             stamp.Start();
-                            File.WriteAllBytes(filename, test_data);
+                            fs.Write(test_data, begin, (int)i);
+                            fs.Flush();
                             stamp.Stop();
-                            WriteResult.Add(1000 * i / (ulong)stamp.ElapsedMilliseconds);
+                            WriteResult.Add(1000 * i / stamp.ElapsedMilliseconds);
                             stamp.Start();
-                            File.ReadAllBytes(filename);
+                            fs.Seek(0, SeekOrigin.Begin);
+                            fs.Read(read_data, 0, (int)i);
+                         //   File.ReadAllBytes(filename);
                             stamp.Stop();
-                            ReadResult.Add(1000 * i / (ulong)stamp.ElapsedMilliseconds);
+                            ReadResult.Add(1000 * i / stamp.ElapsedMilliseconds);
                         }
-                        catch
+                        catch (DivideByZeroException)
                         {
+
+                        }
+                        catch (Exception e)
+                        {
+                            PushMessage($"块大小{i.FormatStroageUnit()}错误:{Environment.NewLine}{e.ToString()}");
+                            break;
                         }
                     }
                     try
                     {
                         PushMessage($"块大小:{i.FormatStroageUnit()} 读取:{ReadResult.Average().FormatStroageUnit()} 写入:{WriteResult.Average().FormatStroageUnit()}");
                     }
-                    catch
+                    catch(InvalidOperationException)
                     {
                         PushMessage($"块大小:{i.FormatStroageUnit()} MaxedOut!");
                     }
+                    catch(Exception e)
+                    {
+                        PushMessage($"块大小{i.FormatStroageUnit()}错误:{Environment.NewLine}{e.ToString()}");
+                    }
                 }
+                fs.Close();
             });
+        }
+
+        static void HalfRandom(byte[] data)
+        {
+            for (int nx = 0; nx < 32; nx++)
+            {
+                data[new Random().Next(0, data.Length)] = (byte)new Random().Next();
+                data[new Random().Next(0, data.Length)] = (byte)new Random().Next();
+            }
         }
 
         private void DiskBlackFLashTest(DriveInfo info)
         {
             ulong BlockLength = ulong.Parse(disk_write_text_disk_size.Text.Trim('M')) * 1024 * 1024;
             ulong BlockSize = (((ulong)info.AvailableFreeSpace) / BlockLength) - 1;
-            node.Push($"容量:{BlockSize.ToString()} {BlockLength.ToString()}");
-            if (info.DriveType == DriveType.Fixed)
-                BlockSize = BlockSize / 100;
-            if (!this.Confirm($"测试大小:{BlockLength.ToString()} x {BlockSize.ToString()}"))
+            node.Push($"容量:{BlockSize.FormatStroageUnit()} {BlockLength.FormatStroageUnit()}");
+            if (info.DriveType == DriveType.CDRom)
+            {
+                this.Error("不能测试光驱!");
+                return;
+            }
+            if (!this.Confirm($"测试大小:{BlockLength.FormatStroageUnit()} x {BlockSize.FormatStroageUnit()}"))
                 return;
             disk_write_test_progress.Maximum = BlockSize * 2;
             disk_write_test_progress.Value = 0;
@@ -106,23 +149,27 @@ namespace 诊断工具
             {
                 return info.RootDirectory.ToString() + Path.DirectorySeparatorChar + "TestData" + Path.DirectorySeparatorChar + "IDW_TEST_0x" + id.ToString("X8");
             }
-            Directory.CreateDirectory(Path.GetDirectoryName(ComputeFilePath(0)));
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(ComputeFilePath(0)));
+            }
+            catch(Exception ex)
+            {
+                this.Error(ex,"创建测试目录失败");
+                return;
+            }
             Dictionary<ulong, string> HashTable = new Dictionary<ulong, string>((int)BlockSize);
             DisktestThread(() =>
             {
                 try
                 {
-                    byte[] data = new byte[BlockSize];
+                    byte[] data = new byte[BlockLength];
                     new Random().NextBytes(data);
                     PushMessage("开始写入文件");
                     for (ulong n = 0; n < BlockSize; n++)
                     {
                         PushMessage("准备数据...");
-                        for (int nx = 0; nx < 32; nx++)
-                        {
-                            data[new Random().Next(0, data.Length)] = (byte)new Random().Next();
-                            data[new Random().Next(0, data.Length)] = (byte)new Random().Next();
-                        }
+                        HalfRandom(data);
                         PushMessage("计算哈希值...");
                         HashTable[n] = data.GenericHash(new MD5CryptoServiceProvider());
                         string file = ComputeFilePath(n);

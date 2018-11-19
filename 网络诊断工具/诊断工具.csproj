@@ -103,19 +103,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CommandGroup.cs" />
-    <Compile Include="Diagon.cs" />
+    <Compile Include="Methods\CommandGroup.cs" />
+    <Compile Include="Methods\Diagon.cs" />
     <Compile Include="DiskTestMethod.cs" />
-    <Compile Include="DNSReslove.cs" />
+    <Compile Include="Methods\DNSReslove.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IPScanner.cs" />
+    <Compile Include="Methods\ImageWrite.cs" />
+    <Compile Include="Methods\IPScanner.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PingTester.cs" />
+    <Compile Include="Methods\PingTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
