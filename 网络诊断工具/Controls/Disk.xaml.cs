@@ -23,6 +23,7 @@ using Path = System.IO.Path;
 using Phenom.Logger;
 using 诊断工具.Methods;
 using Microsoft.Win32;
+using System.Threading;
 
 namespace 诊断工具.Controls
 {
@@ -205,7 +206,7 @@ namespace 诊断工具.Controls
             {
                 byte[] test_data = new byte[block_split.Max()];
                 byte[] read_data = new byte[block_split.Max()];
-                new Random().NextBytes(test_data);
+                TestRandom.NextBytes(test_data);
                 FileStream fs = File.Open(filename, FileMode.OpenOrCreate);
                 foreach (var i in block_split)
                 {
@@ -216,7 +217,7 @@ namespace 诊断工具.Controls
                         try
                         {
                             fs.Seek(0, SeekOrigin.Begin);
-                            int begin = new Random().Next(0, test_data.Length - (int)i);
+                            int begin = TestRandom.Next(0, test_data.Length - (int)i);
                             HalfRandom(test_data);
                             Stopwatch stamp = new Stopwatch();
                             stamp.Start();
@@ -227,7 +228,6 @@ namespace 诊断工具.Controls
                             stamp.Start();
                             fs.Seek(0, SeekOrigin.Begin);
                             fs.Read(read_data, 0, (int)i);
-                            //   File.ReadAllBytes(filename);
                             stamp.Stop();
                             ReadResult.Add(1000 * i / stamp.ElapsedMilliseconds);
                         }
@@ -261,11 +261,9 @@ namespace 诊断工具.Controls
         static void HalfRandom(byte[] data)
         {
             for (int nx = 0; nx < 32; nx++)
-            {
-                data[new Random().Next(0, data.Length)] = (byte)new Random().Next();
-                data[new Random().Next(0, data.Length)] = (byte)new Random().Next();
-            }
+                data[TestRandom.Next(0, data.Length)] = (byte)TestRandom.Next();
         }
+        static Random TestRandom = new Random();
         static DebugNode node = new DebugNode("Disk");
         private void DiskBlackFLashTest(DriveInfo info)
         {
@@ -300,18 +298,23 @@ namespace 诊断工具.Controls
                 try
                 {
                     byte[] data = new byte[BlockLength];
-                    new Random().NextBytes(data);
+                    TestRandom.NextBytes(data);
                     PushMessage("开始写入文件");
                     for (ulong n = 0; n < BlockSize; n++)
                     {
                         PushMessage("准备数据...");
                         HalfRandom(data);
                         PushMessage("计算哈希值...");
-                        HashTable[n] = data.GenericHash(new MD5CryptoServiceProvider());
+                        Thread thread = Async.NoneWaitStart(() =>
+                          {
+                              HashTable[n] = data.GenericHash(new MD5CryptoServiceProvider());
+                          });
                         string file = ComputeFilePath(n);
                         PushMessage("写入文件:" + file);
                         File.WriteAllBytes(file, data);
                         UpdateProgress();
+                        while (thread.ThreadState == System.Threading.ThreadState.Running)
+                            Thread.Sleep(100);
                     }
                     ulong faild_count = 0;
                     PushMessage("写入成功!");

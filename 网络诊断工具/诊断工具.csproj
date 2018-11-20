@@ -41,6 +41,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>诊断工具.Loader</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ARSoft.Tools.Net, Version=2.2.9.0, Culture=neutral, PublicKeyToken=1940454cd762ec57, processorArchitecture=MSIL">
       <HintPath>..\packages\ARSoft.Tools.Net.2.2.9\lib\net45\ARSoft.Tools.Net.dll</HintPath>
@@ -107,6 +110,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Toolbox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -124,6 +131,10 @@
     <Compile Include="Controls\SerialPort.xaml.cs">
       <DependentUpon>SerialPort.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Toolbox.xaml.cs">
+      <DependentUpon>Toolbox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Loader.cs" />
     <Compile Include="Methods\CommandGroup.cs" />
     <Compile Include="Methods\Diagon.cs" />
     <Compile Include="Methods\DNSReslove.cs" />
@@ -168,9 +179,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DNSServer.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <SplashScreen Include="SplashScreen1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

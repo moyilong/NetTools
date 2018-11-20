@@ -34,35 +34,6 @@ namespace 诊断工具
         public MainWindow()
         {
             InitializeComponent();
-           
-          
-            bool[,] Map = new bool[toolbox.ColumnDefinitions.Count, toolbox.RowDefinitions.Count];
-            foreach (var i in CommandGroup.CMDS)
-            {
-                Button btn = new Button()
-                {
-                    Content = i.Key,
-                };
-                btn.Click += (e, s) => i.Value();
-                for (int n = 0; n < toolbox.ColumnDefinitions.Count; n++)
-                {
-                    bool success = false;
-                    for (int x = 0; x < toolbox.RowDefinitions.Count; x++)
-                        if (Map[n, x] == default(bool))
-                        {
-                            Map[n, x] = !Map[n, x];
-                            btn.HorizontalAlignment = HorizontalAlignment.Stretch;
-                            btn.VerticalAlignment = VerticalAlignment.Stretch;
-                            Grid.SetRow(btn, x);
-                            Grid.SetColumn(btn, n);
-                            toolbox.Children.Add(btn);
-                            success = true;
-                            break;
-                        }
-                    if (success)
-                        break;
-                }
-            }
         }
 
 
