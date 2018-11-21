@@ -230,6 +230,7 @@ extern "C" {
 #define CPUF_BMI1	CPUIDFIELD_MAKE(7,0,1,3,1)
 #define CPUF_HLE	CPUIDFIELD_MAKE(7,0,1,4,1)
 #define CPUF_AVX2	CPUIDFIELD_MAKE(7,0,1,5,1)
+#define CPUF_AVX512	CPUIDFIELD_MAKE(7,0,1,6,1)
 #define CPUF_SMEP	CPUIDFIELD_MAKE(7,0,1,7,1)
 #define CPUF_BMI2	CPUIDFIELD_MAKE(7,0,1,8,1)
 #define CPUF_ERMS	CPUIDFIELD_MAKE(7,0,1,9,1)
@@ -449,6 +450,7 @@ extern "C" {
 #define SIMD_AVX_NONE	0	// 不支持
 #define SIMD_AVX_1	1	// AVX
 #define SIMD_AVX_2	2	// AVX2
+#define SIMD_AVX_512	3	//AVX512
 
 // functions
 	int cpu_getvendor(char* pvendor);
@@ -481,13 +483,14 @@ extern "C" {
 
 class CCPUID {
 public:
-	enum {
+	/*enum {
 		CPUFDescLen = 292	// CPUIDFIELD描述信息数组的长度.
-	};
+	};*/
+	#define  CPUFDescLen  292
 	static const CPUIDFIELDDESC	CPUFDesc[CPUFDescLen];	// CPUIDFIELD描述信息数组.
 	static const char*	CacheDesc[0x100];	// 缓存描述信息数组.
 	static const char*	SseNames[7];	// SSE级别的名称.
-	static const char*	AvxNames[3];	// AVX级别的名称.
+	static const char*	AvxNames[4];	// AVX级别的名称.
 
 	CPUIDINFO	Info[MAX_CPUIDINFO + 1];	// CPUID信息数组.
 

@@ -26,5 +26,8 @@
     <ClInclude Include="ccpuid.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="desc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -8,13 +8,6 @@
         mc:Ignorable="d" Closing="Window_Closing"
         Closed="Window_Closed"
         Title="诊断工具" Height="450" Width="800">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Themes.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="203*"/>
@@ -50,7 +43,7 @@
                                 <RowDefinition Height="20"></RowDefinition>
                             </Grid.RowDefinitions>
 
-                            <RichTextBox  ScrollViewer.VerticalScrollBarVisibility="Visible">
+                            <RichTextBox IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
                                 <FlowDocument>
                                     <Paragraph>
                                         <Run Name="CPUID_TEXT"></Run>

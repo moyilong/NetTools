@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////
-// testccpuid.cpp : 测试ccpuid.h, 显示所有的CPUID信息.
+// testccpuid.cpp : ����ccpuid.h, ��ʾ���е�CPUID��Ϣ.
 // Author: zyl910
 // Blog: http://www.cnblogs.com/zyl910
 // URL: http://www.cnblogs.com/zyl910/archive/2012/08/22/ccpuid_v101.html
@@ -10,150 +10,87 @@
 // ~~~~~~
 //
 // [2012-08-22] V1.01
-// 兼容GCC.
+// ����GCC.
 //
 // [2012-07-11] V1.00
-// V1.0发布.
+// V1.0����.
 //
 ////////////////////////////////////////////////////////////
 
 #include <stdio.h>
 
 #include "ccpuid.h"
-
-bool bShowDesc = true;	// 显示描述信息
 FILE *fp;
-// 获取程序位数（被编译为多少位的代码）
-inline int GetProgramBits()
-{
-	return sizeof(int*) * 8;
-}
 
-// 打印CPUID字段_某项.
-inline void prtCcpuid_Item(uint32_t fid, uint32_t fidsub, const uint32_t CPUInfo[4])
-{
-	static const char* RegName[4] = { "EAX", "EBX", "ECX", "EDX" };
-	uint32_t mask = CPUIDFIELD_MASK_FID | CPUIDFIELD_MASK_FIDSUB;
-	uint32_t cur = CPUIDFIELD_MAKE(fid, fidsub, 0, 0, 1) & mask;
-	int i;
-	for (i = 0; i < CCPUID::CPUFDescLen; ++i)
-	{
-		const CPUIDFIELDDESC& v = CCPUID::CPUFDesc[i];
-		if ((v.cpuf&mask) == cur)
-		{
-			CPUIDFIELD f = v.cpuf;
-			uint32_t bits = CPUIDFIELD_LEN(f);
-			uint32_t pos = CPUIDFIELD_POS(f);
-			uint32_t reg = CPUIDFIELD_REG(f);
-			uint32_t n = getcpuidfield_buf(CPUInfo, f);	//UINT32 n = __GETBITS32(CPUInfo[reg], pos, bits);
-			if (bits > 1)
-			{
-				fprintf(fp, "\t%s[%2d:%2d]", RegName[reg], pos + bits - 1, pos);
-			}
-			else
-			{
-				fprintf(fp, "\t%s[   %2d]", RegName[reg], pos);
-			}
-			fprintf(fp, "=%s:\t0x%X\t(%u)", v.szName, n, n);
-			if (bShowDesc)
-			{
-				fprintf(fp, "\t// %s", v.szDesc);
-			}
-			fprintf(fp, "\n");
-		}
-	}
-}
+struct OutputDefine {
+	const char *DisplayName;
+	const CPUIDFIELD Field;
+};
 
-// 打印CPUID字段.
-void prtCcpuid(const CCPUID& ccid)
-{
-	int i;
-	for (i = 0; i < ccid.InfoCount(); ++i)
-	{
-		const CPUIDINFO& v = ccid.Info[i];
-		fprintf(fp, "0x%.8X[%d]:\t%.8X\t%.8X\t%.8X\t%.8X\n", v.fid, v.fidsub, v.dw[0], v.dw[1], v.dw[2], v.dw[3]);
-		// 检查子功能号. 如果是规范的子功能号，便故意设为0，根据子功能号0的字段来解析各个子功能号的信息。
-		uint32_t fidsub = v.fidsub;
-		switch (v.fid)
-		{
-		case 0x4: fidsub = 0;
-		case 0xB: fidsub = 0;
-		case 0x8000001D: fidsub = 0;
-		}
-		// item
-		prtCcpuid_Item(v.fid, fidsub, v.dw);
-		// otheritem
-		if (0 == v.fid)	// Vendor-ID (Function 02h)
-		{
-			fprintf(fp, "\tVendor:\t%s\n", ccid.Vendor());
-		}
-		else if (0x80000004 == v.fid)	// Processor Brand String (Function 80000002h,80000003h,80000004h)
-		{
-			fprintf(fp, "\tBrand:\t%s\n", ccid.Brand());
-		}
-		else if (0x2 == v.fid)	// Cache Descriptors (Function 02h)
-		{
-			for (int j = 0; j <= 3; ++j)
-			{
-				uint32_t n = v.dw[j];
-				if (n > 0)	// 最高位为0，且不是全0
-				{
-					for (int k = 0; k <= 3; ++k)
-					{
-						if (j > 0 || k > 0)	// EAX的低8位不是缓存信息
-						{
-							int by = n & 0x00FF;
-							if (by > 0)
-							{
-								fprintf(fp, "\t0x%.2X:\t%s\n", by, CCPUID::CacheDesc[by]);
-							}
-						}
-						n >>= 8;
-					}
-				}
-			}
-		}
-	}
-}
+OutputDefine Define[] = {
+
+{"APM�汾",CPUF_APM_Version},
+{"100MhzƵ���л�",CPUF_100MHzSteps},
+{"MMX",CPUF_MMX},
+{"MMX+",CPUF_MmxExt},
+{"3DNow",CPUF_3DNow},
+{"3DNow+",CPUF_3DNowExt},
+{"3DNowPrefetch",CPUF_3DNowPrefetch},
+{"AES",CPUF_AES},
+{"F16C",CPUF_F16C},
+{"FMA",CPUF_FMA},
+{"FMA4",CPUF_FMA4},
+{"PAE",CPUF_PAE},
+{"Page1GB",CPUF_Page1GB},
+};
+
+
+#define DEBUG(str)	printf("[%s@%d]%s\n",__FILE__,__LINE__,str)
 
 int main(int argc, char* argv[])
 {
 	int i;
+	DEBUG("Opening File...");
 	fp = fopen(argv[1], "w");
+	DEBUG("Start Writting...");
 	//CCPUID ccid;
 	//ccid.RefreshAll();
 	CCPUID& ccid = CCPUID::cur();
 	// base info
-	fprintf(fp, "CCPUID.InfoCount:\t%d\n", ccid.InfoCount());
-	fprintf(fp, "CCPUID.LFuncStd:\t%.8Xh\n", ccid.LFuncStd());
-	fprintf(fp, "CCPUID.LFuncExt:\t%.8Xh\n", ccid.LFuncExt());
-	fprintf(fp, "CCPUID.Vendor:  \t%s\n", ccid.Vendor());
+	//fprintf(fp, "CCPUID.InfoCount:\t%d\n", ccid.InfoCount());
+	//fprintf(fp, "CCPUID.LFuncStd:\t%.8Xh\n", ccid.LFuncStd());
+	//fprintf(fp, "CCPUID.LFuncExt:\t%.8Xh\n", ccid.LFuncExt());
+	fprintf(fp, "CPU����:\t%s\n", ccid.Vendor());
 	//fprintf(fp,"CCPUID.Brand:\t%s\n", ccid.Brand());
-	fprintf(fp, "CCPUID.BrandTrim:\t%s\n", ccid.BrandTrim());
-
-	// simd info
-	fprintf(fp, "CCPUID.MMX:\t%d\t// hw: %d\n", ccid.mmx(), ccid.hwmmx());
-	fprintf(fp, "CCPUID.SSE:\t%d\t// hw: %d\n", ccid.sse(), ccid.hwsse());
-	for (i = 1; i < (int)(sizeof(CCPUID::SseNames) / sizeof(CCPUID::SseNames[0])); ++i)
+	fprintf(fp, "CPU�ͺ�:\t%s ����:%d ����:%d+%d\n", ccid.BrandTrim(),ccid.GetField(CPUF_Stepping), ccid.GetField(CPUF_BaseFamily),ccid.GetField(CPUF_ExtFamily));
+	fprintf(fp, "CPU SIMD����:\n");
+/*	DEBUG("Fetching SIMD Fetaure...");
+	for (int n = 0; n < sizeof(Define) / sizeof(OutputDefine); n++)
 	{
-		if (ccid.hwsse() >= i)	fprintf(fp, "\t%s\n", CCPUID::SseNames[i]);
-	}
-	fprintf(fp, "SSE4A:\t%d\n", ccid.GetField(CPUF_SSE4A));
-	fprintf(fp, "AES:\t%d\n", ccid.GetField(CPUF_AES));
-	fprintf(fp, "PCLMULQDQ:\t%d\n", ccid.GetField(CPUF_PCLMULQDQ));
-	fprintf(fp, "CCPUID.AVX:\t%d\t// hw: %d\n", ccid.avx(), ccid.hwavx());
+		uint32_t val = ccid.GetField(Define[n].Field);
+		if (val > 0)
+			fprintf(fp, "\t%s:\t%ld\t%s\n", Define[n].DisplayName, val,ccid.CPUFDesc[Define[n].Field]);
+	}*/
+	DEBUG("Fetching SSE Feature...");
+	if (ccid.sse() > 1)
+		for (i = 1; i < (int)(sizeof(CCPUID::SseNames) / sizeof(CCPUID::SseNames[0])); ++i)
+			if (ccid.hwsse() >= i)
+				fprintf(fp, "\t%s\n", CCPUID::SseNames[i]);
 	for (i = 1; i < (int)(sizeof(CCPUID::AvxNames) / sizeof(CCPUID::AvxNames[0])); ++i)
+		if (ccid.hwavx() >= i)
+			fprintf(fp, "\t%s\n", CCPUID::AvxNames[i]);
+	DEBUG("Fetch Description Feature...");
+	fprintf(fp,"����CPU����:\n");
+	for (int n = 0; n < CPUFDescLen; n++)
 	{
-		if (ccid.hwavx() >= i)	fprintf(fp, "\t%s\n", CCPUID::AvxNames[i]);
+		uint32_t result = ccid.GetField(ccid.CPUFDesc[n].cpuf);
+		
+		if (result != ccid.CPUFDesc[n].reserved)
+			fprintf(fp, "%s\t%s\t%ld\n", ccid.CPUFDesc[n].szName, ccid.CPUFDesc[n].szDesc, result);
 	}
-	fprintf(fp, "F16C:\t%d\n", ccid.GetField(CPUF_F16C));
-	fprintf(fp, "FMA:\t%d\n", ccid.GetField(CPUF_FMA));
-	fprintf(fp, "FMA4:\t%d\n", ccid.GetField(CPUF_FMA4));
-	fprintf(fp, "XOP:\t%d\n", ccid.GetField(CPUF_XOP));
-
-	// field info
-	fprintf(fp, "== fields ==\n");
-	prtCcpuid(ccid);
+	fflush(fp);
+	DEBUG("Flushing...");
+	fclose(fp);
 
 	return 0;
 }
