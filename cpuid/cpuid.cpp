@@ -18,8 +18,9 @@
 ////////////////////////////////////////////////////////////
 
 #include <stdio.h>
-
+#include <inttypes.h>
 #include "ccpuid.h"
+#include<omp.h>
 FILE *fp;
 
 struct OutputDefine {
@@ -28,9 +29,6 @@ struct OutputDefine {
 };
 
 OutputDefine Define[] = {
-
-{"APM版本",CPUF_APM_Version},
-{"100Mhz频率切换",CPUF_100MHzSteps},
 {"MMX",CPUF_MMX},
 {"MMX+",CPUF_MmxExt},
 {"3DNow",CPUF_3DNow},
@@ -41,7 +39,6 @@ OutputDefine Define[] = {
 {"FMA",CPUF_FMA},
 {"FMA4",CPUF_FMA4},
 {"PAE",CPUF_PAE},
-{"Page1GB",CPUF_Page1GB},
 };
 
 
@@ -53,41 +50,30 @@ int main(int argc, char* argv[])
 	DEBUG("Opening File...");
 	fp = fopen(argv[1], "w");
 	DEBUG("Start Writting...");
-	//CCPUID ccid;
-	//ccid.RefreshAll();
 	CCPUID& ccid = CCPUID::cur();
-	// base info
-	//fprintf(fp, "CCPUID.InfoCount:\t%d\n", ccid.InfoCount());
-	//fprintf(fp, "CCPUID.LFuncStd:\t%.8Xh\n", ccid.LFuncStd());
-	//fprintf(fp, "CCPUID.LFuncExt:\t%.8Xh\n", ccid.LFuncExt());
-	fprintf(fp, "CPU厂商:\t%s\n", ccid.Vendor());
-	//fprintf(fp,"CCPUID.Brand:\t%s\n", ccid.Brand());
-	fprintf(fp, "CPU型号:\t%s 步进:%d 家族:%d+%d\n", ccid.BrandTrim(),ccid.GetField(CPUF_Stepping), ccid.GetField(CPUF_BaseFamily),ccid.GetField(CPUF_ExtFamily));
-	fprintf(fp, "CPU SIMD功能:\n");
-/*	DEBUG("Fetching SIMD Fetaure...");
-	for (int n = 0; n < sizeof(Define) / sizeof(OutputDefine); n++)
-	{
-		uint32_t val = ccid.GetField(Define[n].Field);
-		if (val > 0)
-			fprintf(fp, "\t%s:\t%ld\t%s\n", Define[n].DisplayName, val,ccid.CPUFDesc[Define[n].Field]);
-	}*/
+	fprintf(fp, "true;CPU厂商;;%s;\n", ccid.Vendor());
+	fprintf(fp, "true;CPU型号;;%s 步进:%d 家族:%d+%d;\n", ccid.BrandTrim(),ccid.GetField(CPUF_Stepping), ccid.GetField(CPUF_BaseFamily),ccid.GetField(CPUF_ExtFamily));
+	fprintf(fp, "true;CPU线程数;;逻辑处理器数量:%d 最大线程数:%d\n", omp_get_num_procs(), omp_get_max_threads());
+	fprintf(fp, "true;CPU 指令集;;");
 	DEBUG("Fetching SSE Feature...");
+	for (int n = 0; n < sizeof(Define) / sizeof(OutputDefine); n++)
+		if (ccid.GetField(Define[n].Field) != 0)
+			fprintf(fp, "%s,", Define[n].DisplayName);
 	if (ccid.sse() > 1)
 		for (i = 1; i < (int)(sizeof(CCPUID::SseNames) / sizeof(CCPUID::SseNames[0])); ++i)
 			if (ccid.hwsse() >= i)
-				fprintf(fp, "\t%s\n", CCPUID::SseNames[i]);
+				fprintf(fp, "%s,", CCPUID::SseNames[i]);
 	for (i = 1; i < (int)(sizeof(CCPUID::AvxNames) / sizeof(CCPUID::AvxNames[0])); ++i)
 		if (ccid.hwavx() >= i)
-			fprintf(fp, "\t%s\n", CCPUID::AvxNames[i]);
+			fprintf(fp, "%s,", CCPUID::AvxNames[i]);
+	fprintf(fp, "\n");
 	DEBUG("Fetch Description Feature...");
-	fprintf(fp,"所有CPU功能:\n");
 	for (int n = 0; n < CPUFDescLen; n++)
 	{
 		uint32_t result = ccid.GetField(ccid.CPUFDesc[n].cpuf);
-		
-		if (result != ccid.CPUFDesc[n].reserved)
-			fprintf(fp, "%s\t%s\t%ld\n", ccid.CPUFDesc[n].szName, ccid.CPUFDesc[n].szDesc, result);
+		fprintf(fp, "%s;%s;%s;%" PRIu32"\n", (result == ccid.CPUFDesc[n].reserved ? "false" : "true"), ccid.CPUFDesc[n].szName, ccid.CPUFDesc[n].szDesc, result);
 	}
+	
 	fflush(fp);
 	DEBUG("Flushing...");
 	fclose(fp);

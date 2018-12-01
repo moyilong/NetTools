@@ -13,11 +13,11 @@ namespace 诊断工具
         [STAThread]
         static void Main(string[] args)
         {
-            PhenomWPF.QueryFormStart(typeof(App), new
+            PhenomWPF.QueryFormStart<App>(new
                  Phenom.ProgramMethod.QueryRunner.QueryRunnerItem[]
             {
 
-            },new Loading());
+            }, new Loading());
         }
 
     }

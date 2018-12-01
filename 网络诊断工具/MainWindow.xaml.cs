@@ -51,7 +51,7 @@ namespace 诊断工具
             machin_info.ItemsSource = data;
         }
 
-   
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (!this.Confirm("是否退出?"))
@@ -76,7 +76,21 @@ namespace 诊断工具
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
         {
         }
-
+        struct CPUInfo
+        {
+            public bool Supported { get; set; }
+            public string Name { get; private set; }
+            public string Description { get; private set; }
+            public string Value { get; private set; }
+            public CPUInfo(string line)
+            {
+                string[] xline = line.Trim().Split(';');
+                Supported = bool.Parse(xline[0]);
+                Name = xline[1];
+                Description = xline[2];
+                Value = xline[3];
+            }
+        }
         private void refresh_cpuinfo_Click(object sender, RoutedEventArgs e)
         {
             node.Push("Reading CPU Info");
@@ -90,7 +104,11 @@ namespace 诊断工具
             };
             proces.Start();
             proces.WaitForExit();
-            CPUID_TEXT.Text = File.ReadAllText("cpuid.txt");
+            List<CPUInfo> info = new List<CPUInfo>();
+            foreach (var i in File.ReadAllText("cpuid.txt", Encoding.GetEncoding("GB2312")).Split('\n'))
+                if (!i.IsEmpty())
+                    info.Add(new CPUInfo(i));
+            cpuid_flush_data.ItemsSource = info;
         }
 
 

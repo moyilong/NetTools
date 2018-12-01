@@ -143,7 +143,8 @@ namespace 诊断工具.Controls
             if (IsHexMode)
             {
                 List<byte> ret = new List<byte>();
-                Async.ForEach(serial_port_assistant_input_run.Text.Split(' '), (self, id) =>
+                //Async.ForEach(serial_port_assistant_input_run.Text.Split(' '), (self, id) =>
+                serial_port_assistant_input_run.Text.Split(' ').Foreach((self,id)=>
                 {
                     if (ret != null)
                         try

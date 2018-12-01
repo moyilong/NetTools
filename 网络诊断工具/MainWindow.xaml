@@ -42,14 +42,22 @@
                                 <RowDefinition></RowDefinition>
                                 <RowDefinition Height="20"></RowDefinition>
                             </Grid.RowDefinitions>
-
-                            <RichTextBox IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
-                                <FlowDocument>
-                                    <Paragraph>
-                                        <Run Name="CPUID_TEXT"></Run>
-                                    </Paragraph>
-                                </FlowDocument>
-                            </RichTextBox>
+                            <ListView Name="cpuid_flush_data">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="支持">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox  IsChecked="{Binding Supported}"></CheckBox>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="名称" DisplayMemberBinding="{Binding Name}"></GridViewColumn>
+                                        <GridViewColumn Header="说明" DisplayMemberBinding="{Binding Description}"></GridViewColumn>
+                                        <GridViewColumn Header="参数" DisplayMemberBinding="{Binding Value}"></GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
                             <Button Grid.Row="1" Click="refresh_cpuinfo_Click" Name="refresh_cpuinfo"  Content="刷新CPUInfo" ></Button>
                         </Grid>
                     </TabItem>

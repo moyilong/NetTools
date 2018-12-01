@@ -1,75 +1,105 @@
 const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 {CPUF_LFuncStd, 0, "LFuncStd", "largest standard function."}
-, { CPUF_Stepping, 0, "Stepping", "processor stepping." }
-, { CPUF_BaseModel, 0, "BaseModel", "base processor model." }
-, { CPUF_BaseFamily, 0, "BaseFamily", "base processor family." }
-, { CPUF_ProcessorType, 0, "ProcessorType", "processor type." }
-, { CPUF_ExtModel, 0, "ExtModel", "processor extended model." }
-, { CPUF_ExtFamily, 0, "ExtFamily", "processor extended family." }
+, { CPUF_Stepping, 0, "步进", "处理器步进" }
+, { CPUF_BaseModel, 0, "基本型号", "基本处理器型号" }
+, { CPUF_BaseFamily, 0, "基本家族", "基本处理器家族" }
+, { CPUF_ProcessorType, 0, "处理器类型", "处理器类型" }
+, { CPUF_ExtModel, 0, "扩展型号", "扩展处理器型号" }
+, { CPUF_ExtFamily, 0, "扩展家族", "扩展处理器家族" }
+
+
+//CPU指令集
+, { CPUF_MMX, 0, "MMX", "MMX 指令集." }
+, { CPUF_MmxExt, 0, "MmxExt", "MMX指令集的AMD扩展" }
+, { CPUF_3DNow, 0, "3DNow", "3DNow! 指令集." }
+, { CPUF_3DNowExt, 0, "3DNowExt", "AMD 3DNow! 指令集扩展" }
+, { CPUF_AVX2, 0, "AVX2", "AVX2 指令集." }
+, { CPUF_SSE, 0, "SSE", "SSE指令集" }
+, { CPUF_SSE2, 0, "SSE2", "SSE2指令集" }
+, { CPUF_SSSE3, 0, "SSSE3", "SSSE3指令集" }
+, { CPUF_SSE3, 0, "SSE3", "SSE3 指令集" }
+, { CPUF_SSE41, 0, "SSE41", "SSE4.1 指令集." }
+, { CPUF_SSE42, 0, "SSE42", "SSE4.2 指令集." }
+, { CPUF_SSE4A, 0, "SSE4A", "SSE4A 指令集." }
+, { CPUF_AVX, 0, "AVX", "AVX 指令集." }
+, { CPUF_PCLMULQDQ, 0, "PCLMULQDQ", "PCLMULQDQ指令集" }
+, { CPUF_CX8, 0, "CX8", "CMPXCHG8B 指令集" }
+, { CPUF_CMPXCHG16B, 0, "CMPXCHG16B", "CMPXCHG16B 指令集" }
+, { CPUF_SYSCALL, 0, "SYSCALL", "SYSCALL 和 SYSRET 指令集." }
+, { CPUF_CLFSH, 0, "CLFSH", "CLFLUSH 指令集" }
+, { CPUF_FXSR, 0, "FXSR", "FXSAVE 和 FXRSTOR 指令集." }
+, { CPUF_CMOV, 0, "CMOV", "Conditional Move 指令集." }
+, { CPUF_SEP, 0, "SEP", "快速系统调用指令集(SYSENTER和SYSEXIT)" }
+, { CPUF_MSR, 0, "MSR", "特殊型号寄存器 (RDMSR 和 WRMSR) 指令集." }
+, { CPUF_MONITOR, 0, "MONITOR", "MONITOR/MWAIT 指令集." }
+, { CPUF_MOVBE, 0, "MOVBE", "MOVBE 指令集" }
+, { CPUF_POPCNT, 0, "POPCNT", "POPCNT 指令集" }
+, { CPUF_AES, 0, "AES", "Advanced Encryption Standard (AES) 指令集." }
+, { CPUF_XSAVE, 0, "XSAVE", "XSAVE (and related) 指令集" }
+, { CPUF_OSXSAVE, 0, "OSXSAVE", "XSAVE (and related) 指令集" }
+, { CPUF_FMA4, 0, "FMA4", "4操作符FMA指令集" }
+, { CPUF_3DNowPrefetch, 0, "3DNowPrefetch", "3DNow预取(PREFETCH 和 PREFETCHW)指令集" }
+, { CPUF_XOP, 0, "XOP", "扩展操作符" }
+
+, { CPUF_FP128, 0, "FP128", "128-bit SSE (multimedia) 指令集 are executed with full-width internal operations and pipelines rather than decomposing them into internal 64-bit suboperations." }
+, { CPUF_MOVU, 0, "MOVU", "MOVU SSE (multimedia) 指令集 are more efficient and should be preferred to SSE(multimedia) MOVL/MOVH. MOVUPS is more efficient than MOVLPS/MOVHPS." }
+
+
+, { CPUF_VMX, 0, "VMX", "虚拟机扩展" }
+, { CPUF_SMX, 0, "SMX", "安全模式扩展" }
+
 , { CPUF_BrandId8, 0, "BrandId8", "8-bit brand ID." }
 , { CPUF_CLFlush, 0, "CLFlush", "CLFLUSH line size. (*8)" }
 , { CPUF_MaxApicId, 0, "MaxApicId", "Maximum number of addressable IDs for logical processors in this physical package." }
 , { CPUF_ApicId, 0, "ApicId", "Initial local APIC physical ID(8-bit)." }
-, { CPUF_SSE3, 0, "SSE3", "Streaming SIMD Extensions 3." }
-, { CPUF_PCLMULQDQ, 0, "PCLMULQDQ", "PCLMULQDQ ." }
 , { CPUF_DTES64, 0, "DTES64", "64-bit DS Area." }
-, { CPUF_MONITOR, 0, "MONITOR", "MONITOR/MWAIT 指令集." }
 , { CPUF_DS_CPL, 0, "DS_CPL", "CPL Qualified Debug Store." }
-, { CPUF_VMX, 0, "VMX", "Virtual Machine Extensions." }
-, { CPUF_SMX, 0, "SMX", "Safer Mode Extensions." }
 , { CPUF_EIST, 0, "EIST", "Enhanced Intel SpeedStep technology." }
-, { CPUF_TM2, 0, "TM2", "Thermal Monitor 2." }
-, { CPUF_SSSE3, 0, "SSSE3", "Supplemental Streaming SIMD Extensions 3 (SSSE3)." }
+, { CPUF_TM2, 0, "TM2", "温控 2." }
+
 , { CPUF_CNXT_ID, 0, "CNXT_ID", "L1 Context ID." }
 , { CPUF_FMA, 0, "FMA", "supports FMA extensions using YMM state." }
-, { CPUF_CMPXCHG16B, 0, "CMPXCHG16B", "CMPXCHG16B ." }
+
 , { CPUF_xTPR, 0, "xTPR", "xTPR Update Control. Can disable sending Task Priority messages." }
 , { CPUF_PDCM, 0, "PDCM", "Perfmon and Debug Capability." }
 , { CPUF_PCID, 0, "PCID", "Process Context Identifiers." }
 , { CPUF_DCA, 0, "DCA", "Direct Cache Access." }
-, { CPUF_SSE41, 0, "SSE41", "SSE4.1 指令集." }
-, { CPUF_SSE42, 0, "SSE42", "SSE4.2 指令集." }
-, { CPUF_x2APIC, 0, "x2APIC", "Extended xAPIC Support." }
-, { CPUF_MOVBE, 0, "MOVBE", "MOVBE ." }
-, { CPUF_POPCNT, 0, "POPCNT", "POPCNT ." }
+
+, { CPUF_x2APIC, 0, "x2APIC", "扩展XAPIC支持" }
+
 , { CPUF_TSC_DEADLINE, 0, "TSC_DEADLINE", "Local APIC timer supports one-shot operation using a TSC deadline value." }
-, { CPUF_AES, 0, "AES", "Advanced Encryption Standard (AES) 指令集." }
-, { CPUF_XSAVE, 0, "XSAVE", "XSAVE (and related) 指令集 are supported by hardware." }
-, { CPUF_OSXSAVE, 0, "OSXSAVE", "XSAVE (and related) 指令集 are enabled." }
-, { CPUF_AVX, 0, "AVX", "AVX 指令集." }
+
 , { CPUF_F16C, 0, "F16C", "half-precision convert  support." }
 , { CPUF_RDRAND, 0, "RDRAND", "RDRAND ." }
-, { CPUF_FPU, 0, "FPU", "Floating Point Unit On-Chip." }
-, { CPUF_VME, 0, "VME", "Virtual 8086 Mode Enhancements." }
-, { CPUF_DE, 0, "DE", "Debugging Extensions." }
-, { CPUF_PSE, 0, "PSE", "Page Size Extension." }
-, { CPUF_TSC, 0, "TSC", "Time Stamp Counter." }
-, { CPUF_MSR, 0, "MSR", "Model Specific Registers RDMSR and WRMSR 指令集." }
-, { CPUF_PAE, 0, "PAE", "Physical Address Extension." }
+, { CPUF_FPU, 0, "FPU", "集成浮点处理器" }
+, { CPUF_VME, 0, "VME", "虚拟86模式扩展" }
+, { CPUF_DE, 0, "DE", "调试扩展" }
+, { CPUF_PSE, 0, "PSE", "页大小扩展" }
+, { CPUF_TSC, 0, "TSC", "计时器" }
+
+, { CPUF_PAE, 0, "PAE", "物理地址线扩展" }
 , { CPUF_MCE, 0, "MCE", "Machine Check Exception." }
-, { CPUF_CX8, 0, "CX8", "CMPXCHG8B ." }
+
 , { CPUF_APIC, 0, "APIC", "APIC(Advanced Programmable Interrupt Controller) On-Chip." }
-, { CPUF_SEP, 0, "SEP", "Fast System Call 指令集, SYSENTER and SYSEXIT." }
+
+
 , { CPUF_MTRR, 0, "MTRR", "Memory Type Range Registers." }
 , { CPUF_PGE, 0, "PGE", "Page Global Enable." }
 , { CPUF_MCA, 0, "MCA", "Machine-Check Architecture." }
-, { CPUF_CMOV, 0, "CMOV", "Conditional Move 指令集." }
-, { CPUF_PAT, 0, "PAT", "Page Attribute Table." }
-, { CPUF_PSE36, 0, "PSE36", "36-Bit Page Size Extension." }
-, { CPUF_PSN, 0, "PSN", "Processor Serial Number." }
-, { CPUF_CLFSH, 0, "CLFSH", "CLFLUSH ." }
-, { CPUF_DS, 0, "DS", "Debug Store." }
-, { CPUF_ACPI, 0, "ACPI", "Thermal Monitor and Software Controlled Clock Facilities." }
-, { CPUF_MMX, 0, "MMX", "MMX 指令集." }
-, { CPUF_FXSR, 0, "FXSR", "FXSAVE and FXRSTOR 指令集." }
-, { CPUF_SSE, 0, "SSE", "Streaming SIMD Extensions." }
-, { CPUF_SSE2, 0, "SSE2", "Streaming SIMD Extensions 2." }
+
+, { CPUF_PAT, 0, "PAT", "页属性表" }
+, { CPUF_PSE36, 0, "PSE36", "36-Bit 页大小扩展" }
+, { CPUF_PSN, 0, "PSN", "处理器序列号" }
+
+, { CPUF_DS, 0, "DS", "调试存储" }
+, { CPUF_ACPI, 0, "ACPI", "温度监控和软件控制器" }
+
 , { CPUF_SS, 0, "SS", "Self Snoop." }
-, { CPUF_HTT, 0, "HTT", "Max APIC IDs reserved field is Valid." }
-, { CPUF_TM, 0, "TM", "Thermal Monitor." }
+, { CPUF_HTT, 0, "HTT", "最大APIC ID" }
+, { CPUF_TM, 0, "TM", "温度监控" }
 , { CPUF_PBE, 0, "PBE", "Pending Break Enable." }
-, { CPUF_Cache_Type, 0, "Cache_Type", "Cache Type (0=Null, 1=Data, 2=, 3=Unified)." }
-, { CPUF_Cache_Level, 0, "Cache_Level", "Cache Level (Starts at 1)." }
+, { CPUF_Cache_Type, 0, "Cache_Type", "缓存类型 (0=无, 1=数据, 2=, 3=混合)." }
+, { CPUF_Cache_Level, 0, "Cache_Level", "缓存等级(从1开始)" }
 , { CPUF_CACHE_SI, 0, "CACHE_SI", "Self Initializing cache level." }
 , { CPUF_CACHE_FA, 0, "CACHE_FA", "Fully Associative cache." }
 , { CPUF_MaxApicIdShare, 0, "MaxApicIdShare", "Maximum number of addressable IDs for logical processors sharing this cache (plus 1 encoding)." }
@@ -104,7 +134,7 @@ const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 , { CPUF_FSGSBASE, 0, "FSGSBASE", "Supports RDFSBASE/RDGSBASE/WRFSBASE/WRGSBASE." }
 , { CPUF_BMI1, 0, "BMI1", "The first group of advanced bit manipulation extensions (ANDN, BEXTR, BLSI, BLSMK, BLSR, TZCNT)." }
 , { CPUF_HLE, 0, "HLE", "Hardware Lock Elision." }
-, { CPUF_AVX2, 0, "AVX2", "AVX2 指令集." }
+
 , { CPUF_SMEP, 0, "SMEP", "Supervisor Mode Execution Protection." }
 , { CPUF_BMI2, 0, "BMI2", "The second group of advanced bit manipulation extensions (BZHI, MULX, PDEP, PEXT, RORX, SARX, SHLX, SHRX)." }
 , { CPUF_ERMS, 0, "ERMS", "Supports Enhanced REP MOVSB/STOSB." }
@@ -147,28 +177,21 @@ const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 , { CPUF_ExtApicSpace, 0, "ExtApicSpace", "extended APIC space." }
 , { CPUF_AltMovCr8, 0, "AltMovCr8", "LOCK MOV CR0 means MOV CR8." }
 , { CPUF_ABM, 0, "ABM", "advanced bit manipulation (LZCNT)." }
-, { CPUF_SSE4A, 0, "SSE4A", "SSE4A 指令集." }
+
 , { CPUF_MisAlignSse, 0, "MisAlignSse", "misaligned SSE mode." }
-, { CPUF_3DNowPrefetch, 0, "3DNowPrefetch", "PREFETCH and PREFETCHW  support." }
 , { CPUF_OSVW, 0, "OSVW", "OS visible workaround." }
 , { CPUF_IBS, 0, "IBS", " based sampling." }
-, { CPUF_XOP, 0, "XOP", "extended operation support." }
 , { CPUF_SKINIT, 0, "SKINIT", "SKINIT and STGI are supported, independent of the value of MSRC000_0080[SVME]." }
 , { CPUF_WDT, 0, "WDT", "watchdog timer support." }
 , { CPUF_LWP, 0, "LWP", "lightweight profiling support." }
-, { CPUF_FMA4, 0, "FMA4", "4-operand FMA  support." }
 , { CPUF_BIT_NODEID, 0, "BIT_NODEID", "Indicates support for MSRC001_100C[NodeId, NodesPerProcessor]." }
 , { CPUF_TBM, 0, "TBM", "Trailing bit manipulation  support." }
 , { CPUF_TopologyExtensions, 0, "TopologyExtensions", "Topology extensions support." }
-, { CPUF_SYSCALL, 0, "SYSCALL", "SYSCALL and SYSRET 指令集." }
-, { CPUF_XD, 0, "XD", "Execution Disable Bit." }
-, { CPUF_MmxExt, 0, "MmxExt", "AMD extensions to MMX 指令集." }
+, { CPUF_XD, 0, "XD", "禁止执行位" }
 , { CPUF_FFXSR, 0, "FFXSR", "FXSAVE and FXRSTOR  optimizations." }
 , { CPUF_Page1GB, 0, "Page1GB", "1-GB large page support." }
 , { CPUF_RDTSCP, 0, "RDTSCP", "RDTSCP and TSC_AUX." }
-, { CPUF_LM, 0, "LM", "64-bit long mode.(x86-64)" }
-, { CPUF_3DNowExt, 0, "3DNowExt", "AMD extensions to 3DNow! 指令集." }
-, { CPUF_3DNow, 0, "3DNow", "3DNow! 指令集." }
+, { CPUF_LM, 0, "LM", "64位模式" }
 , { CPUF_L1ITlb2and4MSize, 0, "L1ITlb2and4MSize", " TLB number of entries for 2-MB and 4-MB pages." }
 , { CPUF_L1ITlb2and4MAssoc, 0, "L1ITlb2and4MAssoc", " TLB associativity for 2-MB and 4-MB pages." }
 , { CPUF_L1DTlb2and4MSize, 0, "L1DTlb2and4MSize", "Data TLB number of entries for 2-MB and 4-MB pages." }
@@ -236,8 +259,6 @@ const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 , { CPUF_L2ITlb1GAssoc, 0, "L2ITlb1GAssoc", "L2  TLB associativity for 1 GB pages." }
 , { CPUF_L2DTlb1GSize, 0, "L2DTlb1GSize", "L2 data TLB number of entries for 1 GB pages." }
 , { CPUF_L2DTlb1GAssoc, 0, "L2DTlb1GAssoc", "L2 data TLB associativity for 1 GB pages." }
-, { CPUF_FP128, 0, "FP128", "128-bit SSE (multimedia) 指令集 are executed with full-width internal operations and pipelines rather than decomposing them into internal 64-bit suboperations." }
-, { CPUF_MOVU, 0, "MOVU", "MOVU SSE (multimedia) 指令集 are more efficient and should be preferred to SSE(multimedia) MOVL/MOVH. MOVUPS is more efficient than MOVLPS/MOVHPS." }
 , { CPUF_IBSFFV, 0, "IBSFFV", "IBS feature flags valid." }
 , { CPUF_FetchSam, 0, "FetchSam", "IBS fetch sampling supported." }
 , { CPUF_OpSam, 0, "OpSam", "IBS execution sampling supported." }
@@ -248,7 +269,7 @@ const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 , { CPUF_RipInvalidChk, 0, "RipInvalidChk", "Invalid RIP indication supported." }
 , { CPUF_LwpAvail, 0, "LwpAvail", "LWP available." }
 , { CPUF_LwpVAL, 0, "LwpVAL", "LWPVAL  available." }
-, { CPUF_LwpIRE, 0, "LwpIRE", "指令集 retired event available." }
+, { CPUF_LwpIRE, 0, "LwpIRE", "instraction retired event available." }
 , { CPUF_LwpBRE, 0, "LwpBRE", "branch retired event available." }
 , { CPUF_LwpDME, 0, "LwpDME", "DC miss event available." }
 , { CPUF_LwpCNH, 0, "LwpCNH", "core clocks not halted event available." }
@@ -269,7 +290,7 @@ const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 , { CPUF_LwpCacheLatency, 0, "LwpCacheLatency", "cache latency filtering supported." }
 , { CPUF_D_LwpAvail, 0, "D_LwpAvail", "lightweight profiling supported." }
 , { CPUF_D_LwpVAL, 0, "D_LwpVAL", "LWPVAL  supported." }
-, { CPUF_D_LwpIRE, 0, "D_LwpIRE", "指令集 retired event supported." }
+, { CPUF_D_LwpIRE, 0, "D_LwpIRE", "instraction retired event supported." }
 , { CPUF_D_LwpBRE, 0, "D_LwpBRE", "branch retired event supported." }
 , { CPUF_D_LwpDME, 0, "D_LwpDME", "DC miss event supported." }
 , { CPUF_D_LwpCNH, 0, "D_LwpCNH", "core clocks not halted event supported." }
