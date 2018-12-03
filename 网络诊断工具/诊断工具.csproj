@@ -99,9 +99,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ADB\ADB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ADB.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ADB\ADBCtl.xaml.cs">
+      <DependentUpon>ADBCtl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ADB\ADBBasic.cs" />
     <Compile Include="ScreenTest.xaml.cs">
       <DependentUpon>ScreenTest.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\ADB\ADBCtl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Disk.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -169,6 +182,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Controls\ADB\ADB.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ADB.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -187,6 +204,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DNSServer.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AdbWinUsbApi.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\adb.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AdbWinApi.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

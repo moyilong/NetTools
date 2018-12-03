@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="诊断工具.Controls.ADB.ADBCtl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:诊断工具.Controls.ADB"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <GroupBox Header="设备列表" Width="150" HorizontalAlignment="Left">
+            <Grid>
+                <ListView Name="adb_devices" Margin="0,0,0,35">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="名称" DisplayMemberBinding="{Binding Key}"></GridViewColumn>
+                            <GridViewColumn Header="状态" DisplayMemberBinding="{Binding Value}"></GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Button Height="30" VerticalAlignment="Bottom" Content="刷新" Name="refresh_adb" Click="refresh_adb_Click"></Button>
+            </Grid>
+        </GroupBox>
+        <GroupBox Margin="155,0,0,0" Header="APK安装" HorizontalAlignment="Stretch">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Content="安装ADB" Name="install_adb" Click="install_adb_Click"></Button>
+                <Button Grid.Row="1" Grid.Column="0" Content="重启ADB服务" Name="restart_adb_services" Click="restart_adb_services_Click"></Button>
+                <Grid Grid.Row="2" Grid.Column="0" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Content="连接设备"></Label>
+                    <TextBox Grid.Row="1" Name="connect_string"></TextBox>
+                    <Button Content="连接" Grid.Row="2" Name="connect_adb" Click="connect_adb_Click"></Button>
+                </Grid>
+                
+                <Button Grid.Row="0" Grid.Column="2" Content="安装APK" Name="install_apk" Click="install_apk_Click"></Button>
+                <Button Grid.Row="1" Grid.Column="2" Content="重启" Name="adb_reboot" Click="adb_reboot_Click"></Button>
+                <Button Grid.Row="2" Grid.Column="2" Content="重启(Fastboot)" Name="adb_reboot_fastboot" Click="adb_reboot_fastboot_Click"/>
+                <Button Grid.Row="3" Grid.Column="2" Content="重启(Recovery)" Name="adb_reboot_recovery" Click="adb_reboot_recovery_Click"/>
+            </Grid>    
+        </GroupBox>
+    </Grid>
+</UserControl>

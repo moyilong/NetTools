@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wpf="clr-namespace:Phenom.WPF;assembly=Phenom.WPF"
         xmlns:controls="clr-namespace:诊断工具.Controls"
+        xmlns:adb="clr-namespace:诊断工具.Controls.ADB"
         mc:Ignorable="d" Closing="Window_Closing"
         Closed="Window_Closed"
         Title="诊断工具" Height="450" Width="800">
@@ -71,6 +72,9 @@
             </TabItem>
             <TabItem Header="串口助手">
                 <controls:SerialPort></controls:SerialPort>
+            </TabItem>
+            <TabItem Header="安卓">
+                <adb:ADBCtl></adb:ADBCtl>
             </TabItem>
         </TabControl>
     </Grid>
