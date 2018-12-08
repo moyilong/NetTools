@@ -8,6 +8,7 @@ using System.Threading;
 using Phenom.Logger;
 using System.Collections.ObjectModel;
 using Phenom.Extension;
+using Phenom.Network;
 using System.Linq;
 using System.Net;
 using WebClient = Phenom.Network.WebClient;
@@ -93,13 +94,10 @@ namespace 诊断工具.Controls
 
         private void start_ip_scan_Click(object sender, RoutedEventArgs e)
         {
-            if (address_area.SelectedItem is IPAddress ip)
-                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                {
-                    ipscan.ItemsSource = IPScanner.ScanIP(ip, 3000, Application.Current.MainWindow as MainWindow);
-                    return;
-                }
-            this.Error("请选择IPv4地址");
+            if (!(gateway_area.SelectedItem is IPAddress ip))
+                this.Error("请选择IP地址区域");
+            else
+                ipscan.ItemsSource = IPScanner.ScanIP(ip.ToString(), 3000, Application.Current.MainWindow as MainWindow);
         }
         static DebugNode node = new DebugNode("Network");
         private void refresh_mdns_Click(object sender, RoutedEventArgs e)
@@ -119,8 +117,8 @@ namespace 诊断工具.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            address_area.ItemsSource = WebClient.IPList.Where(self => self.IsPrivateAddress() && self.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
             refresh_mdns_Click(null, null);
+            gateway_area.ItemsSource = WebClient.IPList;
         }
     }
-} 
+}

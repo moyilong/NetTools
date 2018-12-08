@@ -2,7 +2,6 @@
 using Phenom.ProgramMethod;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 
@@ -19,12 +18,16 @@ namespace 诊断工具.Methods
         public string Status { get; set; } = "等待";
         public double Timeout { get; set; } = 0;
 
-        public static ObservableCollection<IPScanner> ScanIP(IPAddress GateWay, double TimeOut, MainWindow parent)
+        public static ObservableCollection<IPScanner> ScanIP(string GateWay, double TimeOut, MainWindow parent)
         {
-            string[] sub = GateWay.ToString().Split('.');
+            string[] sub = GateWay.Split('.');
+            if (sub.Length != 4)
+                return null;
             ObservableCollection<IPScanner> ret = new ObservableCollection<IPScanner>();
             for (int n = 0; n < byte.MaxValue; n++)
-                ret.Add(new IPScanner($"{sub[0]}.{sub[1]}.{sub[2]}.{n.ToString()}", ret, TimeOut, parent));
+            {
+                ret.Add(new IPScanner(GateWay + "." + n.ToString(), ret, TimeOut, parent));
+            }
             return ret;
         }
 

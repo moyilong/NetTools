@@ -1,20 +1,13 @@
 ﻿using Phenom.Logger;
 using Phenom.WPF.Extension;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
+using Rectangle = System.Drawing.Rectangle;
+using Point = System.Drawing.Point;
+using Color = System.Drawing.Color;
 namespace 诊断工具
 {
     /// <summary>
@@ -42,13 +35,27 @@ namespace 诊断工具
         int Step = -1;
         void Fill(System.Drawing.Brush color)
         {
-            gpu.FillRectangle(color, new System.Drawing.Rectangle(0, 0, (int)Width,(int) Height));
+            gpu.FillRectangle(color, new Rectangle(0, 0, (int)Width,(int) Height));
             UpdateImage();
         }
         DebugNode node = new DebugNode("ScreenTester");
-        void FillGrayLevel(System.Drawing.Color color,int level)
+        enum RenderMode
         {
-            float step = (float)image.Width / level;
+            Vertex,
+            Hornorlize
+        }
+        void FillGrayLevel(Color color,int level,RenderMode mode)
+        {
+            float step =0;
+            switch(mode )
+            {
+                case RenderMode.Hornorlize:
+                    step = (float)image.Width / level;
+                    break;
+                case RenderMode.Vertex:
+                    step = (float)image.Height / level;
+                    break;
+            }
 
             //int c_step = 255 / level;
             int r_step = color.R == 0 ? 0 : 256 / level;
@@ -57,8 +64,19 @@ namespace 诊断工具
             node.Push($"共{level}级{step}步长 R:{r_step} G:{g_step} B:{b_step}");
             for (int n = 0; n < level ; n++)
             {
-                var vcolor = System.Drawing.Color.FromArgb(255, r_step * n, g_step * n, b_step * n);
-                var vrect = new System.Drawing.Rectangle((int)(n * step), 0,(int) step+5, image.Height);
+                Color vcolor = Color.FromArgb(255, r_step * n, g_step * n, b_step * n);
+
+                Rectangle vrect =new Rectangle();
+                switch(mode)
+                {
+                    case RenderMode.Hornorlize:
+                        vrect=new Rectangle((int)(n * step), 0, (int)step + 5, image.Height);
+                        break;
+                    case RenderMode.Vertex:
+                        vrect = new Rectangle(0, (int)(n * step), image.Width, (int)step + 5);
+                        break;
+                }
+
                 node.Push($"绘制:{n} R={vcolor.R} G={vcolor.G} B={vcolor.B} A={vcolor.A} Rect={vrect.X},{vrect.Y},{vrect.Width},{vrect.Height}"); 
                 gpu.FillRectangle(new SolidBrush(vcolor), vrect);
             }
@@ -75,9 +93,27 @@ namespace 诊断工具
             System.Drawing.Brushes.Red,
             System.Drawing.Brushes.Green,
             System.Drawing.Brushes.Blue,
-            System.Drawing.Brushes.Yellow,
+            System.Drawing.Brushes.AntiqueWhite
         };
- 
+
+        enum SublineMode
+        {
+            Vertex,
+            Hornorlize,
+            VertexAndHornorlize
+        }
+
+        void PowerSubline(SublineMode mode,int dest)
+        {
+            gpu.FillRectangle(System.Drawing.Brushes.Black, new Rectangle(0, 0, image.Width, image.Height));
+            if (mode == SublineMode.Vertex || mode == SublineMode.VertexAndHornorlize)
+                for (int n = 0; n < image.Height; n += dest)
+                    gpu.DrawLine(Pens.White, new Point(0, n), new Point(image.Width, n));
+            if (mode == SublineMode.Hornorlize || mode == SublineMode.VertexAndHornorlize)
+                for (int n = 0; n < image.Width; n += dest)
+                    gpu.DrawLine(Pens.White, new Point(n, 0), new Point(n, image.Height));
+            UpdateImage();
+        }
 
         private void image_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
@@ -96,26 +132,62 @@ namespace 诊断工具
                 case 15:
                 case 16:
                 case 17:
-                    System.Drawing.Color color = System.Drawing.Color.White;
+                case 18:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                case 26:
+                case 27:
+                case 28:
+                case 29:
+                    RenderMode mode = RenderMode.Hornorlize;
+                    if (Step > 17)
+                    {
+                        Step -= 12;
+                        mode = RenderMode.Vertex;
+                    }
+                    Color color = Color.White;
                     int level = Step - 5;
                     if (Step == 9 || Step == 10 || Step == 11)
                     {
-                        color = System.Drawing.Color.Red;
+                        color = Color.Red;
                         level = Step - 8;
                     }
                     else if (Step == 12 || Step == 13 || Step == 14)
                     {
-                        color = System.Drawing.Color.Green;
+                        color = Color.Green;
                         level = Step - 11;
                     }
                     else if (Step == 15 || Step == 16 || Step == 17)
                     {
-                        color = System.Drawing.Color.Blue;
+                        color = Color.Blue;
                         level = Step - 14;
                     }
                     level = (int)Math.Pow(2, 4 + level);
                     current_item.Content = $"{level}级灰阶";
-                    FillGrayLevel(color, level);
+                    FillGrayLevel(color, level, mode);
+                    if (mode == RenderMode.Vertex)
+                        Step += 12;
+                    break;
+                case 30:
+                    PowerSubline(SublineMode.Hornorlize,2);
+                    current_item.Content = "线条测试";
+                    break;
+                case 31:
+                    PowerSubline(SublineMode.Vertex,2);
+                    current_item.Content = "线条测试";
+                    break;
+                case 32:
+                    PowerSubline(SublineMode.VertexAndHornorlize,2);
+                    current_item.Content = "线条测试";
+                    break;
+                case 33:
+                    PowerSubline(SublineMode.VertexAndHornorlize, 50);
+                    current_item.Content = "矩形";
                     break;
                 default:
                     if (Step < IntelliDefaultFill.Length)

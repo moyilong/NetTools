@@ -1,0 +1,121 @@
+﻿<UserControl x:Class="诊断工具.Controls.SerialPort"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:诊断工具.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <GroupBox Header="端口" Grid.Row="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Content="端口" Grid.Column="0" Grid.Row="0"></Label>
+                <ComboBox Grid.Column="0" Grid.Row="1" Name="serial_assistant_port">
+                </ComboBox>
+                <Label Content="速度" Grid.Row="0" Grid.Column="1"></Label>
+                <ComboBox Grid.Column="1" Grid.Row="1" Name="serial_assistant_speed">
+                    <ComboBox.Items>
+                        <ComboBoxItem>110</ComboBoxItem>
+                        <ComboBoxItem>300</ComboBoxItem>
+                        <ComboBoxItem>600</ComboBoxItem>
+                        <ComboBoxItem>1200</ComboBoxItem>
+                        <ComboBoxItem>2400</ComboBoxItem>
+                        <ComboBoxItem>4800</ComboBoxItem>
+                        <ComboBoxItem>9600</ComboBoxItem>
+                        <ComboBoxItem>14400</ComboBoxItem>
+                        <ComboBoxItem>19200</ComboBoxItem>
+                        <ComboBoxItem>38400</ComboBoxItem>
+                        <ComboBoxItem>56000</ComboBoxItem>
+                        <ComboBoxItem>57600</ComboBoxItem>
+                        <ComboBoxItem IsSelected="True">115200</ComboBoxItem>
+                        <ComboBoxItem>128000</ComboBoxItem>
+                        <ComboBoxItem>230400</ComboBoxItem>
+                        <ComboBoxItem>256000</ComboBoxItem>
+                    </ComboBox.Items>
+                </ComboBox>
+                <Label Content="数据位" Grid.Column="2" Grid.Row="0"></Label>
+                <ComboBox Name="serial_assistant_databit" Grid.Column="2" Grid.Row="1">
+                    <ComboBox.Items>
+                        <ComboBoxItem IsSelected="True">8</ComboBoxItem>
+                        <ComboBoxItem>7</ComboBoxItem>
+                        <ComboBoxItem>6</ComboBoxItem>
+                    </ComboBox.Items>
+                </ComboBox>
+                <Label Content="停止位" Grid.Column="3" Grid.Row="0"></Label>
+                <ComboBox Name="serial_assistant_stopbit" Grid.Column="3" Grid.Row="1">
+                    <ComboBox.Items>
+                        <ComboBoxItem IsSelected="True">1</ComboBoxItem>
+                        <ComboBoxItem>1.5</ComboBoxItem>
+                        <ComboBoxItem>2</ComboBoxItem>
+                    </ComboBox.Items>
+                </ComboBox>
+                <Button Content="刷新端口" Grid.Column="4" Name="serial_port_assistant_refresh_port" Click="serial_port_assistant_refresh_port_Click"></Button>
+                <Button Content="开始监听" Grid.Column="4" Grid.Row="1" Name="serial_port_assistant_switch_stat" Click="serial_port_assistant_switch_stat_Click"></Button>
+            </Grid>
+        </GroupBox>
+        <Grid Grid.Row="1" Name="view_box">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <RichTextBox Name="ascii_show_box" Grid.Column="0" IsReadOnly="True">
+                <FlowDocument>
+                    <Paragraph>
+                        <Run Name="ascii_show_run"></Run>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+            <RichTextBox Name="hex_show_box" Grid.Column="1" IsReadOnly="True">
+                <FlowDocument>
+                    <Paragraph>
+                        <Run Name="hex_show_run"></Run>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+        </Grid>
+        <GroupBox Name="send_box" Header="发送" Grid.Row="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                </Grid.RowDefinitions>
+                <RichTextBox Name="serial_port_assistant_input"  IsReadOnly="False">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Name="serial_port_assistant_input_run"></Run>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"></ColumnDefinition>
+                        <ColumnDefinition Width="100"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition Width="100"></ColumnDefinition>
+                        <ColumnDefinition Width="100"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Name="serial_assistant_send_bytes" Grid.Column="0"></Label>
+                    <Label Name="serial_assistant_recv_bytes" Grid.Column="1"></Label>
+                    <Button Name="serial_assistant_send_by_ascii" Content="按ASCII发送" Click="serial_assistant_send_by_ascii_Click" Grid.Column="4"></Button>
+                    <Button Name="serial_assistant_send_by_hex" Content="按HEX发送" Click="serial_assistant_send_by_hex_Click" Grid.Column="3"></Button>
+                </Grid>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

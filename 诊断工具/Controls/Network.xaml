@@ -97,7 +97,7 @@
                         </Grid.ColumnDefinitions>
                         <Label  VerticalContentAlignment="Center" Height="30" Grid.Column="0" Content="IP地址段"></Label>
                         <!--<TextBox VerticalContentAlignment="Center" Height="30" Grid.Column="1" Name="gateway_area" Text="192.168.1"></TextBox>-->
-                        <ComboBox Name="address_area" Height="30" Grid.Column="1" ></ComboBox>
+                        <ComboBox Name="gateway_area" Height="30" VerticalAlignment="Center"  Grid.Column="1"></ComboBox>
                         <Label  VerticalContentAlignment="Center" Content="超时" Grid.Column="2" Height="30"></Label>
                         <TextBox  VerticalContentAlignment="Center" Height="30" Name="scan_timeout" Text="3000" Grid.Column="3"></TextBox>
                         <Button Content="开始扫描" Name="start_ip_scan" Click="start_ip_scan_Click" Grid.Column="4"></Button>

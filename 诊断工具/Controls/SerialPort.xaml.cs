@@ -1,12 +1,23 @@
 ﻿using Phenom.Extension;
+using Phenom.ProgramMethod;
 using Phenom.WPF;
 using Phenom.WPF.Extension;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using SerialPort = System.IO.Ports.SerialPort;
 
 namespace 诊断工具.Controls
 {
@@ -132,7 +143,7 @@ namespace 诊断工具.Controls
             if (IsHexMode)
             {
                 List<byte> ret = new List<byte>();
-                serial_port_assistant_input_run.Text.Split(' ').Foreach((self,id)=>
+                Async.ForEach(serial_port_assistant_input_run.Text.Split(' '), (self, id) =>
                 {
                     if (ret != null)
                         try
