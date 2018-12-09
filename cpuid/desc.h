@@ -1,4 +1,4 @@
-const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
+const CPUIDFIELDDESC   CCPUID::CPUFDesc[] = {
 {CPUF_LFuncStd, 0, "LFuncStd", "largest standard function."}
 , { CPUF_Stepping, 0, "步进", "处理器步进" }
 , { CPUF_BaseModel, 0, "基本型号", "基本处理器型号" }
@@ -22,6 +22,8 @@ const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 , { CPUF_SSE42, 0, "SSE42", "SSE4.2 指令集." }
 , { CPUF_SSE4A, 0, "SSE4A", "SSE4A 指令集." }
 , { CPUF_AVX, 0, "AVX", "AVX 指令集." }
+, { CPUF_AVX2,0,"AVX2","AVX2指令集"}
+, { CPUF_AVX512,0,"AVX512","AVX512指令集"}
 , { CPUF_PCLMULQDQ, 0, "PCLMULQDQ", "PCLMULQDQ指令集" }
 , { CPUF_CX8, 0, "CX8", "CMPXCHG8B 指令集" }
 , { CPUF_CMPXCHG16B, 0, "CMPXCHG16B", "CMPXCHG16B 指令集" }
@@ -52,9 +54,9 @@ const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 , { CPUF_CLFlush, 0, "CLFlush", "CLFLUSH line size. (*8)" }
 , { CPUF_MaxApicId, 0, "MaxApicId", "Maximum number of addressable IDs for logical processors in this physical package." }
 , { CPUF_ApicId, 0, "ApicId", "Initial local APIC physical ID(8-bit)." }
-, { CPUF_DTES64, 0, "DTES64", "64-bit DS Area." }
+, { CPUF_DTES64, 0, "DTES64", "64位DS空间" }
 , { CPUF_DS_CPL, 0, "DS_CPL", "CPL Qualified Debug Store." }
-, { CPUF_EIST, 0, "EIST", "Enhanced Intel SpeedStep technology." }
+, { CPUF_EIST, 0, "EIST", "Intel 增强速率控制" }
 , { CPUF_TM2, 0, "TM2", "温控 2." }
 
 , { CPUF_CNXT_ID, 0, "CNXT_ID", "L1 Context ID." }
@@ -62,14 +64,14 @@ const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 
 , { CPUF_xTPR, 0, "xTPR", "xTPR Update Control. Can disable sending Task Priority messages." }
 , { CPUF_PDCM, 0, "PDCM", "Perfmon and Debug Capability." }
-, { CPUF_PCID, 0, "PCID", "Process Context Identifiers." }
-, { CPUF_DCA, 0, "DCA", "Direct Cache Access." }
+, { CPUF_PCID, 0, "PCID", "处理器编号" }
+, { CPUF_DCA, 0, "DCA", "直接缓存访问" }
 
 , { CPUF_x2APIC, 0, "x2APIC", "扩展XAPIC支持" }
 
 , { CPUF_TSC_DEADLINE, 0, "TSC_DEADLINE", "Local APIC timer supports one-shot operation using a TSC deadline value." }
 
-, { CPUF_F16C, 0, "F16C", "half-precision convert  support." }
+, { CPUF_F16C, 0, "F16C", "单精度浮点转换" }
 , { CPUF_RDRAND, 0, "RDRAND", "RDRAND ." }
 , { CPUF_FPU, 0, "FPU", "集成浮点处理器" }
 , { CPUF_VME, 0, "VME", "虚拟86模式扩展" }
@@ -78,9 +80,9 @@ const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 , { CPUF_TSC, 0, "TSC", "计时器" }
 
 , { CPUF_PAE, 0, "PAE", "物理地址线扩展" }
-, { CPUF_MCE, 0, "MCE", "Machine Check Exception." }
+, { CPUF_MCE, 0, "MCE", "硬件异常检查." }
 
-, { CPUF_APIC, 0, "APIC", "APIC(Advanced Programmable Interrupt Controller) On-Chip." }
+, { CPUF_APIC, 0, "APIC", "APIC(高级编程中断控制器)" }
 
 
 , { CPUF_MTRR, 0, "MTRR", "Memory Type Range Registers." }
@@ -173,7 +175,7 @@ const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 , { CPUF_PkgType, 0, "PkgType", "Package type (Family[7:0] >= 10h)." }
 , { CPUF_LahfSahf, 0, "LahfSahf", "LAHF and SAHF  support in 64-bit mode." }
 , { CPUF_CmpLegacy, 0, "CmpLegacy", "core multi-processing legacy mode." }
-, { CPUF_SVM, 0, "SVM", "secure virtual machine." }
+, { CPUF_SVM, 0, "SVM", "安全虚拟化" }
 , { CPUF_ExtApicSpace, 0, "ExtApicSpace", "extended APIC space." }
 , { CPUF_AltMovCr8, 0, "AltMovCr8", "LOCK MOV CR0 means MOV CR8." }
 , { CPUF_ABM, 0, "ABM", "advanced bit manipulation (LZCNT)." }
@@ -188,8 +190,8 @@ const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 , { CPUF_TBM, 0, "TBM", "Trailing bit manipulation  support." }
 , { CPUF_TopologyExtensions, 0, "TopologyExtensions", "Topology extensions support." }
 , { CPUF_XD, 0, "XD", "禁止执行位" }
-, { CPUF_FFXSR, 0, "FFXSR", "FXSAVE and FXRSTOR  optimizations." }
-, { CPUF_Page1GB, 0, "Page1GB", "1-GB large page support." }
+, { CPUF_FFXSR, 0, "FFXSR", "FXSAVE 和 FXRSTOR  优化." }
+, { CPUF_Page1GB, 0, "Page1GB", "1-GB 大页面支持" }
 , { CPUF_RDTSCP, 0, "RDTSCP", "RDTSCP and TSC_AUX." }
 , { CPUF_LM, 0, "LM", "64位模式" }
 , { CPUF_L1ITlb2and4MSize, 0, "L1ITlb2and4MSize", " TLB number of entries for 2-MB and 4-MB pages." }
@@ -312,4 +314,5 @@ const CPUIDFIELDDESC CCPUID::CPUFDesc[] = {
 , { CPUF_CoresPerComputeUnit, 0, "CoresPerComputeUnit", "cores per compute unit. The number of cores per compute unit is CoresPerComputeUnit+1." }
 , { CPUF_NodeId, 0, "NodeId", "Specifies the node ID." }
 , { CPUF_NodesPerProcessor, 0, "NodesPerProcessor", "Specifies the number of nodes per processor." }
+,{CPUF_NodesPerProcessor,-1,NULL,NULL}
 };

@@ -35,20 +35,21 @@ OutputDefine Define[] = {
 {"3DNow+",CPUF_3DNowExt},
 {"3DNowPrefetch",CPUF_3DNowPrefetch},
 {"AES",CPUF_AES},
-{"F16C",CPUF_F16C},
 {"FMA",CPUF_FMA},
 {"FMA4",CPUF_FMA4},
 {"PAE",CPUF_PAE},
 };
 
 
-#define DEBUG(str)	printf("[%s@%d]%s\n",__FILE__,__LINE__,str)
+#define DEBUG(str) if (fp != stdout)	fprintf(stderr,"[%s@%d]%s\n",__FILE__,__LINE__,str)
 
 int main(int argc, char* argv[])
 {
 	int i;
-	DEBUG("Opening File...");
-	fp = fopen(argv[1], "w");
+	if (argc > 1)
+		fp = fopen(argv[1], "w");
+	if (fp == NULL)
+		fp = stdout;
 	DEBUG("Start Writting...");
 	CCPUID& ccid = CCPUID::cur();
 	fprintf(fp, "true;CPU≥ß…Ã;;%s;\n", ccid.Vendor());
@@ -68,10 +69,15 @@ int main(int argc, char* argv[])
 			fprintf(fp, "%s,", CCPUID::AvxNames[i]);
 	fprintf(fp, "\n");
 	DEBUG("Fetch Description Feature...");
-	for (int n = 0; n < CPUFDescLen; n++)
+	int n = 0;
+	while (true)
 	{
+
+		if (ccid.CPUFDesc[n].szDesc == NULL && ccid.CPUFDesc[n].szName == NULL)
+			break;
 		uint32_t result = ccid.GetField(ccid.CPUFDesc[n].cpuf);
 		fprintf(fp, "%s;%s;%s;%" PRIu32"\n", (result == ccid.CPUFDesc[n].reserved ? "false" : "true"), ccid.CPUFDesc[n].szName, ccid.CPUFDesc[n].szDesc, result);
+		n++;
 	}
 	
 	fflush(fp);
