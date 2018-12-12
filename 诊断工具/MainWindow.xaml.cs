@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -36,8 +37,6 @@ namespace 诊断工具
             InitializeComponent();
         }
 
-
-
         private void refresh_machine_info_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -51,7 +50,7 @@ namespace 诊断工具
             machin_info.ItemsSource = data;
         }
 
-   
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (!this.Confirm("是否退出?"))
@@ -72,25 +71,61 @@ namespace 诊断工具
             }
         }
 
-
+        [DllImport("cpuid")]
+        static extern int load_cpuid(ref byte[] buffer);
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
         {
         }
-
+        struct data_type
+        {
+            public bool Item1 { get; set; }
+            public string Item2 { get; set; }
+            public string Item3 { get; set; }
+            public string Item4 { get; set; }
+        }
         private void refresh_cpuinfo_Click(object sender, RoutedEventArgs e)
         {
+          
             node.Push("Reading CPU Info");
-            Process proces = new Process()
+            node.Push("Executing CPUID....");
+
+            byte[] buffer = new byte[0x65536];
+            unchecked
             {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "cpuid.exe",
-                    Arguments = "cpuid.txt ",
-                }
-            };
-            proces.Start();
-            proces.WaitForExit();
-            CPUID_TEXT.Text = File.ReadAllText("cpuid.txt", Encoding.GetEncoding("GB2312"));
+                node.Push("收到:" + load_cpuid(ref buffer) + "数据");
+            }
+            node.Push("Processing Data...");
+            List<data_type> list = new List<data_type>();
+            string[] lines = Encoding.GetEncoding("GB2312").GetString(buffer).Split('\n');
+            node.Push("Enumerating....");
+            foreach (var i in lines)
+                if (!i.IsEmpty())
+                    try
+                    {
+                        node.Push("->" + i);
+                        string[] px = i.Split(';');
+                        list.Add(new data_type
+                        {
+                            Item1 = px[0] != "false",
+                            Item2 = px[1],
+                            Item3 = px[2],
+                            Item4 = px[4]
+                        });
+                    }
+                    catch
+                    {
+
+                    }
+         //   cpuid.ItemsSource = list;
+            try
+            {
+                File.Delete("cpuid.txt");
+            }
+            catch
+            {
+
+            }
+            //CPUID_TEXT.Text = File.ReadAllText("cpuid.txt");
         }
 
 

@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A46B9E6C-673E-42C3-9C25-3F21D9150DA0}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>诊断工具</RootNamespace>
     <AssemblyName>诊断工具</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
@@ -183,6 +183,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y $(SolutionDir)\Debug\cpuid.exe $(TargetDir)\</PostBuildEvent>
+    <PostBuildEvent>copy /y $(SolutionDir)\Debug\cpuid.dll $(TargetDir)\</PostBuildEvent>
   </PropertyGroup>
 </Project>
