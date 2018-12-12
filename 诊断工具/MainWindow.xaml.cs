@@ -90,7 +90,7 @@ namespace 诊断工具
             };
             proces.Start();
             proces.WaitForExit();
-            CPUID_TEXT.Text = File.ReadAllText("cpuid.txt");
+            CPUID_TEXT.Text = File.ReadAllText("cpuid.txt", Encoding.GetEncoding("GB2312"));
         }
 
 

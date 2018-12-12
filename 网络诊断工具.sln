@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "诊断工具", "网络诊断工具\诊断工具.csproj", "{A46B9E6C-673E-42C3-9C25-3F21D9150DA0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "诊断工具", "诊断工具\诊断工具.csproj", "{A46B9E6C-673E-42C3-9C25-3F21D9150DA0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A787E629-DE1A-441F-B0A0-40EA383A2FD6} = {A787E629-DE1A-441F-B0A0-40EA383A2FD6}
 	EndProjectSection
