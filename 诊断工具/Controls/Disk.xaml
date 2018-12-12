@@ -30,7 +30,7 @@
                 <Button Content="刷新" Name="refresh_disk_info" Click="refresh_disk_info_Click" Grid.Row="1"></Button>
             </Grid>
         </TabItem>
-        <TabItem Header="磁盘测试"  Margin="-1,-2,-3,0.2">
+        <TabItem Header="磁盘测试">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"></RowDefinition>
@@ -126,6 +126,42 @@
                         </GroupBox>
                     </Grid>
                 </GroupBox>
+            </Grid>
+        </TabItem>
+        <TabItem Header="批量重命名">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ListView Name="rename_list" Grid.Column="0">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="原名称" DisplayMemberBinding="{Binding OrignalFilename}"></GridViewColumn>
+                            <GridViewColumn Header="输出" DisplayMemberBinding="{Binding TargetFilename}"></GridViewColumn>
+                            <GridViewColumn Header="重复检查" DisplayMemberBinding="{Binding HaveReplace}"></GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Grid Grid.Column="1" Height="300" VerticalAlignment="Top">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0" Content="添加文件夹" Name="add_floder" Click="Add_floder_Click"></Button>
+                    <Label Grid.Row="1" Content="输入表达式" ></Label>
+                    <TextBox Grid.Row="2" Name="input_regex"></TextBox>
+                    
+                    <Label Grid.Row="3" Content="输出表达式"></Label>
+                    <TextBox Grid.Row="4" Name="regex" ></TextBox>
+                    <Button Grid.Row="5" Content="预览" Name="preview_rename" Click="Preview_rename_Click"></Button>
+                    <Button Grid.Row="6" Content="执行" Name="execute" Click="Execute_Click"></Button>
+                </Grid>
             </Grid>
         </TabItem>
     </TabControl>

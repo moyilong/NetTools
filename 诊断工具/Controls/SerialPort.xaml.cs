@@ -143,18 +143,18 @@ namespace 诊断工具.Controls
             if (IsHexMode)
             {
                 List<byte> ret = new List<byte>();
-                Async.ForEach(serial_port_assistant_input_run.Text.Split(' '), (self, id) =>
-                {
-                    if (ret != null)
-                        try
-                        {
-                            ret.Add(byte.Parse(self));
-                        }
-                        catch
-                        {
-                            ret = null;
-                        }
-                }, false);
+                serial_port_assistant_input_run.Text.Split(' ').Foreach((self, id) =>
+               {
+                   if (ret != null)
+                       try
+                       {
+                           ret.Add(byte.Parse(self));
+                       }
+                       catch
+                       {
+                           ret = null;
+                       }
+               }, false);
                 if (ret == null)
                 {
                     this.Error("解析HEX数据失败!");

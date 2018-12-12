@@ -21,7 +21,6 @@
 #include <inttypes.h>
 #include "ccpuid.h"
 #include<omp.h>
-FILE *fp;
 
 struct OutputDefine {
 	const char *DisplayName;
@@ -35,48 +34,58 @@ OutputDefine Define[] = {
 {"3DNow+",CPUF_3DNowExt},
 {"3DNowPrefetch",CPUF_3DNowPrefetch},
 {"AES",CPUF_AES},
-{"F16C",CPUF_F16C},
 {"FMA",CPUF_FMA},
 {"FMA4",CPUF_FMA4},
 {"PAE",CPUF_PAE},
 };
 
 
-#define DEBUG(str)	printf("[%s@%d]%s\n",__FILE__,__LINE__,str)
+#include <string>
+#include <iostream>
+using namespace std;
 
-int main(int argc, char* argv[])
-{
-	int i;
-	DEBUG("Opening File...");
-	fp = fopen(argv[1], "w");
-	DEBUG("Start Writting...");
+#define DEBUG cout<<__FILE__<<"@"<<__LINE__<<"[]"
+
+extern "C" __declspec(dllexport) int load_cpuid(char *buffer) {
+	string data = "";
+	DEBUG << "Fetching Data..." << endl;
 	CCPUID& ccid = CCPUID::cur();
-	fprintf(fp, "true;CPU厂商;;%s;\n", ccid.Vendor());
-	fprintf(fp, "true;CPU型号;;%s 步进:%d 家族:%d+%d;\n", ccid.BrandTrim(),ccid.GetField(CPUF_Stepping), ccid.GetField(CPUF_BaseFamily),ccid.GetField(CPUF_ExtFamily));
-	fprintf(fp, "true;CPU线程数;;逻辑处理器数量:%d 最大线程数:%d\n", omp_get_num_procs(), omp_get_max_threads());
-	fprintf(fp, "true;CPU 指令集;;");
-	DEBUG("Fetching SSE Feature...");
+	char fp[4096] = {0x00};
+#define cprintf	data+= string(fp) ; memset(fp,'\0',sizeof(fp)) ;  sprintf
+	sprintf(fp, "true;CPU厂商;;%s;\n", ccid.Vendor());
+	cprintf(fp, "true;CPU型号;;%s 步进:%d 家族:%d+%d;\n", ccid.BrandTrim(), ccid.GetField(CPUF_Stepping), ccid.GetField(CPUF_BaseFamily), ccid.GetField(CPUF_ExtFamily));
+	cprintf(fp, "true;CPU线程数;;逻辑处理器数量:%d 最大线程数:%d\n", omp_get_num_procs(), omp_get_max_threads());
+	cprintf(fp, "true;CPU 指令集;;");
+	DEBUG << "Fetching Instruction..." << endl;
 	for (int n = 0; n < sizeof(Define) / sizeof(OutputDefine); n++)
 		if (ccid.GetField(Define[n].Field) != 0)
-			fprintf(fp, "%s,", Define[n].DisplayName);
+		{
+			cprintf(fp, "%s,", Define[n].DisplayName);
+		}
 	if (ccid.sse() > 1)
-		for (i = 1; i < (int)(sizeof(CCPUID::SseNames) / sizeof(CCPUID::SseNames[0])); ++i)
+		for (int i = 1; i < (int)(sizeof(CCPUID::SseNames) / sizeof(CCPUID::SseNames[0])); ++i)
 			if (ccid.hwsse() >= i)
-				fprintf(fp, "%s,", CCPUID::SseNames[i]);
-	for (i = 1; i < (int)(sizeof(CCPUID::AvxNames) / sizeof(CCPUID::AvxNames[0])); ++i)
+			{
+				cprintf(fp, "%s,", CCPUID::SseNames[i]);
+			}
+	for (int i = 1; i < (int)(sizeof(CCPUID::AvxNames) / sizeof(CCPUID::AvxNames[0])); ++i)
 		if (ccid.hwavx() >= i)
-			fprintf(fp, "%s,", CCPUID::AvxNames[i]);
-	fprintf(fp, "\n");
-	DEBUG("Fetch Description Feature...");
-	for (int n = 0; n < CPUFDescLen; n++)
+		{
+			cprintf(fp, "%s,", CCPUID::AvxNames[i]);
+		}
+	cprintf(fp, "\n");;
+	int n = 0;
+	while (true)
 	{
+		DEBUG << "Fetching Row:"<<n << endl;
+		if (ccid.CPUFDesc[n].szDesc == NULL && ccid.CPUFDesc[n].szName == NULL)
+			break;
 		uint32_t result = ccid.GetField(ccid.CPUFDesc[n].cpuf);
-		fprintf(fp, "%s;%s;%s;%" PRIu32"\n", (result == ccid.CPUFDesc[n].reserved ? "false" : "true"), ccid.CPUFDesc[n].szName, ccid.CPUFDesc[n].szDesc, result);
+		cprintf(fp, "%s;%s;%s;%" PRIu32"\n", (result == ccid.CPUFDesc[n].reserved ? "false" : "true"), ccid.CPUFDesc[n].szName, ccid.CPUFDesc[n].szDesc, result);
+		n++;
 	}
-	
-	fflush(fp);
-	DEBUG("Flushing...");
-	fclose(fp);
-
-	return 0;
+	data += string(fp);
+	buffer =(char*) malloc(data.length() + 1);
+	strcpy(buffer, data.data());
+	return data.length();
 }
