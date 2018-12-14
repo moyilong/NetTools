@@ -483,11 +483,8 @@ extern "C" {
 
 class CCPUID {
 public:
-	/*enum {
-		CPUFDescLen = 292	// CPUIDFIELD描述信息数组的长度.
-	};*/
 	static const CPUIDFIELDDESC	CPUFDesc[];	// CPUIDFIELD描述信息数组.
-	static const char*	CacheDesc[0x100];	// 缓存描述信息数组.
+	static const char*	CacheDesc[];	// 缓存描述信息数组.
 	static const char*	SseNames[7];	// SSE级别的名称.
 	static const char*	AvxNames[4];	// AVX级别的名称.
 	CPUIDINFO	Info[MAX_CPUIDINFO + 1];	// CPUID信息数组.

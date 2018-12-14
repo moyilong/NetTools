@@ -36,30 +36,29 @@
                             <Button Content="刷新" VerticalAlignment="Bottom" Height="30" Name="refresh_machine_info" Click="refresh_machine_info_Click" Grid.ColumnSpan="2"></Button>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="CPUID" Loaded="TabItem_Loaded" IsEnabled="False">
+                    <TabItem Header="CPUID" Loaded="TabItem_Loaded">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition></RowDefinition>
-                                <RowDefinition Height="20"></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
                             </Grid.RowDefinitions>
-
-                            <ListView Name="cpuid">
+                            <ListView Name="cpuid_flush_data">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="状态" >
+                                        <GridViewColumn Header="支持">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox Checked="{Binding Item1}"></CheckBox>
+                                                    <CheckBox  IsChecked="{Binding Supported}"></CheckBox>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="名称" DisplayMemberBinding="{Binding Item2}"></GridViewColumn>
-                                        <GridViewColumn Header="说明" DisplayMemberBinding="{Binding Item3}"></GridViewColumn>
-                                        <GridViewColumn Header="结果" DisplayMemberBinding="{Binding Item4}"></GridViewColumn>
+                                        <GridViewColumn Header="名称" DisplayMemberBinding="{Binding Name}"></GridViewColumn>
+                                        <GridViewColumn Header="说明" DisplayMemberBinding="{Binding Description}"></GridViewColumn>
+                                        <GridViewColumn Header="参数" DisplayMemberBinding="{Binding Value}"></GridViewColumn>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-                                <Button Grid.Row="1" Click="refresh_cpuinfo_Click" Name="refresh_cpuinfo"  Content="刷新CPUInfo" ></Button>
+                            <Button Grid.Row="1" Click="refresh_cpuinfo_Click" Name="refresh_cpuinfo"  Content="刷新CPUInfo" ></Button>
                         </Grid>
                     </TabItem>
                 </TabControl>

@@ -70,64 +70,51 @@ namespace 诊断工具
                 Process.GetCurrentProcess().Kill();
             }
         }
-
-        [DllImport("cpuid")]
-        static extern int load_cpuid(ref byte[] buffer);
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
         {
         }
-        struct data_type
+        struct CPUInfo
         {
-            public bool Item1 { get; set; }
-            public string Item2 { get; set; }
-            public string Item3 { get; set; }
-            public string Item4 { get; set; }
+            public bool Supported { get; set; }
+            public string Name { get; private set; }
+            public string Description { get; private set; }
+            public string Value { get; private set; }
+            public CPUInfo(string line)
+            {
+                string[] xline = line.Trim().Split(';');
+                bool.TryParse(xline[0].Trim(',', '.'), out bool _Supported);
+                Supported = _Supported;
+                Name = xline[1].Trim(',', '.');
+                Description = xline[2].Trim(',','.');
+                Value = xline[3].Trim(',', '.');
+            }
         }
+        readonly string TempPath = Path.Combine(Environment.GetEnvironmentVariable("temp"), $"cpuid_{Guid.NewGuid().ToString()}.txt");
         private void refresh_cpuinfo_Click(object sender, RoutedEventArgs e)
         {
-          
             node.Push("Reading CPU Info");
-            node.Push("Executing CPUID....");
-
-            byte[] buffer = new byte[0x65536];
-            unchecked
+            Process proces = new Process()
             {
-                node.Push("收到:" + load_cpuid(ref buffer) + "数据");
-            }
-            node.Push("Processing Data...");
-            List<data_type> list = new List<data_type>();
-            string[] lines = Encoding.GetEncoding("GB2312").GetString(buffer).Split('\n');
-            node.Push("Enumerating....");
-            foreach (var i in lines)
-                if (!i.IsEmpty())
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "cpuid.exe",
+                    Arguments = TempPath,
+                }
+            };
+            proces.Start();
+            proces.WaitForExit();
+            List<CPUInfo> info = new List<CPUInfo>();
+            foreach (var i in File.ReadAllText(TempPath, Encoding.GetEncoding("GB2312")).Split('\n'))
+                if (!i.Trim().IsEmpty())
                     try
                     {
-                        node.Push("->" + i);
-                        string[] px = i.Split(';');
-                        list.Add(new data_type
-                        {
-                            Item1 = px[0] != "false",
-                            Item2 = px[1],
-                            Item3 = px[2],
-                            Item4 = px[4]
-                        });
+                        info.Add(new CPUInfo(i));
                     }
                     catch
                     {
 
                     }
-         //   cpuid.ItemsSource = list;
-            try
-            {
-                File.Delete("cpuid.txt");
-            }
-            catch
-            {
-
-            }
-            //CPUID_TEXT.Text = File.ReadAllText("cpuid.txt");
+            cpuid_flush_data.ItemsSource = info;
         }
-
-
     }
 }

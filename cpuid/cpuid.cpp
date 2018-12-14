@@ -37,16 +37,17 @@ OutputDefine Define[] = {
 {"FMA",CPUF_FMA},
 {"FMA4",CPUF_FMA4},
 {"PAE",CPUF_PAE},
+{"VMX",CPUF_VMX},
 };
 
 
 #include <string>
 #include <iostream>
 using namespace std;
+bool verbose_output = true;
+#define DEBUG if (verbose_output) cout<<__FILE__<<"@"<<__LINE__<<"[]"
 
-#define DEBUG cout<<__FILE__<<"@"<<__LINE__<<"[]"
-
-extern "C" __declspec(dllexport) int load_cpuid(char *buffer) {
+string load_cpuid() {
 	string data = "";
 	DEBUG << "Fetching Data..." << endl;
 	CCPUID& ccid = CCPUID::cur();
@@ -73,7 +74,7 @@ extern "C" __declspec(dllexport) int load_cpuid(char *buffer) {
 		{
 			cprintf(fp, "%s,", CCPUID::AvxNames[i]);
 		}
-	cprintf(fp, "\n");;
+	cprintf(fp, ";\n");;
 	int n = 0;
 	while (true)
 	{
@@ -81,11 +82,23 @@ extern "C" __declspec(dllexport) int load_cpuid(char *buffer) {
 		if (ccid.CPUFDesc[n].szDesc == NULL && ccid.CPUFDesc[n].szName == NULL)
 			break;
 		uint32_t result = ccid.GetField(ccid.CPUFDesc[n].cpuf);
-		cprintf(fp, "%s;%s;%s;%" PRIu32"\n", (result == ccid.CPUFDesc[n].reserved ? "false" : "true"), ccid.CPUFDesc[n].szName, ccid.CPUFDesc[n].szDesc, result);
+		cprintf(fp, "%s;%s;%s;%" PRIu32";\n", (result == ccid.CPUFDesc[n].reserved ? "false" : "true"), ccid.CPUFDesc[n].szName, ccid.CPUFDesc[n].szDesc, result);
 		n++;
 	}
 	data += string(fp);
-	buffer =(char*) malloc(data.length() + 1);
-	strcpy(buffer, data.data());
-	return data.length();
+	return data;
+}
+
+void main(int argc, char *argv[]) {
+	FILE *fp = NULL;
+	if (argc >=1)
+		fp = fopen(argv[1], "w");
+	else
+	{
+		verbose_output = false;
+		fp = stdout;
+	}
+	string buff = load_cpuid();
+	fwrite(buff.data(), 1, buff.length() + 1, fp);
+	fcloseall();
 }
