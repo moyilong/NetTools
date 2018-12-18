@@ -19,7 +19,7 @@ namespace 诊断工具.Controls
     /// <summary>
     /// Toolbox.xaml 的交互逻辑
     /// </summary>
-    public partial class Toolbox : UserControl,PaggedItem
+    public partial class Toolbox : UserControl, AutoLoad
     {
         public Toolbox()
         {

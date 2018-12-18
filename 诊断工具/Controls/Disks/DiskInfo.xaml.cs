@@ -19,7 +19,7 @@ namespace 诊断工具.Controls.Disks
     /// <summary>
     /// DiskInfo.xaml 的交互逻辑
     /// </summary>
-    public partial class DiskInfo : UserControl,PaggedItem
+    public partial class DiskInfo : UserControl, AutoLoad
     {
         public DiskInfo()
         {

@@ -27,7 +27,7 @@ namespace 诊断工具.Controls.Disks
     /// <summary>
     /// DiskTest.xaml 的交互逻辑
     /// </summary>
-    public partial class DiskTest : UserControl,PaggedItem
+    public partial class DiskTest : UserControl, AutoLoad
     {
         public DiskTest()
         {

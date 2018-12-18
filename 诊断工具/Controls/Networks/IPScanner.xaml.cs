@@ -20,7 +20,7 @@ namespace 诊断工具.Controls.Networks
     /// <summary>
     /// IPScanner.xaml 的交互逻辑
     /// </summary>
-    public partial class IPScanner : UserControl,PaggedItem
+    public partial class IPScanner : UserControl, AutoLoad
     {
         public IPScanner()
         {

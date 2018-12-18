@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace 诊断工具
 {
-    public interface PaggedItem
+    public interface AutoLoad
     {
         string TabName { get; }
         string Catalog { get; }
     }
+
+    public interface HelpedAutoLoad: AutoLoad
+    {
+        string HelpDoc { get; }
+    }
+
+
 }

@@ -21,7 +21,7 @@ namespace 诊断工具.Controls.Networks
     /// <summary>
     /// PingTester.xaml 的交互逻辑
     /// </summary>
-    public partial class PingTester : UserControl,PaggedItem
+    public partial class PingTester : UserControl, AutoLoad
     {
         public PingTester()
         {

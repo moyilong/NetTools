@@ -24,7 +24,7 @@ namespace 诊断工具.Controls.Generic
     /// <summary>
     /// GenericInfo.xaml 的交互逻辑
     /// </summary>
-    public partial class GenericInfo : UserControl,PaggedItem
+    public partial class GenericInfo : UserControl, AutoLoad
     {
         public GenericInfo()
         {

@@ -24,11 +24,15 @@ namespace 诊断工具.Controls.Disks
     /// <summary>
     /// ImageWritter.xaml 的交互逻辑
     /// </summary>
-    public partial class ImageWritter : UserControl,PaggedItem
+    public partial class ImageWritter : UserControl,HelpedAutoLoad
     {
         public string TabName => "镜像写入";
 
         public string Catalog => "磁盘";
+
+        public string HelpDoc => @"
+将一个镜像文件直接写入磁盘
+";
 
         public ImageWritter()
         {

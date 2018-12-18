@@ -19,7 +19,7 @@ namespace 诊断工具.Controls.Networks
     /// <summary>
     /// DiagonStick.xaml 的交互逻辑
     /// </summary>
-    public partial class DiagonStick : UserControl,PaggedItem
+    public partial class DiagonStick : UserControl, AutoLoad
     {
         public DiagonStick()
         {

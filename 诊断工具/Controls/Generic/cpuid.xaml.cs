@@ -22,7 +22,7 @@ namespace 诊断工具.Controls.Generic
     /// <summary>
     /// cpuid.xaml 的交互逻辑
     /// </summary>
-    public partial class cpuid : UserControl,PaggedItem
+    public partial class cpuid : UserControl, AutoLoad
     {
         public cpuid()
         {
