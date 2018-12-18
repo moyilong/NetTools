@@ -2,10 +2,6 @@
 using Phenom.WPF;
 using Phenom.WPF.Extension;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace 诊断工具
 {
@@ -19,6 +15,5 @@ namespace 诊断工具
 
             }, new Loading());
         }
-
     }
 }

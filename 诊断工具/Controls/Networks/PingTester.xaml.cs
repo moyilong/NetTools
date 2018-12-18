@@ -21,7 +21,7 @@ namespace 诊断工具.Controls.Networks
     /// <summary>
     /// PingTester.xaml 的交互逻辑
     /// </summary>
-    public partial class PingTester : UserControl, AutoLoad
+    public partial class PingTester : UserControl,AutoLoadTemplate
     {
         public PingTester()
         {
@@ -29,7 +29,7 @@ namespace 诊断工具.Controls.Networks
             ping_test_table.ItemsSource = tester;
         }
 
-        public string TabName => "网络连通性测试";
+        public string TabName => "网络连通性测试(Ping)";
         public string Catalog => "网络";
 
         private void start_monit_Click(object sender, RoutedEventArgs e)

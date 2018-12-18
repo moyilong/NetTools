@@ -22,7 +22,7 @@ namespace 诊断工具.Controls.Networks
     /// <summary>
     /// DNSQuery.xaml 的交互逻辑
     /// </summary>
-    public partial class DNSQuery : UserControl, AutoLoad
+    public partial class DNSQuery : UserControl,AutoLoadTemplate
     {
         private ObservableCollection<DNSReslove> DNSList = new ObservableCollection<DNSReslove>();
 

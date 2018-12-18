@@ -47,7 +47,7 @@ namespace 诊断工具
             InitializeComponent();
             Controllers.Foreach((self, id) =>
             {
-                if (self is AutoLoad item)
+                if (self is AutoLoadTemplate item)
                 {
                     TabItem vitem = new TabItem()
                     {
@@ -86,7 +86,7 @@ namespace 诊断工具
             }
             else
             {
-                help_doc.Text = "本页面没有帮助文档";
+                help_doc.Text = string.Empty;
             }
         }
 

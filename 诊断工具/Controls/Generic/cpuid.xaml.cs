@@ -22,7 +22,7 @@ namespace 诊断工具.Controls.Generic
     /// <summary>
     /// cpuid.xaml 的交互逻辑
     /// </summary>
-    public partial class cpuid : UserControl, AutoLoad
+    public partial class cpuid : UserControl,HelpedAutoLoad
     {
         public cpuid()
         {
@@ -32,6 +32,8 @@ namespace 诊断工具.Controls.Generic
         public string TabName => "CPUID";
 
         public string Catalog =>"系统";
+
+        public string HelpDoc => @"点击刷新，查看CPU详细功能列表";
 
         struct CPUInfo
         {
@@ -74,6 +76,11 @@ namespace 诊断工具.Controls.Generic
 
                     }
             cpuid_flush_data.ItemsSource = info;
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            refresh_cpuinfo_Click(null, null);
         }
     }
 }

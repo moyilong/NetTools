@@ -24,7 +24,7 @@ namespace 诊断工具.Controls
     /// <summary>
     /// SerialPort.xaml 的交互逻辑
     /// </summary>
-    public partial class SerialPort : UserControl, AutoLoad
+    public partial class SerialPort : UserControl,AutoLoadTemplate
     {
         public SerialPort()
         {

@@ -1,5 +1,6 @@
 ﻿using Phenom.Extension;
 using Phenom.ProgramMethod;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.NetworkInformation;
@@ -25,9 +26,7 @@ namespace 诊断工具.Methods
                 return null;
             ObservableCollection<IPScanner> ret = new ObservableCollection<IPScanner>();
             for (int n = 0; n < byte.MaxValue; n++)
-            {
-                ret.Add(new IPScanner(GateWay + "." + n.ToString(), ret, TimeOut, parent));
-            }
+                ret.Add(new IPScanner($"{sub[0]}.{sub[1]}.{sub[2]}.{n}", ret, TimeOut, parent));
             return ret;
         }
 
@@ -52,14 +51,21 @@ namespace 诊断工具.Methods
             long TotalTimeout = 0;
             for (int n = 0; n < 10; n++)
             {
-                Send++;
-                PingReply replay = ping.Send(IP.ToIPAddress(), (int)xot);
-                if (replay.Status == IPStatus.Success)
+                try
                 {
-                    TotalTimeout += replay.RoundtripTime;
-                    Response++;
+                    Send++;
+
+                    PingReply replay = ping.Send(IP.ToIPAddress(), (int)xot);
+                    if (replay.Status == IPStatus.Success)
+                    {
+                        TotalTimeout += replay.RoundtripTime;
+                        Response++;
+                    }
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hint"));
                 }
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hint"));
+                catch
+                {
+                }
             }
             Status = Response == 0 ? "失败!" : "成功";
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Status"));

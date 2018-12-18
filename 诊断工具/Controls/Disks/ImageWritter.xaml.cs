@@ -30,9 +30,7 @@ namespace 诊断工具.Controls.Disks
 
         public string Catalog => "磁盘";
 
-        public string HelpDoc => @"
-将一个镜像文件直接写入磁盘
-";
+        public string HelpDoc => @"电机按钮，查看当前的CPU详细信息";
 
         public ImageWritter()
         {

@@ -19,7 +19,7 @@ namespace 诊断工具.Controls.Networks
     /// <summary>
     /// DiagonStick.xaml 的交互逻辑
     /// </summary>
-    public partial class DiagonStick : UserControl, AutoLoad
+    public partial class DiagonStick : UserControl,AutoLoadTemplate,HelpedAutoLoad
     {
         public DiagonStick()
         {
@@ -29,6 +29,8 @@ namespace 诊断工具.Controls.Networks
         public string TabName => "网络诊断";
 
         public string Catalog => "网络";
+
+        public string HelpDoc => "进行网络连接诊断";
 
         private void diagonstick_Click(object sender, RoutedEventArgs e)
         {

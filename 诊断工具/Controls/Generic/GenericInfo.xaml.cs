@@ -24,7 +24,7 @@ namespace 诊断工具.Controls.Generic
     /// <summary>
     /// GenericInfo.xaml 的交互逻辑
     /// </summary>
-    public partial class GenericInfo : UserControl, AutoLoad
+    public partial class GenericInfo : UserControl,HelpedAutoLoad
     {
         public GenericInfo()
         {
@@ -34,6 +34,9 @@ namespace 诊断工具.Controls.Generic
         public string TabName => "本机信息";
 
         public string Catalog => "系统";
+
+        public string HelpDoc => "查看当前系统信息";
+
         private void refresh_machine_info_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();

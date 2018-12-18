@@ -25,7 +25,7 @@ namespace 诊断工具.Controls.Disks
     /// <summary>
     /// BatchRename.xaml 的交互逻辑
     /// </summary>
-    public partial class BatchRename : UserControl, AutoLoad
+    public partial class BatchRename : UserControl,AutoLoadTemplate
     {
         public string TabName => "批量重命名";
 
