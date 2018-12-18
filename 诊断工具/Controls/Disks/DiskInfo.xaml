@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="诊断工具.Controls.Disks.DiskInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:诊断工具.Controls.Disks"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ListView Name="disk_info">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="名称" DisplayMemberBinding="{Binding Name}"></GridViewColumn>
+                    <GridViewColumn Header="盘符" DisplayMemberBinding="{Binding RootDirectory}"></GridViewColumn>
+                    <GridViewColumn Header="容量" DisplayMemberBinding="{Binding TotalSize}"></GridViewColumn>
+                    <GridViewColumn Header="可用空间" DisplayMemberBinding="{Binding TotalFreeSpace}"></GridViewColumn>
+                    <GridViewColumn Header="类型" DisplayMemberBinding="{Binding DriveType}"></GridViewColumn>
+                    <GridViewColumn Header="文件系统" DisplayMemberBinding="{Binding DriveFormat}"></GridViewColumn>
+                    <GridViewColumn Header="已就绪" DisplayMemberBinding="{Binding IsReady}"></GridViewColumn>
+                    <GridViewColumn Header="卷标" DisplayMemberBinding="{Binding VolumeLabel}"></GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Content="刷新" Name="refresh_disk_info" Click="refresh_disk_info_Click" Grid.Row="1"></Button>
+    </Grid>
+</UserControl>

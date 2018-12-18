@@ -19,7 +19,7 @@ namespace 诊断工具.Controls
     /// <summary>
     /// Toolbox.xaml 的交互逻辑
     /// </summary>
-    public partial class Toolbox : UserControl
+    public partial class Toolbox : UserControl,PaggedItem
     {
         public Toolbox()
         {
@@ -52,5 +52,9 @@ namespace 诊断工具.Controls
                 }
             }
         }
+
+        public string TabName => "工具箱";
+
+        public string Catalog => null;
     }
 }

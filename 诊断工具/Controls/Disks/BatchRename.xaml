@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="诊断工具.Controls.Disks.BatchRename"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:诊断工具.Controls.Disks"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="0.5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ListView Name="rename_list" Grid.Column="0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="原名称" DisplayMemberBinding="{Binding OrignalFilename}"></GridViewColumn>
+                    <GridViewColumn Header="输出" DisplayMemberBinding="{Binding TargetFilename}"></GridViewColumn>
+                    <GridViewColumn Header="重复检查" DisplayMemberBinding="{Binding HaveReplace}"></GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Grid Grid.Column="1" Height="300" VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Content="添加文件夹" Name="add_floder" Click="Add_floder_Click"></Button>
+            <Label Grid.Row="1" Content="输入表达式" ></Label>
+            <TextBox Grid.Row="2" Name="input_regex"></TextBox>
+
+            <Label Grid.Row="3" Content="输出表达式"></Label>
+            <TextBox Grid.Row="4" Name="regex" ></TextBox>
+            <Button Grid.Row="5" Content="预览" Name="preview_rename" Click="Preview_rename_Click"></Button>
+            <Button Grid.Row="6" Content="执行" Name="execute" Click="Execute_Click"></Button>
+        </Grid>
+    </Grid>
+</UserControl>

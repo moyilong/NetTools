@@ -24,7 +24,7 @@ namespace 诊断工具.Controls
     /// <summary>
     /// SerialPort.xaml 的交互逻辑
     /// </summary>
-    public partial class SerialPort : UserControl
+    public partial class SerialPort : UserControl,PaggedItem
     {
         public SerialPort()
         {
@@ -49,6 +49,10 @@ namespace 诊断工具.Controls
 
         private MuteController mute = null;
         private System.IO.Ports.SerialPort MonitedPort = null;
+
+        public string TabName => "串口助手";
+
+        public string Catalog => null;
 
         private void serial_port_assistant_switch_stat_Click(object sender, RoutedEventArgs e)
         {

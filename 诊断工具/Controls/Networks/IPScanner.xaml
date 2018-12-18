@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="诊断工具.Controls.Networks.IPScanner"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:诊断工具.Controls.Networks"
+             mc:Ignorable="d" 
+             Loaded="UserControl_Loaded"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label  VerticalContentAlignment="Center" Height="30" Grid.Column="0" Content="IP地址段"></Label>
+                <!--<TextBox VerticalContentAlignment="Center" Height="30" Grid.Column="1" Name="gateway_area" Text="192.168.1"></TextBox>-->
+                <ComboBox Name="gateway_area" Height="30" VerticalAlignment="Center"  Grid.Column="1"></ComboBox>
+                <Label  VerticalContentAlignment="Center" Content="超时" Grid.Column="2" Height="30"></Label>
+                <TextBox  VerticalContentAlignment="Center" Height="30" Name="scan_timeout" Text="3000" Grid.Column="3"></TextBox>
+                <Button Content="开始扫描" Name="start_ip_scan" Click="start_ip_scan_Click" Grid.Column="4"></Button>
+            </Grid>
+        </Grid>
+        <ListView Name="ipscan" Grid.Row="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="IP地址" DisplayMemberBinding="{Binding IP}"></GridViewColumn>
+                    <GridViewColumn Header="状态"  DisplayMemberBinding="{Binding Status}"></GridViewColumn>
+                    <GridViewColumn Header="响应时间" DisplayMemberBinding="{Binding Timeout}"></GridViewColumn>
+                    <GridViewColumn Header="命中率" DisplayMemberBinding="{Binding Hint}"></GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</UserControl>

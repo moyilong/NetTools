@@ -98,14 +98,84 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\Disks\BatchRename.xaml.cs">
+      <DependentUpon>BatchRename.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Disks\DiskInfo.xaml.cs">
+      <DependentUpon>DiskInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Disks\DiskTest.xaml.cs">
+      <DependentUpon>DiskTest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Disks\ImageWritter.xaml.cs">
+      <DependentUpon>ImageWritter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\cpuid.xaml.cs">
+      <DependentUpon>cpuid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Generic\GenericInfo.xaml.cs">
+      <DependentUpon>GenericInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Networks\DiagonStick.xaml.cs">
+      <DependentUpon>DiagonStick.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Networks\DNSQuery.xaml.cs">
+      <DependentUpon>DNSQuery.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Networks\IPScanner.xaml.cs">
+      <DependentUpon>IPScanner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Networks\MDNSScanner.xaml.cs">
+      <DependentUpon>MDNSScanner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Networks\PingTester.xaml.cs">
+      <DependentUpon>PingTester.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PaggedItem.cs" />
     <Compile Include="ScreenTest.xaml.cs">
       <DependentUpon>ScreenTest.xaml</DependentUpon>
     </Compile>
-    <Page Include="Controls\Disk.xaml">
+    <Page Include="Controls\Disks\BatchRename.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Network.xaml">
+    <Page Include="Controls\Disks\DiskInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Disks\DiskTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Disks\ImageWritter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Generic\cpuid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Generic\GenericInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Networks\DiagonStick.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Networks\DNSQuery.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Networks\IPScanner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Networks\MDNSScanner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Networks\PingTester.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,12 +194,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls\Disk.xaml.cs">
-      <DependentUpon>Disk.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Network.xaml.cs">
-      <DependentUpon>Network.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SerialPort.xaml.cs">
       <DependentUpon>SerialPort.xaml</DependentUpon>
@@ -189,6 +253,7 @@
   <ItemGroup>
     <None Include="Resources\DNSServer.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /y $(SolutionDir)\Debug\cpuid.exe $(TargetDir)\</PostBuildEvent>
