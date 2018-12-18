@@ -5,9 +5,10 @@ using System.Drawing;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Rectangle = System.Drawing.Rectangle;
-using Point = System.Drawing.Point;
 using Color = System.Drawing.Color;
+using Point = System.Drawing.Point;
+using Rectangle = System.Drawing.Rectangle;
+
 namespace 诊断工具
 {
     /// <summary>
@@ -30,28 +31,34 @@ namespace 诊断工具
             gpu = Graphics.FromImage(image);
             image_MouseClick(null, null);
         }
-        System.Drawing.Image  image = null;
-        Graphics gpu = null;
-        int Step = -1;
-        void Fill(System.Drawing.Brush color)
+
+        private System.Drawing.Image image = null;
+        private Graphics gpu = null;
+        private int Step = -1;
+
+        private void Fill(System.Drawing.Brush color)
         {
-            gpu.FillRectangle(color, new Rectangle(0, 0, (int)Width,(int) Height));
+            gpu.FillRectangle(color, new Rectangle(0, 0, (int)Width, (int)Height));
             UpdateImage();
         }
-        DebugNode node = new DebugNode("ScreenTester");
-        enum RenderMode
+
+        private DebugNode node = new DebugNode("ScreenTester");
+
+        private enum RenderMode
         {
             Vertex,
             Hornorlize
         }
-        void FillGrayLevel(Color color,int level,RenderMode mode)
+
+        private void FillGrayLevel(Color color, int level, RenderMode mode)
         {
-            float step =0;
-            switch(mode )
+            float step = 0;
+            switch (mode)
             {
                 case RenderMode.Hornorlize:
                     step = (float)image.Width / level;
                     break;
+
                 case RenderMode.Vertex:
                     step = (float)image.Height / level;
                     break;
@@ -62,31 +69,34 @@ namespace 诊断工具
             int g_step = color.G == 0 ? 0 : 256 / level;
             int b_step = color.B == 0 ? 0 : 256 / level;
             node.Push($"共{level}级{step}步长 R:{r_step} G:{g_step} B:{b_step}");
-            for (int n = 0; n < level ; n++)
+            for (int n = 0; n < level; n++)
             {
                 Color vcolor = Color.FromArgb(255, r_step * n, g_step * n, b_step * n);
 
-                Rectangle vrect =new Rectangle();
-                switch(mode)
+                Rectangle vrect = new Rectangle();
+                switch (mode)
                 {
                     case RenderMode.Hornorlize:
-                        vrect=new Rectangle((int)(n * step), 0, (int)step + 5, image.Height);
+                        vrect = new Rectangle((int)(n * step), 0, (int)step + 5, image.Height);
                         break;
+
                     case RenderMode.Vertex:
                         vrect = new Rectangle(0, (int)(n * step), image.Width, (int)step + 5);
                         break;
                 }
 
-                node.Push($"绘制:{n} R={vcolor.R} G={vcolor.G} B={vcolor.B} A={vcolor.A} Rect={vrect.X},{vrect.Y},{vrect.Width},{vrect.Height}"); 
+                node.Push($"绘制:{n} R={vcolor.R} G={vcolor.G} B={vcolor.B} A={vcolor.A} Rect={vrect.X},{vrect.Y},{vrect.Width},{vrect.Height}");
                 gpu.FillRectangle(new SolidBrush(vcolor), vrect);
             }
-            UpdateImage(); 
+            UpdateImage();
         }
-        void UpdateImage()
+
+        private void UpdateImage()
         {
             Background = new ImageBrush(image.ToSource());
         }
-        System.Drawing.Brush[] IntelliDefaultFill = new System.Drawing.Brush[]
+
+        private System.Drawing.Brush[] IntelliDefaultFill = new System.Drawing.Brush[]
         {
             System.Drawing.Brushes.White,
             System.Drawing.Brushes.Black,
@@ -96,22 +106,32 @@ namespace 诊断工具
             System.Drawing.Brushes.AntiqueWhite
         };
 
-        enum SublineMode
+        private enum SublineMode
         {
             Vertex,
             Hornorlize,
             VertexAndHornorlize
         }
 
-        void PowerSubline(SublineMode mode,int dest)
+        private void PowerSubline(SublineMode mode, int dest)
         {
             gpu.FillRectangle(System.Drawing.Brushes.Black, new Rectangle(0, 0, image.Width, image.Height));
             if (mode == SublineMode.Vertex || mode == SublineMode.VertexAndHornorlize)
+            {
                 for (int n = 0; n < image.Height; n += dest)
+                {
                     gpu.DrawLine(Pens.White, new Point(0, n), new Point(image.Width, n));
+                }
+            }
+
             if (mode == SublineMode.Hornorlize || mode == SublineMode.VertexAndHornorlize)
+            {
                 for (int n = 0; n < image.Width; n += dest)
+                {
                     gpu.DrawLine(Pens.White, new Point(n, 0), new Point(n, image.Height));
+                }
+            }
+
             UpdateImage();
         }
 
@@ -171,29 +191,37 @@ namespace 诊断工具
                     current_item.Content = $"{level}级灰阶";
                     FillGrayLevel(color, level, mode);
                     if (mode == RenderMode.Vertex)
+                    {
                         Step += 12;
+                    }
+
                     break;
+
                 case 30:
-                    PowerSubline(SublineMode.Hornorlize,2);
+                    PowerSubline(SublineMode.Hornorlize, 2);
                     current_item.Content = "线条测试";
                     break;
+
                 case 31:
-                    PowerSubline(SublineMode.Vertex,2);
+                    PowerSubline(SublineMode.Vertex, 2);
                     current_item.Content = "线条测试";
                     break;
+
                 case 32:
-                    PowerSubline(SublineMode.VertexAndHornorlize,2);
+                    PowerSubline(SublineMode.VertexAndHornorlize, 2);
                     current_item.Content = "线条测试";
                     break;
+
                 case 33:
                     PowerSubline(SublineMode.VertexAndHornorlize, 50);
                     current_item.Content = "矩形";
                     break;
+
                 default:
                     if (Step < IntelliDefaultFill.Length)
                     {
                         Fill(IntelliDefaultFill[Step]);
-                        current_item.Content = $"静态图形:{Step+1}/{IntelliDefaultFill.Length}";
+                        current_item.Content = $"静态图形:{Step + 1}/{IntelliDefaultFill.Length}";
                     }
                     else
                     {
@@ -203,6 +231,7 @@ namespace 诊断工具
                     break;
             }
         }
+
         private void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             image_MouseClick(null, null);

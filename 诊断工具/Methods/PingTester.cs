@@ -27,7 +27,9 @@ namespace 诊断工具.Methods
         private void PingTester_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != "StatusView")
+            {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StatusView"));
+            }
         }
 
         public string StatusView
@@ -38,20 +40,32 @@ namespace 诊断工具.Methods
                 if (RequestCount != 0)
                 {
                     if (FaildCount / RequestCount > 0.01)
+                    {
                         faild_list.Add("丢包率高");
+                    }
                 }
                 else
+                {
                     faild_list.Add("未响应");
+                }
+
                 if (AvgDelay > 300 || LastDelay > 800)
+                {
                     faild_list.Add("延迟高");
+                }
 
                 if (faild_list.Count == 0)
+                {
                     return "好";
+                }
                 else
                 {
                     string ret = "";
-                    foreach (var i in faild_list)
+                    foreach (string i in faild_list)
+                    {
                         ret += i + ";";
+                    }
+
                     return ret;
                 }
             }

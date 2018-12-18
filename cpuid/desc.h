@@ -7,7 +7,6 @@ const CPUIDFIELDDESC   CCPUID::CPUFDesc[] = {
 , { CPUF_ExtModel, 0, "扩展型号", "扩展处理器型号" }
 , { CPUF_ExtFamily, 0, "扩展家族", "扩展处理器家族" }
 
-
 //CPU指令集
 , { CPUF_MMX, 0, "MMX", "MMX 指令集." }
 , { CPUF_MmxExt, 0, "MmxExt", "MMX指令集的AMD扩展" }
@@ -46,7 +45,6 @@ const CPUIDFIELDDESC   CCPUID::CPUFDesc[] = {
 , { CPUF_FP128, 0, "FP128", "128-bit SSE (multimedia) 指令集 are executed with full-width internal operations and pipelines rather than decomposing them into internal 64-bit suboperations." }
 , { CPUF_MOVU, 0, "MOVU", "MOVU SSE (multimedia) 指令集 are more efficient and should be preferred to SSE(multimedia) MOVL/MOVH. MOVUPS is more efficient than MOVLPS/MOVHPS." }
 
-
 , { CPUF_VMX, 0, "VMX", "虚拟机扩展" }
 , { CPUF_SMX, 0, "SMX", "安全模式扩展" }
 
@@ -83,7 +81,6 @@ const CPUIDFIELDDESC   CCPUID::CPUFDesc[] = {
 , { CPUF_MCE, 0, "MCE", "硬件异常检查." }
 
 , { CPUF_APIC, 0, "APIC", "APIC(高级编程中断控制器)" }
-
 
 , { CPUF_MTRR, 0, "MTRR", "Memory Type Range Registers." }
 , { CPUF_PGE, 0, "PGE", "Page Global Enable." }

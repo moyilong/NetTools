@@ -29,7 +29,7 @@ namespace 诊断工具.Methods
                     stamp.Start();
                     IPAddress[] address = Dns.GetHostAddresses(domain);
                     stamp.Stop();
-                    foreach (var i in address)
+                    foreach (IPAddress i in address)
                     {
                         Result += i.ToString() + Environment.NewLine;
                     }
@@ -53,24 +53,35 @@ namespace 诊断工具.Methods
             TimeSpan span_end = new TimeSpan();
             node.Push("处理结果");
             if (message == null)
+            {
                 Result = "空结果";
+            }
             else
             {
                 Result = $"共查询到{message.AnswerRecords.Count.ToString()}个记录{message.ReturnCode.ToString()}{Environment.NewLine}";
-                foreach (var record in message.AnswerRecords)
+                foreach (DnsRecordBase record in message.AnswerRecords)
                 {
                     Result += record.GetType().Name + "记录:";
                     if (record is ARecord)
+                    {
                         Result += (record as ARecord).Address.ToString() + Environment.NewLine;
+                    }
                     else if (record is CNameRecord)
+                    {
                         Result += (record as CNameRecord).CanonicalName.ToString();
+                    }
                     else if (record is NaptrRecord)
+                    {
                         Result += (record as NaptrRecord).Replacement.ToString();
+                    }
                     else if (record is PtrRecord)
+                    {
                         Result += (record as PtrRecord).PointerDomainName.ToString();
+                    }
                     else
+                    {
                         Result += record.ToString() + Environment.NewLine;
-
+                    }
                 }
             }
             TimeOut = (span_begin - span_end).TotalMilliseconds;

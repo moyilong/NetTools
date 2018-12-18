@@ -40,7 +40,6 @@ OutputDefine Define[] = {
 {"VMX",CPUF_VMX},
 };
 
-
 #include <string>
 #include <iostream>
 using namespace std;
@@ -51,7 +50,7 @@ string load_cpuid() {
 	string data = "";
 	DEBUG << "Fetching Data..." << endl;
 	CCPUID& ccid = CCPUID::cur();
-	char fp[4096] = {0x00};
+	char fp[4096] = { 0x00 };
 #define cprintf	data+= string(fp) ; memset(fp,'\0',sizeof(fp)) ;  sprintf
 	sprintf(fp, "true;CPU厂商;;%s;\n", ccid.Vendor());
 	cprintf(fp, "true;CPU型号;;%s 步进:%d 家族:%d+%d;\n", ccid.BrandTrim(), ccid.GetField(CPUF_Stepping), ccid.GetField(CPUF_BaseFamily), ccid.GetField(CPUF_ExtFamily));
@@ -78,7 +77,7 @@ string load_cpuid() {
 	int n = 0;
 	while (true)
 	{
-		DEBUG << "Fetching Row:"<<n << endl;
+		DEBUG << "Fetching Row:" << n << endl;
 		if (ccid.CPUFDesc[n].szDesc == NULL && ccid.CPUFDesc[n].szName == NULL)
 			break;
 		uint32_t result = ccid.GetField(ccid.CPUFDesc[n].cpuf);
@@ -91,7 +90,7 @@ string load_cpuid() {
 
 void main(int argc, char *argv[]) {
 	FILE *fp = NULL;
-	if (argc >=1)
+	if (argc >= 1)
 		fp = fopen(argv[1], "w");
 	else
 	{

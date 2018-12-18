@@ -1,27 +1,15 @@
 ﻿using Phenom.Extension;
 using Phenom.WPF.Extension;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace 诊断工具.Controls.Networks
 {
     /// <summary>
     /// PingTester.xaml 的交互逻辑
     /// </summary>
-    public partial class PingTester : UserControl,AutoLoadTemplate
+    public partial class PingTester : UserControl, AutoLoadTemplate
     {
         public PingTester()
         {
@@ -43,6 +31,7 @@ namespace 诊断工具.Controls.Networks
         }
 
         private ObservableCollection<Methods.PingTester> tester = new ObservableCollection<Methods.PingTester>();
+
         private void add_new_domain_Click(object sender, RoutedEventArgs e)
         {
             new_domain.Text = new_domain.Text.Trim();
@@ -53,12 +42,16 @@ namespace 诊断工具.Controls.Networks
             }
             tester.Add(new Methods.PingTester(new_domain.Text));
         }
+
         private void add_generic_list_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var i in Properties.Resources.DomainList.Split('\n'))
+            foreach (string i in Properties.Resources.DomainList.Split('\n'))
+            {
                 if (!i.IsEmpty())
+                {
                     tester.Add(new Methods.PingTester(i));
+                }
+            }
         }
-
     }
 }

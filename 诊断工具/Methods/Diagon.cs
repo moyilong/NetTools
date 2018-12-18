@@ -119,7 +119,7 @@ namespace 诊断工具.Methods
             ObservableCollection<DiagonResult> ret = new ObservableCollection<DiagonResult>();
             Async.NoneWaitStart(() =>
             {
-                foreach (var i in TestProject)
+                foreach (Tuple<string, Func<DiagonResult, bool>, bool> i in TestProject)
                 {
                     DiagonResult diagon = new DiagonResult
                     {
@@ -127,7 +127,9 @@ namespace 诊断工具.Methods
                     };
                     window.Dispatcher.Invoke(() => ret.Add(diagon));
                     if (!i.Item2(diagon) && i.Item3)
+                    {
                         break;
+                    }
                 }
             }, OnInit, OnExit);
             return ret;

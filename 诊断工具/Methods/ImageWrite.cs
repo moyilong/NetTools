@@ -4,10 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 
 namespace 诊断工具.Methods
@@ -18,12 +16,18 @@ namespace 诊断工具.Methods
         Verifying,
         Syncing
     }
+
     public class DriverInfo
     {
         public string DispName;
         public int ID;
         public string PathName;
-        public override string ToString() => DispName;
+
+        public override string ToString()
+        {
+            return DispName;
+        }
+
         public ulong DiskSize
         {
             get
@@ -32,16 +36,20 @@ namespace 诊断工具.Methods
                 ulong val = ulong.Parse(array[21]);
                 string unit = array[22];
                 ulong scale = 1;
-                switch (unit.ToUpper()) {
+                switch (unit.ToUpper())
+                {
                     case "GB":
                         scale = 1024 * 1024 * 1024;
                         break;
+
                     case "MB":
                         scale = 1024 * 1024;
                         break;
+
                     case "KB":
                         scale = 1024;
                         break;
+
                     case "TB":
                         scale = (ulong)1024 * 1024 * 1024 * 1024;
                         break;
@@ -51,37 +59,55 @@ namespace 诊断工具.Methods
                 return val;
             }
         }
-        static DebugNode node = new DebugNode("DriverInfo");
+
+        private static DebugNode node = new DebugNode("DriverInfo");
     }
-    static public class WriteLib
+
+    public static class WriteLib
     {
-        
         public delegate void ProgressProc(long Max, long Cur, long Min, string Tips, WorkingMode mode);
+
         #region 引入
-        [DllImport("kernel32", SetLastError = true)]
-        static extern IntPtr CreateFile(string FileName, FileAccess DesiredAccess, FileShare ShareMode, IntPtr SecurityAttributes, FileMode CreationDisposition, int FlagsAndAttributes, IntPtr hTemplate);
-        [DllImport("kernel32", SetLastError = true)]
-        static extern bool WriteFile(IntPtr hFile, byte[] stream, int Len, ref int WritedLen, IntPtr Overlapped);
-        #endregion
-        static DebugNode node = new DebugNode("Writter");
 
+        [DllImport("kernel32", SetLastError = true)]
+        private static extern IntPtr CreateFile(string FileName, FileAccess DesiredAccess, FileShare ShareMode, IntPtr SecurityAttributes, FileMode CreationDisposition, int FlagsAndAttributes, IntPtr hTemplate);
 
-        static public int BlockSize { get; set; } = 65536;
-        static private string ComputeHash(byte[] data) => BitConverter.ToString(MD5.Create().ComputeHash(data));
-        public static void Write(string Path,bool NeedVerify, Stream stream, ProgressProc Progress = null)
+        [DllImport("kernel32", SetLastError = true)]
+        private static extern bool WriteFile(IntPtr hFile, byte[] stream, int Len, ref int WritedLen, IntPtr Overlapped);
+
+        #endregion 引入
+
+        private static DebugNode node = new DebugNode("Writter");
+
+        public static int BlockSize { get; set; } = 65536;
+
+        private static string ComputeHash(byte[] data)
         {
-      
+            return BitConverter.ToString(MD5.Create().ComputeHash(data));
+        }
+
+        public static void Write(string Path, bool NeedVerify, Stream stream, ProgressProc Progress = null)
+        {
             IntPtr handle = CreateFile(Path, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, 0x20000000, IntPtr.Zero);
             node.Push("打开:" + Path);
             if (handle.ToInt64() == -1)
+            {
                 throw new Exception("Open handler faild!");
+            }
+
             Dictionary<long, string> HashTable = new Dictionary<long, string>();
-            using (FileStream xstream = new FileStream(new SafeFileHandle( handle,true), FileAccess.ReadWrite))
+            using (FileStream xstream = new FileStream(new SafeFileHandle(handle, true), FileAccess.ReadWrite))
             {
                 if (xstream == null)
+                {
                     throw new Exception("Open strem faild!");
+                }
+
                 while (!xstream.CanWrite)
+                {
                     Thread.Sleep(100);
+                }
+
                 stream.Seek(0, SeekOrigin.Begin);
                 byte[] data = new byte[BlockSize];
                 int size = 0;
@@ -92,19 +118,30 @@ namespace 诊断工具.Methods
                     try
                     {
                         while (!xstream.CanWrite)
+                        {
                             Thread.Sleep(100);
+                        }
+
                         for (int n = 0; n < data.Length; n++)
+                        {
                             data[n] = 0x00;
+                        }
+
                         size = stream.Read(data, 0, BlockSize);
                         if (size == 0 || size == -1)
+                        {
                             break;
+                        }
+
                         Progress?.Invoke(stream.Length, xstream.Position, 0, null, WorkingMode.Writting);
                         xstream.Write(data, 0, BlockSize);
                         HashTable[nx++] = ComputeHash(data);
                         Progress?.Invoke(stream.Length, xstream.Position, 0, null, WorkingMode.Syncing);
                         xstream.Flush();
                         if (size != BlockSize)
+                        {
                             break;
+                        }
                     }
                     catch (Exception e)
                     {
@@ -128,13 +165,14 @@ namespace 诊断工具.Methods
                         string val = HashTable[nx++];
                         node.Push("计算值:" + crc + " 参考值:" + val);
                         if (crc != val)
+                        {
                             throw new Exception("校验CRC错误 发生在 0x" + xstream.Position.ToString("X") + Environment.NewLine + "SOURCE=" + val + Environment.NewLine + "READ=" + crc);
+                        }
                     }
                 }
                 node.Push("关闭文件流");
                 Progress?.Invoke(stream.Length, xstream.Position, 0, "完成", WorkingMode.Verifying);
             }
-        
         }
 
         public static void RunDiskPart(string script)
@@ -152,24 +190,33 @@ namespace 诊断工具.Methods
                 Arguments = "-s script.txt"
             });
             while (!cmd.HasExited)
+            {
                 node.Push(cmd.StandardOutput.ReadLine());
+            }
         }
+
         public static DriverInfo[] SecureDiskInfo
         {
             get
             {
                 List<DriverInfo> ret = new List<DriverInfo>();
-                foreach (var i in DiskList)
+                foreach (DriverInfo i in DiskList)
+                {
                     if (i.DiskSize < (ulong)128 * 1024 * 1024 * 1024)
+                    {
                         ret.Add(i);
+                    }
+                }
+
                 return ret.ToArray();
             }
         }
+
         public static DriverInfo[] DiskList
         {
             get
             {
-                File.WriteAllText("script.txt",@"
+                File.WriteAllText("script.txt", @"
 list disk
 exit
 ");
@@ -190,7 +237,7 @@ exit
                 List<DriverInfo> ret = new List<DriverInfo>();
                 cmd.WaitForExit();
                 string data = cmd.StandardOutput.ReadToEnd() + Environment.NewLine + cmd.StandardError.ReadToEnd();
-                foreach (var line in data.Split('\n'))
+                foreach (string line in data.Split('\n'))
                 {
                     node.Push(line);
                     if (line.Trim() == string.Empty ||
@@ -200,7 +247,10 @@ exit
                         line.IndexOf("----") != -1 ||
                         line.IndexOf("###") != -1 ||
                         line.IndexOf("退出") != -1)
+                    {
                         continue;
+                    }
+
                     string[] arr = line.Trim().Split(' ');
                     ret.Add(new DriverInfo()
                     {

@@ -1,20 +1,8 @@
 ﻿using Phenom.Extension;
 using Phenom.WPF.Extension;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using 诊断工具.Methods;
 
 namespace 诊断工具.Controls.Networks
@@ -22,7 +10,7 @@ namespace 诊断工具.Controls.Networks
     /// <summary>
     /// DNSQuery.xaml 的交互逻辑
     /// </summary>
-    public partial class DNSQuery : UserControl,AutoLoadTemplate
+    public partial class DNSQuery : UserControl, AutoLoadTemplate
     {
         private ObservableCollection<DNSReslove> DNSList = new ObservableCollection<DNSReslove>();
 
@@ -48,8 +36,10 @@ namespace 诊断工具.Controls.Networks
 
         private void add_generic_server_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var i in Properties.Resources.DNSServer.Split('\n'))
+            foreach (string i in Properties.Resources.DNSServer.Split('\n'))
+            {
                 DNSList.Add(new DNSReslove(i.Trim()));
+            }
         }
 
         private void test_domain_Click(object sender, RoutedEventArgs e)
@@ -59,8 +49,10 @@ namespace 诊断工具.Controls.Networks
                 this.Error("请输入域名");
                 return;
             }
-            foreach (var i in DNSList)
+            foreach (DNSReslove i in DNSList)
+            {
                 i.Reslover(dns_test_domain.Text.Trim());
+            }
         }
     }
 }

@@ -8,18 +8,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Path = System.IO.Path;
 
 namespace 诊断工具.Controls.Disks
@@ -27,32 +18,38 @@ namespace 诊断工具.Controls.Disks
     /// <summary>
     /// DiskTest.xaml 的交互逻辑
     /// </summary>
-    public partial class DiskTest : UserControl,AutoLoadTemplate
+    public partial class DiskTest : UserControl, AutoLoadTemplate
     {
         public DiskTest()
         {
             InitializeComponent();
         }
 
-        private void DisktestThread(Action self) => Async.StartOnce(self, () =>
+        private void DisktestThread(Action self)
         {
-            Dispatcher.Invoke(() => disk_write_test.IsEnabled = false);
-        }, () =>
-        {
-            Dispatcher.Invoke(() => disk_write_test.IsEnabled = true);
-        });
+            Async.StartOnce(self, () =>
+{
+    Dispatcher.Invoke(() => disk_write_test.IsEnabled = false);
+}, () =>
+{
+    Dispatcher.Invoke(() => disk_write_test.IsEnabled = true);
+});
+        }
 
         private void PerformanceTest(DriveInfo info)
         {
         }
 
-        static void HalfRandom(byte[] data)
+        private static void HalfRandom(byte[] data)
         {
             for (int nx = 0; nx < 32; nx++)
+            {
                 data[TestRandom.Next(0, data.Length)] = (byte)TestRandom.Next();
+            }
         }
-        static Random TestRandom = new Random();
-        static DebugNode node = new DebugNode("Disk");
+
+        private static Random TestRandom = new Random();
+        private static DebugNode node = new DebugNode("Disk");
 
         public string TabName => "磁盘测试";
 
@@ -63,16 +60,19 @@ namespace 诊断工具.Controls.Disks
             Dispatcher.Invoke(() =>
             {
                 if (disk_write_text_info.Text.Length > 1000)
+                {
                     disk_write_text_info.Text = "";
+                }
+
                 disk_write_text_info.Text += message + Environment.NewLine;
                 disk_wrtie_test_output.ScrollToEnd();
             });
         }
+
         private void UpdateProgress()
         {
             Dispatcher.Invoke(() => disk_write_test_progress.Value += 1);
         }
-
 
         private void disk_write_test_disk_begin_Click(object sender, RoutedEventArgs e)
         {
@@ -96,6 +96,7 @@ namespace 诊断工具.Controls.Disks
                     break;
             }
         }
+
         private void disk_write_test_disk_select_refresh_Click(object sender, RoutedEventArgs e)
         {
             disk_write_text_disk_select.ItemsSource = DriveInfo.GetDrives();
@@ -112,7 +113,10 @@ namespace 诊断工具.Controls.Disks
                 return;
             }
             if (!this.Confirm($"测试大小:{BlockLength.FormatStroageUnit()} x {BlockSize.FormatStroageUnit()}"))
+            {
                 return;
+            }
+
             disk_write_test_progress.Maximum = BlockSize * 2;
             disk_write_test_progress.Value = 0;
             string ComputeFilePath(ulong id)
@@ -128,7 +132,7 @@ namespace 诊断工具.Controls.Disks
                 this.Error(ex, "创建测试目录失败");
                 return;
             }
-           
+
             Dictionary<ulong, string> HashTable = new Dictionary<ulong, string>((int)BlockSize);
             DisktestThread(() =>
             {
@@ -151,7 +155,9 @@ namespace 诊断工具.Controls.Disks
                         File.WriteAllBytes(file, data);
                         UpdateProgress();
                         while (thread.ThreadState == System.Threading.ThreadState.Running)
+                        {
                             Thread.Sleep(100);
+                        }
                     }
                     ulong faild_count = 0;
                     PushMessage("写入成功!");
@@ -184,7 +190,6 @@ namespace 诊断工具.Controls.Disks
             });
         }
 
-
         private void BlockTest(DriveInfo info)
         {
             long[] block_split = new long[]
@@ -216,7 +221,7 @@ namespace 诊断工具.Controls.Disks
                 byte[] read_data = new byte[block_split.Max()];
                 TestRandom.NextBytes(test_data);
                 FileStream fs = File.Open(filename, FileMode.OpenOrCreate);
-                foreach (var i in block_split)
+                foreach (long i in block_split)
                 {
                     List<double> WriteResult = new List<double>();
                     List<double> ReadResult = new List<double>();
@@ -241,7 +246,6 @@ namespace 诊断工具.Controls.Disks
                         }
                         catch (DivideByZeroException)
                         {
-
                         }
                         catch (Exception e)
                         {

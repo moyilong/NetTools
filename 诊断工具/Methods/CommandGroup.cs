@@ -6,7 +6,7 @@ namespace 诊断工具.Methods
 {
     internal static class CommandGroup
     {
-        static public Dictionary<string, Action> CMDS = new Dictionary<string, Action>
+        public static Dictionary<string, Action> CMDS = new Dictionary<string, Action>
         {
             ["任务管理器"] = () => Process.Start("taskmgr"),
             ["设备管理器"] = () => Process.Start("devmgmt.msc"),

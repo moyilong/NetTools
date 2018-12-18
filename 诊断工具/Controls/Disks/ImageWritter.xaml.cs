@@ -3,20 +3,9 @@ using Phenom.Extension;
 using Phenom.ProgramMethod;
 using Phenom.WPF.Extension;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using 诊断工具.Methods;
 
 namespace 诊断工具.Controls.Disks
@@ -24,7 +13,7 @@ namespace 诊断工具.Controls.Disks
     /// <summary>
     /// ImageWritter.xaml 的交互逻辑
     /// </summary>
-    public partial class ImageWritter : UserControl,HelpedAutoLoad
+    public partial class ImageWritter : UserControl, HelpedAutoLoad
     {
         public string TabName => "镜像写入";
 
@@ -52,7 +41,9 @@ namespace 诊断工具.Controls.Disks
                 Multiselect = false
             };
             if ((bool)dialog.ShowDialog())
+            {
                 disk_write_image.Text = dialog.FileName;
+            }
         }
 
         private void disk_wrte_Click(object sender, RoutedEventArgs e)
@@ -80,7 +71,9 @@ namespace 诊断工具.Controls.Disks
             Async.NoneWaitStart(() =>
             {
                 using (FileStream fs = new FileStream(disk_write_image.Text, FileMode.Open))
+                {
                     WriteLib.Write(info.PathName, true, fs, UpdateDiskWriteProgress);
+                }
             }, () =>
             {
                 Dispatcher.Invoke(() => disk_wrte.IsEnabled = false);
@@ -90,6 +83,7 @@ namespace 诊断工具.Controls.Disks
                 Dispatcher.Invoke(() => disk_wrte.IsEnabled = true);
             });
         }
+
         private void UpdateDiskWriteProgress(long Max, long Cur, long Min, string Tips, WorkingMode mode)
         {
             Dispatcher.Invoke(() =>
@@ -107,9 +101,11 @@ namespace 诊断工具.Controls.Disks
                     case WorkingMode.Syncing:
                         disk_write_title.Header = "同步";
                         break;
+
                     case WorkingMode.Verifying:
                         disk_write_title.Header = "校验";
                         break;
+
                     case WorkingMode.Writting:
                         disk_write_title.Header = "写入";
                         break;

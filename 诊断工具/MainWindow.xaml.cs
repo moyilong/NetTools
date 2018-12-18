@@ -40,7 +40,7 @@ namespace 诊断工具
             new Toolbox()
         };
 
-        Dictionary<string, TabControl> Binding = new Dictionary<string, TabControl>();
+        private Dictionary<string, TabControl> Binding = new Dictionary<string, TabControl>();
 
         public MainWindow()
         {
@@ -52,13 +52,15 @@ namespace 诊断工具
                     TabItem vitem = new TabItem()
                     {
                         Header = item.TabName,
-                        Content=self
+                        Content = self
                     };
 
                     self.GotFocus += HelpUpdate;
 
                     if (item.Catalog == null)
+                    {
                         main_area.Items.Add(vitem);
+                    }
                     else
                     {
                         if (!Binding.ContainsKey(item.Catalog))
@@ -67,18 +69,16 @@ namespace 诊断工具
                             main_area.Items.Add(new TabItem()
                             {
                                 Content = Binding[item.Catalog],
-                                Header=item.Catalog
+                                Header = item.Catalog
                             });
                         }
                         Binding[item.Catalog].Items.Add(vitem);
                     }
-                        
                 }
             });
         }
 
-     
-        void HelpUpdate(object obj,RoutedEventArgs e)
+        private void HelpUpdate(object obj, RoutedEventArgs e)
         {
             if (obj is HelpedAutoLoad help)
             {
@@ -109,9 +109,9 @@ namespace 诊断工具
                 Process.GetCurrentProcess().Kill();
             }
         }
+
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
         {
         }
-
     }
 }

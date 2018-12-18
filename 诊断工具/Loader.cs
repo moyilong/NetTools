@@ -5,14 +5,13 @@ using System;
 
 namespace 诊断工具
 {
-    static public class Loader
+    public static class Loader
     {
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            PhenomWPF.QueryFormStart<App>( new QueryRunner.QueryRunnerItem[]
+            PhenomWPF.QueryFormStart<App>(new QueryRunner.QueryRunnerItem[]
             {
-
             }, new Loading());
         }
     }

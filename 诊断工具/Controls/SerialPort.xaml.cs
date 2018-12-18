@@ -1,30 +1,19 @@
 ﻿using Phenom.Extension;
-using Phenom.ProgramMethod;
 using Phenom.WPF;
 using Phenom.WPF.Extension;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using SerialPort = System.IO.Ports.SerialPort;
 
 namespace 诊断工具.Controls
 {
     /// <summary>
     /// SerialPort.xaml 的交互逻辑
     /// </summary>
-    public partial class SerialPort : UserControl,AutoLoadTemplate
+    public partial class SerialPort : UserControl, AutoLoadTemplate
     {
         public SerialPort()
         {
@@ -125,7 +114,10 @@ namespace 诊断工具.Controls
                 string data = MonitedPort.ReadExisting();
                 StringBuilder builder = new StringBuilder();
                 for (int n = 0; n < data.Length; n++)
+                {
                     builder.Append($"{((byte)data[n]).ToString("X2")} ");
+                }
+
                 Dispatcher.Invoke(() =>
                 {
                     ascii_show_run.Text += data;
@@ -150,6 +142,7 @@ namespace 诊断工具.Controls
                 serial_port_assistant_input_run.Text.Split(' ').Foreach((self, id) =>
                {
                    if (ret != null)
+                   {
                        try
                        {
                            ret.Add(byte.Parse(self));
@@ -158,6 +151,7 @@ namespace 诊断工具.Controls
                        {
                            ret = null;
                        }
+                   }
                }, false);
                 if (ret == null)
                 {
@@ -167,7 +161,10 @@ namespace 诊断工具.Controls
                 ready_to_send = ret.ToArray();
             }
             else
+            {
                 ready_to_send = serial_port_assistant_input_run.Text.ToByte();
+            }
+
             MonitedPort.Write(ready_to_send, 0, ready_to_send.Length);
             UpdateSerialPortAssistantCount();
         }
@@ -181,6 +178,5 @@ namespace 诊断工具.Controls
         {
             SendData(true);
         }
-
     }
 }

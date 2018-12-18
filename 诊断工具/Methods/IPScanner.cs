@@ -1,6 +1,5 @@
 ﻿using Phenom.Extension;
 using Phenom.ProgramMethod;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.NetworkInformation;
@@ -23,10 +22,16 @@ namespace 诊断工具.Methods
         {
             string[] sub = GateWay.Split('.');
             if (sub.Length != 4)
+            {
                 return null;
+            }
+
             ObservableCollection<IPScanner> ret = new ObservableCollection<IPScanner>();
             for (int n = 0; n < byte.MaxValue; n++)
+            {
                 ret.Add(new IPScanner($"{sub[0]}.{sub[1]}.{sub[2]}.{n}", ret, TimeOut, parent));
+            }
+
             return ret;
         }
 
@@ -71,7 +76,9 @@ namespace 诊断工具.Methods
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Status"));
             Thread.Sleep(3000);
             if (Response == 0)
+            {
                 father.Dispatcher.Invoke(() => Parent.Remove(this));
+            }
             else
             {
                 Timeout = TotalTimeout / Response;

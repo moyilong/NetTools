@@ -24,7 +24,6 @@
 CCPUID CCPUID::_cur;
 #include "desc.h"
 
-
 const char*	CCPUID::CacheDesc[] = {
 	"Null descriptor, this byte contains no information"
 	,"Instruction TLB: 4 KByte pages, 4-way set associative, 32 entries"

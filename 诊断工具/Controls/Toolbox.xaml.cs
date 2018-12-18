@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using 诊断工具.Methods;
 
 namespace 诊断工具.Controls
@@ -19,13 +7,13 @@ namespace 诊断工具.Controls
     /// <summary>
     /// Toolbox.xaml 的交互逻辑
     /// </summary>
-    public partial class Toolbox : UserControl,AutoLoadTemplate
+    public partial class Toolbox : UserControl, AutoLoadTemplate
     {
         public Toolbox()
         {
             InitializeComponent();
             bool[,] Map = new bool[toolbox.ColumnDefinitions.Count, toolbox.RowDefinitions.Count];
-            foreach (var i in CommandGroup.CMDS)
+            foreach (System.Collections.Generic.KeyValuePair<string, System.Action> i in CommandGroup.CMDS)
             {
                 Button btn = new Button()
                 {
@@ -36,6 +24,7 @@ namespace 诊断工具.Controls
                 {
                     bool success = false;
                     for (int x = 0; x < toolbox.RowDefinitions.Count; x++)
+                    {
                         if (Map[n, x] == default(bool))
                         {
                             Map[n, x] = !Map[n, x];
@@ -47,8 +36,12 @@ namespace 诊断工具.Controls
                             success = true;
                             break;
                         }
+                    }
+
                     if (success)
+                    {
                         break;
+                    }
                 }
             }
         }
