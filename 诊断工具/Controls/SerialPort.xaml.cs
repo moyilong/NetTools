@@ -1,6 +1,6 @@
 ﻿using Phenom.Extension;
 using Phenom.WPF;
-using Phenom.WPF.Extension;
+
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;

@@ -1,6 +1,7 @@
-﻿using Phenom.ProgramMethod;
+﻿using Phenom.Extension;
+using Phenom.ProgramMethod;
 using Phenom.WPF;
-using Phenom.WPF.Extension;
+
 using System;
 
 namespace 诊断工具

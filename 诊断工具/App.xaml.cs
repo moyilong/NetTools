@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using static Phenom.WPF.Extension.PhenomWPF;
+using static Phenom.Extension.PhenomWPF;
 
 namespace 诊断工具
 {

@@ -1,5 +1,6 @@
-﻿using Phenom.ProgramMethod;
-using Phenom.WPF.Extension;
+﻿using Phenom.Extension;
+using Phenom.ProgramMethod;
+
 using System;
 using System.Collections.ObjectModel;
 using System.IO;

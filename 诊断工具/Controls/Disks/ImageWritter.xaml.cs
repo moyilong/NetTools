@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32;
 using Phenom.Extension;
 using Phenom.ProgramMethod;
-using Phenom.WPF.Extension;
+
 using System;
 using System.IO;
 using System.Windows;

@@ -1,6 +1,6 @@
 ﻿using Phenom.Extension;
 using Phenom.Logger;
-using Phenom.WPF.Extension;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -57,6 +57,9 @@ namespace 诊断工具
 
                     self.GotFocus += HelpUpdate;
 
+                    if (item is WIPTemplate)
+                        vitem.Header += "[开发中]";
+
                     if (item.Catalog == null)
                     {
                         main_area.Items.Add(vitem);
@@ -69,7 +72,7 @@ namespace 诊断工具
                             main_area.Items.Add(new TabItem()
                             {
                                 Content = Binding[item.Catalog],
-                                Header = item.Catalog
+                                Header = item.Catalog,
                             });
                         }
                         Binding[item.Catalog].Items.Add(vitem);

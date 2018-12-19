@@ -1,5 +1,5 @@
 ﻿using Phenom.Extension;
-using Phenom.WPF.Extension;
+
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,7 +10,7 @@ namespace 诊断工具.Controls.Networks
     /// <summary>
     /// DNSQuery.xaml 的交互逻辑
     /// </summary>
-    public partial class DNSQuery : UserControl, AutoLoadTemplate
+    public partial class DNSQuery : UserControl, AutoLoadTemplate,WIPTemplate,HelpedAutoLoad
     {
         private ObservableCollection<DNSReslove> DNSList = new ObservableCollection<DNSReslove>();
 
@@ -23,6 +23,11 @@ namespace 诊断工具.Controls.Networks
         public string TabName => "DNS查询";
 
         public string Catalog => "网络";
+
+        public string HelpDoc => @"
+1、添加DNS服务器或者添加常用DNS
+2、输入要测试的域名，点击测试
+";
 
         private void add_dns_server_Click(object sender, RoutedEventArgs e)
         {

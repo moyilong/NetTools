@@ -10,7 +10,7 @@ namespace 诊断工具.Controls.Networks
     /// <summary>
     /// MDNSScanner.xaml 的交互逻辑
     /// </summary>
-    public partial class MDNSScanner : UserControl, AutoLoadTemplate
+    public partial class MDNSScanner : UserControl, AutoLoadTemplate,WIPTemplate,HelpedAutoLoad
     {
         public MDNSScanner()
         {
@@ -22,6 +22,8 @@ namespace 诊断工具.Controls.Networks
         public string TabName => "mDNS扫描";
 
         public string Catalog => "网络";
+
+        public string HelpDoc => @"进行mDNS扫描";
 
         private void refresh_mdns_Click(object sender, RoutedEventArgs e)
         {

@@ -1,5 +1,5 @@
 ﻿using Phenom.Extension;
-using Phenom.WPF.Extension;
+
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;

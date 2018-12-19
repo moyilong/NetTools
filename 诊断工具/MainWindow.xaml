@@ -13,7 +13,7 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition Width="0.3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TabControl Name="main_area"></TabControl>
+        <TabControl Name="main_area"   ></TabControl>
         <GroupBox Header="帮助" Grid.Column="1">
             <RichTextBox IsReadOnly="True">
                 <FlowDocument>

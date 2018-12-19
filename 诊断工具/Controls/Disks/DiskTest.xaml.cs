@@ -1,7 +1,7 @@
 ﻿using Phenom.Extension;
 using Phenom.Logger;
 using Phenom.ProgramMethod;
-using Phenom.WPF.Extension;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -1,5 +1,6 @@
-﻿using Phenom.Logger;
-using Phenom.WPF.Extension;
+﻿using Phenom.Extension;
+using Phenom.Logger;
+
 using System;
 using System.Drawing;
 using System.Windows;
