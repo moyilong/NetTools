@@ -131,6 +131,11 @@
     <Compile Include="Controls\Networks\PingTester.xaml.cs">
       <DependentUpon>PingTester.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ImageProcessor.xaml.cs">
+      <DependentUpon>ImageProcessor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Methods\ImageFormatConvert\IFormatConverter.cs" />
+    <Compile Include="Methods\ImageFormatConvert\PixelFormater.cs" />
     <Compile Include="PaggedItem.cs" />
     <Compile Include="ScreenTest.xaml.cs">
       <DependentUpon>ScreenTest.xaml</DependentUpon>
@@ -186,6 +191,10 @@
     <Page Include="Controls\Toolbox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ImageProcessor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

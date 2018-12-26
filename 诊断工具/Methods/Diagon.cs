@@ -51,23 +51,6 @@ namespace 诊断工具.Methods
             new Tuple<string, Func<DiagonResult, bool>, bool>("百度内容测试",result => WebContentTest("http://www.baidu.com",result),true),
             new Tuple<string, Func<DiagonResult, bool>, bool>("谷歌基本连接测试",result=>PingTest("www.google.com",result),false),
             new Tuple<string, Func<DiagonResult, bool>, bool>("SpeedTest服务器测试",result=>PingTest("www.speedtest.net",result),true),
-            /*new Tuple<string, Func<DiagonResult, bool>, bool>("快速速度检测", result =>
-            {
-                try{
-                    result.Result="准备中";
-                    SpeedTestClient client = new SpeedTestClient();
-                    Server test_server = client.GetSettings().Servers.First();
-                    double download= client.TestDownloadSpeed(test_server);
-                    double upload = client.TestUploadSpeed(test_server);
-                    result.Result=$"上传:{Math.Round( upload/1000,2).ToString()} MB/s 下载:{Math.Round( download/1000,2).ToString()} MB/s 服务器:{test_server.Host.ToString()} 延迟:{test_server.Latency.ToString()}";
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    result.Result = e.ToString();
-                    return false;
-                }
-            },false)*/
         };
 
         private static bool WebContentTest(string domain, DiagonResult result)

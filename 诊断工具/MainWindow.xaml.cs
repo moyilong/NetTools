@@ -37,7 +37,8 @@ namespace 诊断工具
             new BatchRename(),
 
             new SerialPort(),
-            new Toolbox()
+            new Toolbox(),
+            new ImageProcessor()
         };
 
         private Dictionary<string, TabControl> Binding = new Dictionary<string, TabControl>();

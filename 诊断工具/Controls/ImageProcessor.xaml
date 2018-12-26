@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="诊断工具.Controls.ImageProcessor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="30"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Button Name="process" Grid.RowSpan="2" Click="Process_Click" Content=">>" Grid.Column="1"></Button>
+        <Image Name="source" Grid.Column="0"></Image>
+        <Image Name="target" Grid.Column="2"></Image>
+        <Button Name="open_source" Grid.Row="1" Grid.Column="0" Content="打开图片" Click="Open_source_Click"></Button>
+        <Button Name="save_source" Grid.Row="1" Grid.Column="2" Content="保存图片" Click="Save_source_Click"></Button>
+        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <ScrollBar Grid.Row="1" ValueChanged="Vertex_ValueChanged"  SmallChange="0.1" Height="30" Maximum="1.0" Minimum="0" Value="0.7"  Grid.Column="0" Name="vertex" Orientation="Horizontal"></ScrollBar>
+            <Label Content="阈值" Height="30" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="0"></Label>
+            <Label Grid.Column="1" Content="取样" Height="30" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="0"></Label>
+            <Grid Grid.Column="1" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ComboBox Name="convert_type" ></ComboBox>
+                <Button Content="导出到剪切板" Click="Export_to_clipboard_Click" Name="export_to_clipboard" Grid.Column="1"></Button>
+                <Button Content="从剪切板导入" Click="Import_to_clipboard_Click" Name="import_to_clipboard" Grid.Column="2"></Button>
+            </Grid>
+        </Grid>
+        
+    </Grid>
+</UserControl>
