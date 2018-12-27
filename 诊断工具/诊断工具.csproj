@@ -61,6 +61,9 @@
     <Reference Include="Phenom.HAM">
       <HintPath>C:\Phenom\net461\Phenom.HAM.dll</HintPath>
     </Reference>
+    <Reference Include="Phenom.UnionCore">
+      <HintPath>C:\Phenom\net461\Phenom.UnionCore.dll</HintPath>
+    </Reference>
     <Reference Include="Phenom.WPF">
       <HintPath>C:\Phenom\net461\Phenom.WPF.dll</HintPath>
     </Reference>
