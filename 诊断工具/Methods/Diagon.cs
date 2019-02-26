@@ -1,5 +1,5 @@
-﻿using Phenom.Network;
-using Phenom.ProgramMethod;
+﻿using Tahiti.Network;
+using Tahiti.ProgramMethod;
 
 /*using SpeedTest;
 using SpeedTest.Models;*/
@@ -8,6 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.NetworkInformation;
+using Tahiti.Extension;
 
 namespace 诊断工具.Methods
 {
@@ -100,7 +101,7 @@ namespace 诊断工具.Methods
         public static ObservableCollection<DiagonResult> RunResult(MainWindow window, Action OnInit, Action OnExit)
         {
             ObservableCollection<DiagonResult> ret = new ObservableCollection<DiagonResult>();
-            Async.NoneWaitStart(() =>
+            new Action(() =>
             {
                 foreach (Tuple<string, Func<DiagonResult, bool>, bool> i in TestProject)
                 {
@@ -114,7 +115,7 @@ namespace 诊断工具.Methods
                         break;
                     }
                 }
-            }, OnInit, OnExit);
+            }).ThreadStart( OnInit, OnExit);
             return ret;
         }
     }

@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using static Phenom.Extension.PhenomWPF;
+using static Tahiti.Extension.TahitiWPF;
 
 namespace 诊断工具
 {

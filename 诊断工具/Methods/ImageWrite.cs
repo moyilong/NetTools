@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32.SafeHandles;
-using Phenom.Logger;
+using Tahiti.Logger;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -55,7 +55,7 @@ namespace 诊断工具.Methods
                         break;
                 }
                 val *= scale;
-                node.Push("Set:" + DispName.Trim() + " Size=" + val.ToString());
+                node.Note("Set:" + DispName.Trim() + " Size=" + val.ToString());
                 return val;
             }
         }
@@ -89,7 +89,7 @@ namespace 诊断工具.Methods
         public static void Write(string Path, bool NeedVerify, Stream stream, ProgressProc Progress = null)
         {
             IntPtr handle = CreateFile(Path, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, 0x20000000, IntPtr.Zero);
-            node.Push("打开:" + Path);
+            node.Log("打开:" + Path);
             if (handle.ToInt64() == -1)
             {
                 throw new Exception("Open handler faild!");
@@ -148,12 +148,12 @@ namespace 诊断工具.Methods
                         throw new Exception("写入错误 在" + xstream.Position.ToString("X") + " 区块大小: 0x" + size.ToString("X"), e);
                     }
                 }
-                node.Push("冲刷缓存");
+                node.Log("冲刷缓存");
                 Progress?.Invoke(0, 0, 0, "写入缓存", WorkingMode.Writting);
                 xstream.Flush();
                 if (NeedVerify)
                 {
-                    node.Push("开始校验");
+                    node.Log("开始校验");
                     Progress?.Invoke(0, 0, 0, "校验中", WorkingMode.Writting);
                     xstream.Seek(0, SeekOrigin.Begin);
                     nx = 0;
@@ -163,21 +163,21 @@ namespace 诊断工具.Methods
                         Progress?.Invoke(stream.Length, n, 0, "验证 0x" + n.ToString("X"), WorkingMode.Verifying);
                         string crc = ComputeHash(data);
                         string val = HashTable[nx++];
-                        node.Push("计算值:" + crc + " 参考值:" + val);
+                        node.Log("计算值:" + crc + " 参考值:" + val);
                         if (crc != val)
                         {
                             throw new Exception("校验CRC错误 发生在 0x" + xstream.Position.ToString("X") + Environment.NewLine + "SOURCE=" + val + Environment.NewLine + "READ=" + crc);
                         }
                     }
                 }
-                node.Push("关闭文件流");
+                node.Log("关闭文件流");
                 Progress?.Invoke(stream.Length, xstream.Position, 0, "完成", WorkingMode.Verifying);
             }
         }
 
         public static void RunDiskPart(string script)
         {
-            node.Push("运行:" + script);
+            node.Log("运行:" + script);
             File.WriteAllText("script.txt", script);
             Process cmd = Process.Start(new ProcessStartInfo
             {
@@ -191,7 +191,7 @@ namespace 诊断工具.Methods
             });
             while (!cmd.HasExited)
             {
-                node.Push(cmd.StandardOutput.ReadLine());
+                node.Log(cmd.StandardOutput.ReadLine());
             }
         }
 
@@ -239,7 +239,7 @@ exit
                 string data = cmd.StandardOutput.ReadToEnd() + Environment.NewLine + cmd.StandardError.ReadToEnd();
                 foreach (string line in data.Split('\n'))
                 {
-                    node.Push(line);
+                    node.Log(line);
                     if (line.Trim() == string.Empty ||
                         line.IndexOf("Copyright (C) Microsoft Corporation.") != -1 ||
                         line.IndexOf("在计算机上") != -1 ||

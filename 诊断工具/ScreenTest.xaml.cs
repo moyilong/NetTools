@@ -1,5 +1,5 @@
-﻿using Phenom.Extension;
-using Phenom.Logger;
+﻿using Tahiti.Extension;
+using Tahiti.Logger;
 
 using System;
 using System.Drawing;
@@ -69,7 +69,7 @@ namespace 诊断工具
             int r_step = color.R == 0 ? 0 : 256 / level;
             int g_step = color.G == 0 ? 0 : 256 / level;
             int b_step = color.B == 0 ? 0 : 256 / level;
-            node.Push($"共{level}级{step}步长 R:{r_step} G:{g_step} B:{b_step}");
+            node.Note($"共{level}级{step}步长 R:{r_step} G:{g_step} B:{b_step}");
             for (int n = 0; n < level; n++)
             {
                 Color vcolor = Color.FromArgb(255, r_step * n, g_step * n, b_step * n);
@@ -86,7 +86,7 @@ namespace 诊断工具
                         break;
                 }
 
-                node.Push($"绘制:{n} R={vcolor.R} G={vcolor.G} B={vcolor.B} A={vcolor.A} Rect={vrect.X},{vrect.Y},{vrect.Width},{vrect.Height}");
+                node.Note($"绘制:{n} R={vcolor.R} G={vcolor.G} B={vcolor.B} A={vcolor.A} Rect={vrect.X},{vrect.Y},{vrect.Width},{vrect.Height}");
                 gpu.FillRectangle(new SolidBrush(vcolor), vrect);
             }
             UpdateImage();

@@ -1,5 +1,5 @@
-﻿using Phenom.Extension;
-using Phenom.ProgramMethod;
+﻿using Tahiti.Extension;
+using Tahiti.ProgramMethod;
 
 using System;
 using System.Collections.ObjectModel;
@@ -44,7 +44,7 @@ namespace 诊断工具.Controls.Disks
 
             string path = dialog.SelectedPath;
             rename_list.ItemsSource = collect;
-            Async.NoneWaitStart(() =>
+            new Action(() =>
             {
                 foreach (string i in Directory.GetFiles(path))
                 {
@@ -53,7 +53,7 @@ namespace 诊断工具.Controls.Disks
                         collect.Add(new RenameOperator(new FileInfo(Path.Combine(path, i))));
                     });
                 }
-            });
+            }).ThreadStart();
         }
 
         private void Preview_rename_Click(object sender, RoutedEventArgs e)

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
-using Phenom.Extension;
-using Phenom.ProgramMethod;
+using Tahiti.Extension;
+using Tahiti.ProgramMethod;
 
 using System;
 using System.IO;
@@ -68,13 +68,13 @@ namespace 诊断工具.Controls.Disks
                 this.Tips("操作已经取消!");
                 return;
             }
-            Async.NoneWaitStart(() =>
+            new Action(() =>
             {
                 using (FileStream fs = new FileStream(disk_write_image.Text, FileMode.Open))
                 {
                     WriteLib.Write(info.PathName, true, fs, UpdateDiskWriteProgress);
                 }
-            }, () =>
+            }).ThreadStart( () =>
             {
                 Dispatcher.Invoke(() => disk_wrte.IsEnabled = false);
             },

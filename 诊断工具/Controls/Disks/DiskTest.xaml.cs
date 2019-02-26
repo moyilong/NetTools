@@ -1,6 +1,6 @@
-﻿using Phenom.Extension;
-using Phenom.Logger;
-using Phenom.ProgramMethod;
+﻿using Tahiti.Extension;
+using Tahiti.Logger;
+using Tahiti.ProgramMethod;
 
 using System;
 using System.Collections.Generic;
@@ -27,13 +27,10 @@ namespace 诊断工具.Controls.Disks
 
         private void DisktestThread(Action self)
         {
-            Async.StartOnce(self, () =>
-{
-    Dispatcher.Invoke(() => disk_write_test.IsEnabled = false);
-}, () =>
-{
-    Dispatcher.Invoke(() => disk_write_test.IsEnabled = true);
-});
+            self.TaskStart(
+                () => Dispatcher.Invoke(() => disk_write_test.IsEnabled = false),
+                () => Dispatcher.Invoke(() => disk_write_test.IsEnabled = true)
+                );
         }
 
         private void PerformanceTest(DriveInfo info)
@@ -106,7 +103,7 @@ namespace 诊断工具.Controls.Disks
         {
             ulong BlockLength = ulong.Parse(disk_write_text_disk_size.Text.Trim('M')) * 1024 * 1024;
             ulong BlockSize = (((ulong)info.AvailableFreeSpace) / BlockLength) - 1;
-            node.Push($"容量:{BlockSize.FormatStroageUnit()} {BlockLength.FormatStroageUnit()}");
+            node.Log($"容量:{BlockSize.FormatStroageUnit()} {BlockLength.FormatStroageUnit()}");
             if (info.DriveType == DriveType.CDRom)
             {
                 this.Error("不能测试光驱!");
@@ -146,10 +143,10 @@ namespace 诊断工具.Controls.Disks
                         PushMessage("准备数据...");
                         HalfRandom(data);
                         PushMessage("计算哈希值...");
-                        Thread thread = Async.NoneWaitStart(() =>
+                        Thread thread = new Action(() =>
                         {
                             HashTable[n] = data.GenericHash(new MD5CryptoServiceProvider());
-                        });
+                        }).ThreadStart();
                         string file = ComputeFilePath(n);
                         PushMessage("写入文件:" + file);
                         File.WriteAllBytes(file, data);

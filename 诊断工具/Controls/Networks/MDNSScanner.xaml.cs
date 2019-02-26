@@ -1,10 +1,11 @@
-﻿using Phenom.Logger;
-using Phenom.ProgramMethod;
+﻿using Tahiti.Logger;
+using Tahiti.ProgramMethod;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using Tmds.MDns;
-
+using System;
+using Tahiti.Extension;
 namespace 诊断工具.Controls.Networks
 {
     /// <summary>
@@ -27,17 +28,17 @@ namespace 诊断工具.Controls.Networks
 
         private void refresh_mdns_Click(object sender, RoutedEventArgs e)
         {
-            Async.NoneWaitStart(() =>
+            new Action(() =>
             {
-                node.Push("开始扫描MDNS");
+                node.Log("开始扫描MDNS");
                 ServiceBrowser browser = new ServiceBrowser();
                 SynchronizationContext context = new SynchronizationContext();
                 browser.StartBrowse("*", context);
                 Thread.Sleep(3000);
                 browser.StopBrowse();
-                node.Push("更新结果");
+                node.Log("更新结果");
                 Dispatcher.Invoke(() => mdns_result.ItemsSource = browser.Services);
-            }, () => Dispatcher.Invoke(() => refresh_mdns.IsEnabled = false), () => Dispatcher.Invoke(() => refresh_mdns.IsEnabled = true));
+            }).ThreadStart( () => Dispatcher.Invoke(() => refresh_mdns.IsEnabled = false), () => Dispatcher.Invoke(() => refresh_mdns.IsEnabled = true));
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

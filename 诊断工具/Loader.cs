@@ -1,8 +1,8 @@
-﻿using Phenom.Extension;
-using Phenom.ProgramMethod;
-using Phenom.UnionCore.API;
-using Phenom.WPF;
-using Phenom.UnionCore.APPAuth;
+﻿using Tahiti.Extension;
+using Tahiti.ProgramMethod;
+using Tahiti.UnionCore.API;
+using Tahiti.WPF;
+using Tahiti.UnionCore.APPAuth;
 using System;
 
 namespace 诊断工具
@@ -15,7 +15,7 @@ namespace 诊断工具
             APIS.InitAPP("4b37a1736c5db70ebccd5add3f9dae27");
             AuthProvider provider = new AuthProvider();
             provider.Monited = true;
-            PhenomWPF.QueryFormStart<App>(new QueryRunner.QueryRunnerItem[]
+            TahitiWPF.QueryFormStart<App>(new QueryRunner.QueryRunnerItem[]
             {
             }, new Loading());
         }

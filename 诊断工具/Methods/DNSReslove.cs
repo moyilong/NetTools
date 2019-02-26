@@ -1,6 +1,6 @@
 ﻿using ARSoft.Tools.Net.Dns;
-using Phenom.Extension;
-using Phenom.Logger;
+using Tahiti.Extension;
+using Tahiti.Logger;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -44,14 +44,14 @@ namespace 诊断工具.Methods
                 return;
             }
             Domain = domain;
-            node.Push("连接DNS服务器..........");
+            node.Note("连接DNS服务器..........");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Domain"));
             DnsClient client = new DnsClient(Server.ToIPAddress(), 1000);
             TimeSpan span_begin = new TimeSpan();
-            node.Push("请求响应......");
+            node.Note("请求响应......");
             DnsMessage message = client.Resolve(new ARSoft.Tools.Net.DomainName(new string[] { domain }), RecordType.Any, RecordClass.INet);
             TimeSpan span_end = new TimeSpan();
-            node.Push("处理结果");
+            node.Note("处理结果");
             if (message == null)
             {
                 Result = "空结果";

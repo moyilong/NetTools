@@ -1,5 +1,5 @@
 ﻿
-using Phenom.Extension;
+using Tahiti.Extension;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,7 +37,7 @@ namespace 诊断工具.Controls.Networks
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            gateway_area.ItemsSource = Phenom.Network.WebClient.IPList.Where(self => self.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+            gateway_area.ItemsSource = Tahiti.Network.WebClient.IPList.Where(self => self.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
         }
     }
 }

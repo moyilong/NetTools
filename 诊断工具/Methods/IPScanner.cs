@@ -1,9 +1,10 @@
-﻿using Phenom.Extension;
-using Phenom.ProgramMethod;
+﻿using Tahiti.Extension;
+using Tahiti.ProgramMethod;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.NetworkInformation;
 using System.Threading;
+using System;
 
 namespace 诊断工具.Methods
 {
@@ -45,7 +46,7 @@ namespace 诊断工具.Methods
             xot = tout;
             Parent = op;
             father = fa;
-            Async.NoneWaitStart(ScanThread);
+            new Action(ScanThread).TaskStart();
         }
 
         private void ScanThread()
