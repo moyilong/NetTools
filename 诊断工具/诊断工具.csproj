@@ -42,7 +42,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>诊断工具.Loader</StartupObject>
+    <StartupObject>诊断工具.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ARSoft.Tools.Net, Version=2.2.9.0, Culture=neutral, PublicKeyToken=1940454cd762ec57, processorArchitecture=MSIL">
@@ -213,7 +213,6 @@
     <Compile Include="Controls\Toolbox.xaml.cs">
       <DependentUpon>Toolbox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Loader.cs" />
     <Compile Include="Methods\CommandGroup.cs" />
     <Compile Include="Methods\Diagon.cs" />
     <Compile Include="Methods\DNSReslove.cs" />
