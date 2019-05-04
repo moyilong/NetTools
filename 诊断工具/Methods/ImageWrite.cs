@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
+using Tahiti.Extension;
 
 namespace 诊断工具.Methods
 {
@@ -135,7 +136,7 @@ namespace 诊断工具.Methods
 
                         Progress?.Invoke(stream.Length, xstream.Position, 0, null, WorkingMode.Writting);
                         xstream.Write(data, 0, BlockSize);
-                        HashTable[nx++] = ComputeHash(data);
+                        HashTable[nx++] = data.Hash<MD5>();
                         Progress?.Invoke(stream.Length, xstream.Position, 0, null, WorkingMode.Syncing);
                         xstream.Flush();
                         if (size != BlockSize)
@@ -161,7 +162,7 @@ namespace 诊断工具.Methods
                     {
                         size = xstream.Read(data, 0, BlockSize);
                         Progress?.Invoke(stream.Length, n, 0, "验证 0x" + n.ToString("X"), WorkingMode.Verifying);
-                        string crc = ComputeHash(data);
+                        string crc =data.Hash<MD5>();
                         string val = HashTable[nx++];
                         node.Log("计算值:" + crc + " 参考值:" + val);
                         if (crc != val)
@@ -259,7 +260,6 @@ exit
                         PathName = @"\\.\PHYSICALDRIVE" + arr[1]
                     });
                 }
-
                 return ret.ToArray();
             }
         }

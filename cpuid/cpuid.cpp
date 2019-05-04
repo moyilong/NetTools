@@ -99,5 +99,5 @@ void main(int argc, char *argv[]) {
 	}
 	string buff = load_cpuid();
 	fwrite(buff.data(), 1, buff.length() + 1, fp);
-	fcloseall();
+	_fcloseall();
 }

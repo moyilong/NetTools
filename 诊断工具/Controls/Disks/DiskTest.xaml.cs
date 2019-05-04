@@ -145,7 +145,7 @@ namespace 诊断工具.Controls.Disks
                         PushMessage("计算哈希值...");
                         Thread thread = new Action(() =>
                         {
-                            HashTable[n] = data.GenericHash(new MD5CryptoServiceProvider());
+                            HashTable[n] = data.Hash<MD5>();
                         }).ThreadStart();
                         string file = ComputeFilePath(n);
                         PushMessage("写入文件:" + file);
@@ -164,7 +164,7 @@ namespace 诊断工具.Controls.Disks
                         PushMessage("读取:" + file);
                         byte[] xdata = File.ReadAllBytes(file);
                         File.Delete(file);
-                        string md5 = xdata.GenericHash(new MD5CryptoServiceProvider());
+                        string md5 = xdata.Hash<MD5>();
                         if (md5 != HashTable[n])
                         {
                             faild_count++;
