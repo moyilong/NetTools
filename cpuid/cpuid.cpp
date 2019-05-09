@@ -51,7 +51,7 @@ string load_cpuid() {
 	DEBUG << "Fetching Data..." << endl;
 	CCPUID& ccid = CCPUID::cur();
 	char fp[4096] = { 0x00 };
-#define cprintf	data+= string(fp) ; memset(fp,'\0',sizeof(fp)) ;  sprintf
+#define cprintf	data+= string(fp) ; memset(fp,'\0',sizeof(fp)) ;  sprintf_s
 	sprintf(fp, "true;CPU厂商;;%s;\n", ccid.Vendor());
 	cprintf(fp, "true;CPU型号;;%s 步进:%d 家族:%d+%d;\n", ccid.BrandTrim(), ccid.GetField(CPUF_Stepping), ccid.GetField(CPUF_BaseFamily), ccid.GetField(CPUF_ExtFamily));
 	cprintf(fp, "true;CPU线程数;;逻辑处理器数量:%d 最大线程数:%d\n", omp_get_num_procs(), omp_get_max_threads());

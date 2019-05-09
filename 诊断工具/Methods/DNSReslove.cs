@@ -10,7 +10,7 @@ namespace 诊断工具.Methods
 {
     internal class DNSReslove : INotifyPropertyChanged
     {
-        private static DebugNode node = new DebugNode("DNS");
+        private const string node = "DNS";
 
         public DNSReslove(string DNS)
         {

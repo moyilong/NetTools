@@ -58,15 +58,6 @@
     <Reference Include="Tahiti">
       <HintPath>C:\Tahiti\net461\Tahiti.dll</HintPath>
     </Reference>
-    <Reference Include="Tahiti.HAM">
-      <HintPath>C:\Tahiti\net461\Tahiti.HAM.dll</HintPath>
-    </Reference>
-    <Reference Include="Tahiti.UnionCore">
-      <HintPath>C:\Tahiti\net461\Tahiti.UnionCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Tahiti.WPF">
-      <HintPath>C:\Tahiti\net461\Tahiti.WPF.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -88,6 +79,10 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Tahiti.DSL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Tahiti\net461\Tahiti.DSL.dll</HintPath>
     </Reference>
     <Reference Include="Tmds.MDns, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Tmds.MDns.0.7.0\lib\net45\Tmds.MDns.dll</HintPath>

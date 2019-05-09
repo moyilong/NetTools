@@ -61,7 +61,7 @@ namespace 诊断工具.Methods
             }
         }
 
-        private static DebugNode node = new DebugNode("DriverInfo");
+        private const string node = "DriverInfo";
     }
 
     public static class WriteLib
@@ -78,7 +78,7 @@ namespace 诊断工具.Methods
 
         #endregion 引入
 
-        private static DebugNode node = new DebugNode("Writter");
+        private const string node = "Writter";
 
         public static int BlockSize { get; set; } = 65536;
 

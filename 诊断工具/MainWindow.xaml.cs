@@ -18,7 +18,7 @@ namespace 诊断工具
     /// </summary>
     public partial class MainWindow : Window
     {
-        private DebugNode node = new DebugNode("网络诊断");
+        private const string node = "网络诊断";
 
         public UserControl[] Controllers = new UserControl[]
         {

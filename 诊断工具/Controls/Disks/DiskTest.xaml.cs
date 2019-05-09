@@ -46,7 +46,7 @@ namespace 诊断工具.Controls.Disks
         }
 
         private static Random TestRandom = new Random();
-        private static DebugNode node = new DebugNode("Disk");
+        private const string node = "Disk";
 
         public string TabName => "磁盘测试";
 

@@ -18,7 +18,7 @@ namespace 诊断工具.Controls.Networks
             InitializeComponent();
         }
 
-        private static DebugNode node = new DebugNode("Network");
+private        const string node = "Network";
 
         public string TabName => "mDNS扫描";
 

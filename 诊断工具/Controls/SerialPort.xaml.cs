@@ -1,6 +1,4 @@
 ﻿using Tahiti.Extension;
-using Tahiti.WPF;
-
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -18,25 +16,31 @@ namespace 诊断工具.Controls
         public SerialPort()
         {
             InitializeComponent();
-            mute = new MuteController
+        }
+
+        private void SetStat(bool e)
+        {
+            foreach (var i in new FrameworkElement[]
             {
-                serial_assistant_port,
+                     serial_assistant_port,
                 serial_assistant_speed,
                 serial_assistant_databit,
                 serial_assistant_stopbit,
                 serial_port_assistant_refresh_port
-            };
-            mute.Add(view_box, MuteController.MuteInvert);
-            mute.Add(send_box, MuteController.MuteInvert);
-            mute.MuteStatus = false;
+            })
+                i.IsEnabled = !e;
+            foreach (var i in new FrameworkElement[]
+            {
+                view_box,
+                send_box
+            })
+                i.IsEnabled = e;
         }
 
         private void serial_port_assistant_refresh_port_Click(object sender, RoutedEventArgs e)
         {
             serial_assistant_port.ItemsSource = System.IO.Ports.SerialPort.GetPortNames();
         }
-
-        private MuteController mute = null;
         private System.IO.Ports.SerialPort MonitedPort = null;
 
         public string TabName => "串口助手";
@@ -88,11 +92,11 @@ namespace 诊断工具.Controls
                     MonitedPort = null;
                     return;
                 }
-                mute.MuteStatus = true;
+                SetStat(true);
             }
             else
             {
-                mute.MuteStatus = false;
+                SetStat(false);
                 MonitedPort.Close();
                 MonitedPort = null;
             }

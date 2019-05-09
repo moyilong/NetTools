@@ -43,7 +43,7 @@ namespace 诊断工具
             UpdateImage();
         }
 
-        private DebugNode node = new DebugNode("ScreenTester");
+        private const string node = "ScreenTester";
 
         private enum RenderMode
         {
