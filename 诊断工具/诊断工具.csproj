@@ -84,6 +84,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Tahiti\net461\Tahiti.DSL.dll</HintPath>
     </Reference>
+    <Reference Include="Tahiti.Resources">
+      <HintPath>C:\Tahiti\net461\Tahiti.Resources.dll</HintPath>
+    </Reference>
     <Reference Include="Tmds.MDns, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Tmds.MDns.0.7.0\lib\net45\Tmds.MDns.dll</HintPath>
     </Reference>
