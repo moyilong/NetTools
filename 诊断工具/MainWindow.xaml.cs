@@ -23,8 +23,6 @@ namespace 诊断工具
         public UserControl[] Controllers = new UserControl[]
         {
             new GenericInfo(),
-            new cpuid(),
-
             new DiagonStick(),
             new DNSQuery(),
             new IPScanner(),

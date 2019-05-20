@@ -111,9 +111,6 @@
     <Compile Include="Controls\Disks\ImageWritter.xaml.cs">
       <DependentUpon>ImageWritter.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Generic\cpuid.xaml.cs">
-      <DependentUpon>cpuid.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Generic\GenericInfo.xaml.cs">
       <DependentUpon>GenericInfo.xaml</DependentUpon>
     </Compile>
@@ -154,10 +151,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Disks\ImageWritter.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Generic\cpuid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
