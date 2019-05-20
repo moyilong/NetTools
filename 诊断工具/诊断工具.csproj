@@ -257,7 +257,4 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy /y $(SolutionDir)\Debug\cpuid.exe $(TargetDir)\</PostBuildEvent>
-  </PropertyGroup>
 </Project>
