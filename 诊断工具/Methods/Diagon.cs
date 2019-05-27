@@ -1,5 +1,5 @@
-﻿using Tahiti.Network;
-using Tahiti.ProgramMethod;
+﻿using Phenom.Network;
+using Phenom.ProgramMethod;
 
 /*using SpeedTest;
 using SpeedTest.Models;*/
@@ -8,7 +8,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.NetworkInformation;
-using Tahiti.Extension;
+using Phenom.Extension;
+using Phenom.Enums;
 
 namespace 诊断工具.Methods
 {
@@ -59,7 +60,7 @@ namespace 诊断工具.Methods
             result.Result = "请求中...";
             try
             {
-                string data = WebClient.GetContentByURL(WebClient.NetworkMethod.Get, domain, 3000);
+                string data = WebClient.GetContentByURL(NetworkMethod.Get, domain, 3000);
                 if (data == null)
                 {
                     result.Result = "错误!空数据!";

@@ -1,11 +1,11 @@
-﻿using Tahiti.Logger;
-using Tahiti.ProgramMethod;
+﻿using Phenom.Logger;
+using Phenom.ProgramMethod;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using Tmds.MDns;
 using System;
-using Tahiti.Extension;
+using Phenom.Extension;
 namespace 诊断工具.Controls.Networks
 {
     /// <summary>

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32.SafeHandles;
-using Tahiti.Logger;
+using Phenom.Logger;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,7 +7,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
-using Tahiti.Extension;
+using Phenom.Extension;
 
 namespace 诊断工具.Methods
 {

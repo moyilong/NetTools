@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>诊断工具</RootNamespace>
     <AssemblyName>诊断工具</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -55,8 +55,8 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Tahiti">
-      <HintPath>C:\Tahiti\net461\Tahiti.dll</HintPath>
+    <Reference Include="Phenom">
+      <HintPath>C:\Phenom\net461\Phenom.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel" />
@@ -80,12 +80,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Tahiti.DSL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Tahiti\net461\Tahiti.DSL.dll</HintPath>
-    </Reference>
-    <Reference Include="Tahiti.Resources">
-      <HintPath>C:\Tahiti\net461\Tahiti.Resources.dll</HintPath>
+    <Reference Include="Phenom.Resources">
+      <HintPath>C:\Phenom\net461\Phenom.Resources.dll</HintPath>
     </Reference>
     <Reference Include="Tmds.MDns, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Tmds.MDns.0.7.0\lib\net45\Tmds.MDns.dll</HintPath>
