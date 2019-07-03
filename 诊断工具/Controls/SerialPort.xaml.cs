@@ -1,4 +1,5 @@
 ﻿using Phenom.Extension;
+using Phenom.UI;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -139,24 +140,22 @@ namespace 诊断工具.Controls
 
         private void SendData(bool IsHexMode)
         {
-            byte[] ready_to_send = null;
+            byte[] ready_to_send;
             if (IsHexMode)
             {
                 List<byte> ret = new List<byte>();
-                serial_port_assistant_input_run.Text.Split(' ').Foreach((self, id) =>
-               {
-                   if (ret != null)
-                   {
-                       try
-                       {
-                           ret.Add(byte.Parse(self));
-                       }
-                       catch
-                       {
-                           ret = null;
-                       }
-                   }
-               }, false);
+                foreach(string self in serial_port_assistant_input_run.Text.Split(' '))
+                    if (ret != null)
+                    {
+                        try
+                        {
+                            ret.Add(byte.Parse(self));
+                        }
+                        catch
+                        {
+                            ret = null;
+                        }
+                    }
                 if (ret == null)
                 {
                     this.Error("解析HEX数据失败!");

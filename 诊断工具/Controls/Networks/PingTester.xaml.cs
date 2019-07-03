@@ -1,5 +1,5 @@
 ﻿using Phenom.Extension;
-
+using Phenom.UI;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,7 +30,7 @@ namespace 诊断工具.Controls.Networks
             Methods.PingTester.Enable = false;
         }
 
-        private ObservableCollection<Methods.PingTester> tester = new ObservableCollection<Methods.PingTester>();
+     readonly   private ObservableCollection<Methods.PingTester> tester = new ObservableCollection<Methods.PingTester>();
 
         private void add_new_domain_Click(object sender, RoutedEventArgs e)
         {

@@ -1,6 +1,6 @@
 ﻿using Phenom.Extension;
 using Phenom.Logger;
-
+using Phenom.UI;
 using System;
 using System.Drawing;
 using System.Windows;
@@ -33,8 +33,8 @@ namespace 诊断工具
             image_MouseClick(null, null);
         }
 
-        private System.Drawing.Image image = null;
-        private Graphics gpu = null;
+        private readonly Image image = null;
+        private readonly Graphics gpu = null;
         private int Step = -1;
 
         private void Fill(System.Drawing.Brush color)
@@ -97,7 +97,7 @@ namespace 诊断工具
             Background = new ImageBrush(image.ToSource());
         }
 
-        private System.Drawing.Brush[] IntelliDefaultFill = new System.Drawing.Brush[]
+        private readonly System.Drawing.Brush[] IntelliDefaultFill = new System.Drawing.Brush[]
         {
             System.Drawing.Brushes.White,
             System.Drawing.Brushes.Black,

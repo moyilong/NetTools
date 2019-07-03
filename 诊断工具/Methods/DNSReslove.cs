@@ -46,7 +46,7 @@ namespace 诊断工具.Methods
             Domain = domain;
             node.Note("连接DNS服务器..........");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Domain"));
-            DnsClient client = new DnsClient(Server.ToIPAddress(), 1000);
+            DnsClient client = new DnsClient(IPAddress.Parse( Server), 1000);
             TimeSpan span_begin = new TimeSpan();
             node.Note("请求响应......");
             DnsMessage message = client.Resolve(new ARSoft.Tools.Net.DomainName(new string[] { domain }), RecordType.Any, RecordClass.INet);

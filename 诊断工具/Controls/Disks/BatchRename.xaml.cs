@@ -1,6 +1,6 @@
 ﻿using Phenom.Extension;
 using Phenom.ProgramMethod;
-
+using Phenom.UI;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -58,12 +58,10 @@ namespace 诊断工具.Controls.Disks
 
         private void Preview_rename_Click(object sender, RoutedEventArgs e)
         {
-            Regex reg = null;
-            Regex ireg = null;
             try
             {
-                reg = new Regex(regex.Text.Trim());
-                ireg = new Regex(input_regex.Text.Trim());
+                Regex reg = new Regex(regex.Text.Trim());
+                Regex ireg = new Regex(input_regex.Text.Trim());
             }
             catch (Exception ex)
             {

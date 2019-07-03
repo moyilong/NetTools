@@ -1,5 +1,5 @@
 ﻿using Phenom.Extension;
-
+using Phenom.UI;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +12,7 @@ namespace 诊断工具.Controls.Networks
     /// </summary>
     public partial class DNSQuery : UserControl, AutoLoadTemplate,WIPTemplate,HelpedAutoLoad
     {
-        private ObservableCollection<DNSReslove> DNSList = new ObservableCollection<DNSReslove>();
+    readonly    private ObservableCollection<DNSReslove> DNSList = new ObservableCollection<DNSReslove>();
 
         public DNSQuery()
         {

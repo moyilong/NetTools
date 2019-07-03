@@ -1,6 +1,4 @@
-﻿using Phenom.Extension;
-using Phenom.Logger;
-
+﻿using Phenom.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,9 +16,12 @@ namespace 诊断工具
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string node = "网络诊断";
+        private readonly Dictionary<string, TabControl> Binding = new Dictionary<string, TabControl>();
 
-        public UserControl[] Controllers = new UserControl[]
+        public MainWindow()
+        {
+            InitializeComponent();
+            foreach (UserControl self in new UserControl[]
         {
             new GenericInfo(),
             new DiagonStick(),
@@ -37,14 +38,7 @@ namespace 诊断工具
             new SerialPort(),
             new Toolbox(),
             new ImageProcessor()
-        };
-
-        private Dictionary<string, TabControl> Binding = new Dictionary<string, TabControl>();
-
-        public MainWindow()
-        {
-            InitializeComponent();
-            Controllers.Foreach((self, id) =>
+        })
             {
                 if (self is AutoLoadTemplate item)
                 {
@@ -77,7 +71,8 @@ namespace 诊断工具
                         Binding[item.Catalog].Items.Add(vitem);
                     }
                 }
-            });
+            }
+
         }
 
         private void HelpUpdate(object obj, RoutedEventArgs e)

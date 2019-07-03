@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using Phenom.Extension;
+using Phenom.UI;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -15,7 +16,7 @@ namespace 诊断工具.Controls
     /// </summary>
     public partial class ImageProcessor : UserControl, AutoLoadTemplate, HelpedAutoLoad
     {
-        IFormatConverter[] converter = new IFormatConverter[]
+  readonly      IFormatConverter[] converter = new IFormatConverter[]
         {
             new PixelFormater()
         };
@@ -67,7 +68,7 @@ namespace 诊断工具.Controls
             if (NeedUpdate)
                 Dispatcher.Invoke(() => Process_Click(null, null));
         }
-        System.Timers.Timer timer = new System.Timers.Timer
+    readonly    System.Timers.Timer timer = new System.Timers.Timer
         {
             Interval = 1000
         };

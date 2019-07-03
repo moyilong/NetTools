@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System;
+using System.Net;
 
 namespace 诊断工具.Methods
 {
@@ -37,8 +38,8 @@ namespace 诊断工具.Methods
         }
 
         private readonly double xot = 3000;
-        private ObservableCollection<IPScanner> Parent = null;
-        private MainWindow father = null;
+        private readonly ObservableCollection<IPScanner> Parent = null;
+        private readonly MainWindow father = null;
 
         public IPScanner(string ip, ObservableCollection<IPScanner> op, double tout, MainWindow fa)
         {
@@ -61,7 +62,7 @@ namespace 诊断工具.Methods
                 {
                     Send++;
 
-                    PingReply replay = ping.Send(IP.ToIPAddress(), (int)xot);
+                    PingReply replay = ping.Send(IPAddress.Parse( IP), (int)xot);
                     if (replay.Status == IPStatus.Success)
                     {
                         TotalTimeout += replay.RoundtripTime;

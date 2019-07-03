@@ -1,7 +1,7 @@
 ﻿using Phenom.Extension;
 using Phenom.Logger;
 using Phenom.ProgramMethod;
-
+using Phenom.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -45,7 +45,7 @@ namespace 诊断工具.Controls.Disks
             }
         }
 
-        private static Random TestRandom = new Random();
+       readonly private static Random TestRandom = new Random();
         private const string node = "Disk";
 
         public string TabName => "磁盘测试";

@@ -48,15 +48,21 @@
     <Reference Include="ARSoft.Tools.Net, Version=2.2.9.0, Culture=neutral, PublicKeyToken=1940454cd762ec57, processorArchitecture=MSIL">
       <HintPath>..\packages\ARSoft.Tools.Net.2.2.9\lib\net45\ARSoft.Tools.Net.dll</HintPath>
     </Reference>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.4.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\packages\BouncyCastle.1.8.4\lib\BouncyCastle.Crypto.dll</HintPath>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Phenom">
-      <HintPath>C:\Phenom\net461\Phenom.dll</HintPath>
+    <Reference Include="Phenom, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d5a3b12fceb3200b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Phenom.1907.314.5436.1615\lib\net472\Phenom.dll</HintPath>
+    </Reference>
+    <Reference Include="Phenom.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d5a3b12fceb3200b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Phenom.Data.1907.314.5436.1615\lib\netstandard2.0\Phenom.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Phenom.UI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d5a3b12fceb3200b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Phenom.UI.1907.314.5436.1615\lib\net472\Phenom.UI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel" />
@@ -80,15 +86,13 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Phenom.Resources">
-      <HintPath>C:\Phenom\net461\Phenom.Resources.dll</HintPath>
-    </Reference>
     <Reference Include="Tmds.MDns, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Tmds.MDns.0.7.0\lib\net45\Tmds.MDns.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
