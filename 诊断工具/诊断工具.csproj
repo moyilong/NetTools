@@ -56,13 +56,16 @@
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Phenom, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d5a3b12fceb3200b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Phenom.1907.314.5436.1615\lib\net472\Phenom.dll</HintPath>
+      <HintPath>..\packages\Phenom.1907.2815.4319.1963\lib\net472\Phenom.dll</HintPath>
     </Reference>
     <Reference Include="Phenom.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d5a3b12fceb3200b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Phenom.Data.1907.314.5436.1615\lib\netstandard2.0\Phenom.Data.dll</HintPath>
+      <HintPath>..\packages\Phenom.Data.1907.2721.3507.1820\lib\netstandard2.0\Phenom.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Phenom.DataCollection, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d5a3b12fceb3200b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Phenom.DataCollection.1907.2815.4319.1963\lib\netstandard2.0\Phenom.DataCollection.dll</HintPath>
     </Reference>
     <Reference Include="Phenom.UI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d5a3b12fceb3200b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Phenom.UI.1907.314.5436.1615\lib\net472\Phenom.UI.dll</HintPath>
+      <HintPath>..\packages\Phenom.UI.1907.2815.4319.1963\lib\net472\Phenom.UI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel" />

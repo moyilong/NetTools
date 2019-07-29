@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Net.NetworkInformation;
 using Phenom.Extension;
 using Phenom.Enums;
+using System.Net;
 
 namespace 诊断工具.Methods
 {
@@ -38,14 +39,14 @@ namespace 诊断工具.Methods
             new Tuple<string, Func<DiagonResult, bool>, bool>("本地连接测试",result=>PingTest("127.0.0.1",result),true),
             new Tuple<string, Func<DiagonResult, bool>, bool>("IP检测",result=>
             {
-                if (WebClient.IPList.Length ==0)
+                if (WebAccess.IPAddresses.Length ==0)
                 {
                     result.Result = "失败!";
                     return false;
                 }
                 else
                 {
-                    result.Result=WebClient.IPList[0].ToString();
+                    result.Result=WebAccess.IPAddresses[0].ToString();
                     return true;
                 }
             },true),
@@ -60,14 +61,17 @@ namespace 诊断工具.Methods
             result.Result = "请求中...";
             try
             {
-                string data = WebClient.GetContentByURL(NetworkMethod.Get, domain, 3000);
-                if (data == null)
+                using (WebClient client = new WebClient())
                 {
-                    result.Result = "错误!空数据!";
-                    return false;
+                    string data = client.DownloadString(domain);
+                    if (data == null)
+                    {
+                        result.Result = "错误!空数据!";
+                        return false;
+                    }
+                    result.Result = "成功! 长度:" + data.Length.ToString();
+                    return true;
                 }
-                result.Result = "成功! 长度:" + data.Length.ToString();
-                return true;
             }
             catch (Exception e)
             {
@@ -80,16 +84,19 @@ namespace 诊断工具.Methods
         {
             try
             {
-                PingReply reply = new Ping().Send(domain);
-                if (reply.Status == IPStatus.Success)
+                using (Ping ping = new Ping())
                 {
-                    result.Result = "成功! " + reply.RoundtripTime.ToString();
-                    return true;
-                }
-                else
-                {
-                    result.Result = "失败 " + reply.Status.ToString();
-                    return false;
+                    PingReply reply = ping.Send(domain);
+                    if (reply.Status == IPStatus.Success)
+                    {
+                        result.Result = "成功! " + reply.RoundtripTime.ToString();
+                        return true;
+                    }
+                    else
+                    {
+                        result.Result = "失败 " + reply.Status.ToString();
+                        return false;
+                    }
                 }
             }
             catch (Exception e)
