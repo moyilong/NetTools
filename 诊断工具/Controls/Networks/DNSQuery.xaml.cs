@@ -11,10 +11,10 @@ namespace 诊断工具.Controls.Networks
     /// DNSQuery.xaml 的交互逻辑
     /// </summary>
     [WIPTemplate]
-    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Network,TabName ="DNS查询")]
-    public partial class DNSQuery : UserControl,HelpedAutoLoad
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Network, TabName = "DNS查询")]
+    public partial class DNSQuery : UserControl, HelpedAutoLoad
     {
-    readonly    private ObservableCollection<DNSReslove> DNSList = new ObservableCollection<DNSReslove>();
+        readonly private ObservableCollection<DNSReslove> DNSList = new ObservableCollection<DNSReslove>();
 
         public DNSQuery()
         {

@@ -63,7 +63,7 @@ namespace 诊断工具
 
         private async void Window_Closing(object sender, CancelEventArgs e)
         {
-            if ( !await this.Confirm("是否退出?"))
+            if (!await this.Confirm("是否退出?"))
             {
                 e.Cancel = true;
             }

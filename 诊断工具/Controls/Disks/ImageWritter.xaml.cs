@@ -1,6 +1,5 @@
 ﻿using Microsoft.Win32;
 using Phenom.Extension;
-using Phenom.ProgramMethod;
 using Phenom.UI;
 using System;
 using System.IO;
@@ -74,10 +73,10 @@ namespace 诊断工具.Controls.Disks
                 {
                     WriteLib.Write(info.PathName, true, fs, UpdateDiskWriteProgress);
                 }
-            }).ThreadStart( () =>
-            {
-                Dispatcher.Invoke(() => disk_wrte.IsEnabled = false);
-            },
+            }).ThreadStart(() =>
+           {
+               Dispatcher.Invoke(() => disk_wrte.IsEnabled = false);
+           },
             () =>
             {
                 Dispatcher.Invoke(() => disk_wrte.IsEnabled = true);

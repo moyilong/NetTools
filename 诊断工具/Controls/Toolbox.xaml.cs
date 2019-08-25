@@ -7,7 +7,7 @@ namespace 诊断工具.Controls
     /// <summary>
     /// Toolbox.xaml 的交互逻辑
     /// </summary>
-    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.System,TabName = "工具箱")]
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.System, TabName = "工具箱")]
     public partial class Toolbox : UserControl
     {
         public Toolbox()

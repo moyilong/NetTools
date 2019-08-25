@@ -12,7 +12,7 @@ namespace 诊断工具.Controls
     /// <summary>
     /// SerialPort.xaml 的交互逻辑
     /// </summary>
-    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.System,TabName ="串口助手")]
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.System, TabName = "串口助手")]
     public partial class SerialPort : UserControl
     {
         public SerialPort()
@@ -43,6 +43,7 @@ namespace 诊断工具.Controls
         {
             serial_assistant_port.ItemsSource = System.IO.Ports.SerialPort.GetPortNames();
         }
+
         private System.IO.Ports.SerialPort MonitedPort = null;
 
         public string TabName => "串口助手";
@@ -145,7 +146,7 @@ namespace 诊断工具.Controls
             if (IsHexMode)
             {
                 List<byte> ret = new List<byte>();
-                foreach(string self in serial_port_assistant_input_run.Text.Split(' '))
+                foreach (string self in serial_port_assistant_input_run.Text.Split(' '))
                     if (ret != null)
                     {
                         try

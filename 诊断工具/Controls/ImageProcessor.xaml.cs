@@ -1,5 +1,4 @@
 ﻿using Microsoft.Win32;
-using Phenom.Extension;
 using Phenom.UI;
 using System;
 using System.Drawing;
@@ -14,27 +13,30 @@ namespace 诊断工具.Controls
     /// <summary>
     /// YSImageProcessor.xaml 的交互逻辑
     /// </summary>
-    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Image,TabName ="Logo转换")]
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Image, TabName = "Logo转换")]
     public partial class ImageProcessor : UserControl, HelpedAutoLoad
     {
-  readonly      IFormatConverter[] converter = new IFormatConverter[]
-        {
+        private readonly IFormatConverter[] converter = new IFormatConverter[]
+              {
             new PixelFormater()
-        };
+              };
+
         public ImageProcessor()
         {
             InitializeComponent();
             timer.Elapsed += Update;
             convert_type.ItemsSource = converter;
         }
+
         double Filter => vertex.Value;
+
         public string HelpDoc => @"
 首先打开Logo源文件(jpg/png/bmp格式)
 然后根据预览，调整阈值
 最后保存为图片文件
 ";
 
-        Color BlackConvert(Color color)
+        private Color BlackConvert(Color color)
         {
             if (color.GetBrightness() > Filter)
                 return Color.White;
@@ -59,17 +61,19 @@ namespace 诊断工具.Controls
                 }
         }
 
-        bool NeedUpdate = false;
+        private bool NeedUpdate = false;
 
-        void Update(object sender, EventArgs e)
+        private void Update(object sender, EventArgs e)
         {
             if (NeedUpdate)
                 Dispatcher.Invoke(() => Process_Click(null, null));
         }
-    readonly    System.Timers.Timer timer = new System.Timers.Timer
+
+        private readonly System.Timers.Timer timer = new System.Timers.Timer
         {
             Interval = 1000
         };
+
         private void Open_source_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog()
@@ -90,7 +94,6 @@ namespace 诊断工具.Controls
             {
                 this.Error(ex, "打开图片失败");
             }
-
         }
 
         private void Save_source_Click(object sender, RoutedEventArgs e)

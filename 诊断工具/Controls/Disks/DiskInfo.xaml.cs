@@ -7,7 +7,7 @@ namespace 诊断工具.Controls.Disks
     /// <summary>
     /// DiskInfo.xaml 的交互逻辑
     /// </summary>
-    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Disk,TabName ="磁盘")]
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Disk, TabName = "磁盘")]
     public partial class DiskInfo : UserControl
     {
         public DiskInfo()

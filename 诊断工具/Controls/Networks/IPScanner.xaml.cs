@@ -1,18 +1,16 @@
-﻿
-using Phenom.Extension;
+﻿using Phenom;
+using Phenom.UI;
+using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Linq;
-using Phenom.UI;
-using Phenom;
 
 namespace 诊断工具.Controls.Networks
 {
     /// <summary>
     /// IPScanner.xaml 的交互逻辑
     /// </summary>
-    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Network,TabName ="IP扫描")]
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Network, TabName = "IP扫描")]
     public partial class IPScanner : UserControl, HelpedAutoLoad
     {
         public IPScanner()

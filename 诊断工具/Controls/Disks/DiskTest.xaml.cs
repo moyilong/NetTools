@@ -1,6 +1,5 @@
 ﻿using Phenom.Extension;
 using Phenom.Logger;
-using Phenom.ProgramMethod;
 using Phenom.UI;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ namespace 诊断工具.Controls.Disks
     /// <summary>
     /// DiskTest.xaml 的交互逻辑
     /// </summary>
-    [AutoLoadTemplate( Catalog = AutoLoadTemplate.CateLogType.Disk,TabName ="磁盘测试")]
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Disk, TabName = "磁盘测试")]
     public partial class DiskTest : UserControl
     {
         public DiskTest()
@@ -46,7 +45,7 @@ namespace 诊断工具.Controls.Disks
             }
         }
 
-       readonly private static Random TestRandom = new Random();
+        readonly private static Random TestRandom = new Random();
         private const string node = "Disk";
 
         public string TabName => "磁盘测试";

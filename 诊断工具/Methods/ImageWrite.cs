@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32.SafeHandles;
+using Phenom.Extension;
 using Phenom.Logger;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
-using Phenom.Extension;
 
 namespace 诊断工具.Methods
 {
@@ -162,7 +162,7 @@ namespace 诊断工具.Methods
                     {
                         size = xstream.Read(data, 0, BlockSize);
                         Progress?.Invoke(stream.Length, n, 0, "验证 0x" + n.ToString("X"), WorkingMode.Verifying);
-                        string crc =data.Hash<MD5>();
+                        string crc = data.Hash<MD5>();
                         string val = HashTable[nx++];
                         node.Log("计算值:" + crc + " 参考值:" + val);
                         if (crc != val)

@@ -1,11 +1,10 @@
 ﻿using Phenom.Extension;
-using Phenom.ProgramMethod;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
-using System;
-using System.Net;
 
 namespace 诊断工具.Methods
 {
@@ -62,7 +61,7 @@ namespace 诊断工具.Methods
                 {
                     Send++;
 
-                    PingReply replay = ping.Send(IPAddress.Parse( IP), (int)xot);
+                    PingReply replay = ping.Send(IPAddress.Parse(IP), (int)xot);
                     if (replay.Status == IPStatus.Success)
                     {
                         TotalTimeout += replay.RoundtripTime;

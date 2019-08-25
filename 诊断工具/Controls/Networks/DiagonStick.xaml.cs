@@ -7,7 +7,7 @@ namespace 诊断工具.Controls.Networks
     /// <summary>
     /// DiagonStick.xaml 的交互逻辑
     /// </summary>
-    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.System,TabName ="综合诊断")]
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.System, TabName = "综合诊断")]
     public partial class DiagonStick : UserControl, HelpedAutoLoad
     {
         public DiagonStick()

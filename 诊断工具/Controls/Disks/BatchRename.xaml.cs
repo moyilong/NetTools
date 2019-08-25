@@ -1,5 +1,4 @@
 ﻿using Phenom.Extension;
-using Phenom.ProgramMethod;
 using Phenom.UI;
 using System;
 using System.Collections.ObjectModel;
@@ -16,7 +15,7 @@ namespace 诊断工具.Controls.Disks
     /// <summary>
     /// BatchRename.xaml 的交互逻辑
     /// </summary>
-    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Disk,TabName ="批量重命名")]
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Disk, TabName = "批量重命名")]
     public partial class BatchRename : UserControl
     {
         public BatchRename()

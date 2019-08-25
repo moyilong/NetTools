@@ -1,17 +1,13 @@
-﻿using Phenom.Network;
-using Phenom.ProgramMethod;
-
-/*using SpeedTest;
+﻿/*using SpeedTest;
 using SpeedTest.Models;*/
 
+using Phenom;
+using Phenom.Extension;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Net.NetworkInformation;
-using Phenom.Extension;
-using Phenom.Enums;
 using System.Net;
-using Phenom;
+using System.Net.NetworkInformation;
 
 namespace 诊断工具.Methods
 {
@@ -124,7 +120,7 @@ namespace 诊断工具.Methods
                         break;
                     }
                 }
-            }).ThreadStart( OnInit, OnExit);
+            }).ThreadStart(OnInit, OnExit);
             return ret;
         }
     }

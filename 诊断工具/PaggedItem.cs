@@ -3,30 +3,33 @@ using System.ComponentModel;
 
 namespace 诊断工具
 {
-    class AutoLoadTemplate : Attribute
+    internal class AutoLoadTemplate : Attribute
     {
         public enum CateLogType
         {
             [Description("网络")]
             Network,
+
             [Description("磁盘")]
             Disk,
+
             [Description("图形图像")]
             Image,
+
             [Description("系统")]
             System
         }
-     public   string TabName { get; set; }
+
+        public string TabName { get; set; }
         public CateLogType Catalog { get; set; }
     }
 
-    public interface HelpedAutoLoad 
+    public interface HelpedAutoLoad
     {
         string HelpDoc { get; }
     }
 
-    public class WIPTemplate :Attribute
+    public class WIPTemplate : Attribute
     {
     }
-   
 }
