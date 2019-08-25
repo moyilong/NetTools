@@ -1,13 +1,14 @@
-﻿using Phenom.UI;
+﻿using Phenom.Extension;
+using Phenom.Logger;
+using Phenom.UI;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using 诊断工具.Controls;
-using 诊断工具.Controls.Disks;
-using 诊断工具.Controls.Generic;
-using 诊断工具.Controls.Networks;
+using static 诊断工具.AutoLoadTemplate;
 
 namespace 诊断工具
 {
@@ -16,63 +17,35 @@ namespace 诊断工具
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly Dictionary<string, TabControl> Binding = new Dictionary<string, TabControl>();
+        private readonly Dictionary<CateLogType, TabControl> Binding = new Dictionary<CateLogType, TabControl>();
 
         public MainWindow()
         {
             InitializeComponent();
-            foreach (UserControl self in new UserControl[]
-        {
-            new GenericInfo(),
-            new DiagonStick(),
-            new DNSQuery(),
-            new IPScanner(),
-            new MDNSScanner(),
-            new PingTester(),
-
-            new DiskInfo(),
-            new ImageWritter(),
-            new DiskTest(),
-            new BatchRename(),
-
-            new SerialPort(),
-            new Toolbox(),
-            new ImageProcessor()
-        })
+            foreach (Type i in AppDomain.CurrentDomain.ScanType(
+                    value => value.BaseType == typeof(UserControl) && value.GetCustomAttribute<AutoLoadTemplate>() != null,
+                    value => true
+                    ))
             {
-                if (self is AutoLoadTemplate item)
+                AutoLoadTemplate load = i.GetCustomAttribute<AutoLoadTemplate>();
+                nameof(MainWindow).Note($"载入:{i.Name}");
+                if (!Binding.ContainsKey(load.Catalog))
                 {
-                    TabItem vitem = new TabItem()
+                    TabControl vctl = new TabControl();
+                    main_area.Items.Add(new TabItem()
                     {
-                        Header = item.TabName,
-                        Content = self
-                    };
-
-                    self.GotFocus += HelpUpdate;
-
-                    if (item is WIPTemplate)
-                        vitem.Header += "[开发中]";
-
-                    if (item.Catalog == null)
-                    {
-                        main_area.Items.Add(vitem);
-                    }
-                    else
-                    {
-                        if (!Binding.ContainsKey(item.Catalog))
-                        {
-                            Binding[item.Catalog] = new TabControl();
-                            main_area.Items.Add(new TabItem()
-                            {
-                                Content = Binding[item.Catalog],
-                                Header = item.Catalog,
-                            });
-                        }
-                        Binding[item.Catalog].Items.Add(vitem);
-                    }
+                        Header = load.Catalog.EnumGetFieldAttribute<DescriptionAttribute>()?.Description ?? load.Catalog.ToString(),
+                        Content = vctl
+                    });
+                    Binding[load.Catalog] = vctl;
+                    nameof(MainWindow).Note("已经创建父级:", load.Catalog.ToString());
                 }
+                Binding[load.Catalog].Items.Add(new TabItem
+                {
+                    Header = load.TabName,
+                    Content = Activator.CreateInstance(i) as UserControl
+                });
             }
-
         }
 
         private void HelpUpdate(object obj, RoutedEventArgs e)

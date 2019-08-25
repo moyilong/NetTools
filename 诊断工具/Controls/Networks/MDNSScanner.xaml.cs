@@ -11,7 +11,9 @@ namespace 诊断工具.Controls.Networks
     /// <summary>
     /// MDNSScanner.xaml 的交互逻辑
     /// </summary>
-    public partial class MDNSScanner : UserControl, AutoLoadTemplate,WIPTemplate,HelpedAutoLoad
+    [WIPTemplate]
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Network,TabName ="MDNS扫描")]
+    public partial class MDNSScanner : UserControl,HelpedAutoLoad
     {
         public MDNSScanner()
         {

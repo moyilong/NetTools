@@ -7,7 +7,8 @@ namespace 诊断工具.Controls
     /// <summary>
     /// Toolbox.xaml 的交互逻辑
     /// </summary>
-    public partial class Toolbox : UserControl, AutoLoadTemplate
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.System,TabName = "工具箱")]
+    public partial class Toolbox : UserControl
     {
         public Toolbox()
         {
@@ -25,7 +26,7 @@ namespace 诊断工具.Controls
                     bool success = false;
                     for (int x = 0; x < toolbox.RowDefinitions.Count; x++)
                     {
-                        if (Map[n, x] == default(bool))
+                        if (Map[n, x] == default)
                         {
                             Map[n, x] = !Map[n, x];
                             btn.HorizontalAlignment = HorizontalAlignment.Stretch;

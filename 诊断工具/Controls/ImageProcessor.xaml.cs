@@ -14,7 +14,8 @@ namespace 诊断工具.Controls
     /// <summary>
     /// YSImageProcessor.xaml 的交互逻辑
     /// </summary>
-    public partial class ImageProcessor : UserControl, AutoLoadTemplate, HelpedAutoLoad
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Image,TabName ="Logo转换")]
+    public partial class ImageProcessor : UserControl, HelpedAutoLoad
     {
   readonly      IFormatConverter[] converter = new IFormatConverter[]
         {
@@ -27,11 +28,6 @@ namespace 诊断工具.Controls
             convert_type.ItemsSource = converter;
         }
         double Filter => vertex.Value;
-
-        public string TabName => "Logo转换";
-
-        public string Catalog => "图形图像";
-
         public string HelpDoc => @"
 首先打开Logo源文件(jpg/png/bmp格式)
 然后根据预览，调整阈值
@@ -52,12 +48,14 @@ namespace 诊断工具.Controls
                 using (MemoryStream ms = new MemoryStream())
                 {
                     source.Source.ToImage().Save(ms, ImageFormat.Bmp);
-                    Bitmap image = new Bitmap(ms);
-                    Bitmap to_image = new Bitmap(image.Width, image.Height);
-                    for (int x = 0; x < image.Width; x++)
-                        for (int y = 0; y < image.Height; y++)
-                            to_image.SetPixel(x, y, BlackConvert(image.GetPixel(x, y)));
-                    target.Source = to_image.ToSource();
+                    using (Bitmap image = new Bitmap(ms))
+                    {
+                        Bitmap to_image = new Bitmap(image.Width, image.Height);
+                        for (int x = 0; x < image.Width; x++)
+                            for (int y = 0; y < image.Height; y++)
+                                to_image.SetPixel(x, y, BlackConvert(image.GetPixel(x, y)));
+                        target.Source = to_image.ToSource();
+                    }
                 }
         }
 

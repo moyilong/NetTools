@@ -11,6 +11,7 @@ using System.Net.NetworkInformation;
 using Phenom.Extension;
 using Phenom.Enums;
 using System.Net;
+using Phenom;
 
 namespace 诊断工具.Methods
 {
@@ -39,14 +40,14 @@ namespace 诊断工具.Methods
             new Tuple<string, Func<DiagonResult, bool>, bool>("本地连接测试",result=>PingTest("127.0.0.1",result),true),
             new Tuple<string, Func<DiagonResult, bool>, bool>("IP检测",result=>
             {
-                if (WebAccess.IPAddresses.Length ==0)
+                if (PhenomCore.IPAddresses.Length ==0)
                 {
                     result.Result = "失败!";
                     return false;
                 }
                 else
                 {
-                    result.Result=WebAccess.IPAddresses[0].ToString();
+                    result.Result=PhenomCore.IPAddresses[0].ToString();
                     return true;
                 }
             },true),

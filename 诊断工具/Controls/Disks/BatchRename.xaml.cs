@@ -16,12 +16,9 @@ namespace 诊断工具.Controls.Disks
     /// <summary>
     /// BatchRename.xaml 的交互逻辑
     /// </summary>
-    public partial class BatchRename : UserControl, AutoLoadTemplate
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Disk,TabName ="批量重命名")]
+    public partial class BatchRename : UserControl
     {
-        public string TabName => "批量重命名";
-
-        public string Catalog => "磁盘";
-
         public BatchRename()
         {
             InitializeComponent();
@@ -34,26 +31,28 @@ namespace 诊断工具.Controls.Disks
 
         private void Add_floder_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
-            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            using (System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
-                return;
-            }
-
-            ObservableCollection<RenameOperator> collect = rename_list.ItemsSource as ObservableCollection<RenameOperator>;
-
-            string path = dialog.SelectedPath;
-            rename_list.ItemsSource = collect;
-            new Action(() =>
-            {
-                foreach (string i in Directory.GetFiles(path))
+                if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 {
-                    Dispatcher.Invoke(() =>
-                    {
-                        collect.Add(new RenameOperator(new FileInfo(Path.Combine(path, i))));
-                    });
+                    return;
                 }
-            }).ThreadStart();
+
+                ObservableCollection<RenameOperator> collect = rename_list.ItemsSource as ObservableCollection<RenameOperator>;
+
+                string path = dialog.SelectedPath;
+                rename_list.ItemsSource = collect;
+                new Action(() =>
+                {
+                    foreach (string i in Directory.GetFiles(path))
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            collect.Add(new RenameOperator(new FileInfo(Path.Combine(path, i))));
+                        });
+                    }
+                }).ThreadStart();
+            }
         }
 
         private void Preview_rename_Click(object sender, RoutedEventArgs e)

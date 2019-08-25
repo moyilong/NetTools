@@ -1,17 +1,31 @@
-﻿namespace 诊断工具
+﻿using System;
+using System.ComponentModel;
+
+namespace 诊断工具
 {
-    public interface AutoLoadTemplate
+    class AutoLoadTemplate : Attribute
     {
-        string TabName { get; }
-        string Catalog { get; }
+        public enum CateLogType
+        {
+            [Description("网络")]
+            Network,
+            [Description("磁盘")]
+            Disk,
+            [Description("图形图像")]
+            Image,
+            [Description("系统")]
+            System
+        }
+     public   string TabName { get; set; }
+        public CateLogType Catalog { get; set; }
     }
 
-    public interface HelpedAutoLoad : AutoLoadTemplate
+    public interface HelpedAutoLoad 
     {
         string HelpDoc { get; }
     }
 
-    public interface WIPTemplate
+    public class WIPTemplate :Attribute
     {
     }
    

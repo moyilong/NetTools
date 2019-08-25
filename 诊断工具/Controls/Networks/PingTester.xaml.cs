@@ -9,7 +9,8 @@ namespace 诊断工具.Controls.Networks
     /// <summary>
     /// PingTester.xaml 的交互逻辑
     /// </summary>
-    public partial class PingTester : UserControl, AutoLoadTemplate
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Network, TabName = "Ping")]
+    public partial class PingTester : UserControl
     {
         public PingTester()
         {
@@ -30,7 +31,7 @@ namespace 诊断工具.Controls.Networks
             Methods.PingTester.Enable = false;
         }
 
-     readonly   private ObservableCollection<Methods.PingTester> tester = new ObservableCollection<Methods.PingTester>();
+        readonly private ObservableCollection<Methods.PingTester> tester = new ObservableCollection<Methods.PingTester>();
 
         private void add_new_domain_Click(object sender, RoutedEventArgs e)
         {

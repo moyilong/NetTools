@@ -18,7 +18,8 @@ namespace 诊断工具.Controls.Disks
     /// <summary>
     /// DiskTest.xaml 的交互逻辑
     /// </summary>
-    public partial class DiskTest : UserControl, AutoLoadTemplate
+    [AutoLoadTemplate( Catalog = AutoLoadTemplate.CateLogType.Disk,TabName ="磁盘测试")]
+    public partial class DiskTest : UserControl
     {
         public DiskTest()
         {

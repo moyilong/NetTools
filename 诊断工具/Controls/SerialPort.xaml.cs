@@ -12,7 +12,8 @@ namespace 诊断工具.Controls
     /// <summary>
     /// SerialPort.xaml 的交互逻辑
     /// </summary>
-    public partial class SerialPort : UserControl, AutoLoadTemplate
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.System,TabName ="串口助手")]
+    public partial class SerialPort : UserControl
     {
         public SerialPort()
         {

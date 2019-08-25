@@ -5,13 +5,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Linq;
 using Phenom.UI;
+using Phenom;
 
 namespace 诊断工具.Controls.Networks
 {
     /// <summary>
     /// IPScanner.xaml 的交互逻辑
     /// </summary>
-    public partial class IPScanner : UserControl, AutoLoadTemplate,HelpedAutoLoad
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Network,TabName ="IP扫描")]
+    public partial class IPScanner : UserControl, HelpedAutoLoad
     {
         public IPScanner()
         {
@@ -39,7 +41,7 @@ namespace 诊断工具.Controls.Networks
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            gateway_area.ItemsSource = Phenom.Network.WebAccess.IPAddresses.Where(self => self.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+            gateway_area.ItemsSource = PhenomCore.IPAddresses.Where(self => self.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
         }
     }
 }

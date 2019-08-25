@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Phenom;
 using Phenom.Extension;
 using Phenom.Network;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace 诊断工具.Controls.Generic
         private void refresh_machine_info_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
-            foreach (System.Net.IPAddress i in WebAccess.IPAddresses)
+            foreach (System.Net.IPAddress i in PhenomCore.IPAddresses)
             {
                 data["本机IP地址"] = i.ToString();
             }
