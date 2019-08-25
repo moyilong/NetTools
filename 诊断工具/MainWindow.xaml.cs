@@ -1,4 +1,5 @@
-﻿using Phenom.Extension;
+﻿using MahApps.Metro.Controls;
+using Phenom.Extension;
 using Phenom.Logger;
 using Phenom.UI;
 using System;
@@ -15,7 +16,7 @@ namespace 诊断工具
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         private readonly Dictionary<CateLogType, TabControl> Binding = new Dictionary<CateLogType, TabControl>();
 
@@ -60,9 +61,9 @@ namespace 诊断工具
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private async void Window_Closing(object sender, CancelEventArgs e)
         {
-            if (!this.Confirm("是否退出?"))
+            if ( !await this.Confirm("是否退出?"))
             {
                 e.Cancel = true;
             }
