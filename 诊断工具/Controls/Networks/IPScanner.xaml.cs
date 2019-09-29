@@ -33,7 +33,7 @@ namespace 诊断工具.Controls.Networks
             }
             else
             {
-                ipscan.ItemsSource = Methods.IPScanner.ScanIP(ip.ToString(), 3000, Application.Current.MainWindow as MainWindow);
+                ipscan.ItemsSource = Methods.IPScanner.ScanIP(ip.ToString(), 3000,this);
             }
         }
 

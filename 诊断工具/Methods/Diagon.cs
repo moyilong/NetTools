@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Windows.Controls;
 
 namespace 诊断工具.Methods
 {
@@ -103,7 +104,7 @@ namespace 诊断工具.Methods
             }
         }
 
-        public static ObservableCollection<DiagonResult> RunResult(MainWindow window, Action OnInit, Action OnExit)
+        public static ObservableCollection<DiagonResult> RunResult(Control window, Action OnInit, Action OnExit)
         {
             ObservableCollection<DiagonResult> ret = new ObservableCollection<DiagonResult>();
             new Action(() =>

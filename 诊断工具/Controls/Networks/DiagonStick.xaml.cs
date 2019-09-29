@@ -23,7 +23,7 @@ namespace 诊断工具.Controls.Networks
 
         private void diagonstick_Click(object sender, RoutedEventArgs e)
         {
-            diagon_result.ItemsSource = Diagon.RunResult(Application.Current.MainWindow as MainWindow,
+            diagon_result.ItemsSource = Diagon.RunResult(this,
                 () => Dispatcher.Invoke(() => diagonstick.IsEnabled = false),
                 () => Dispatcher.Invoke(() => diagonstick.IsEnabled = true)
                 );

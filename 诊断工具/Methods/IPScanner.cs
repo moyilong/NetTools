@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
+using System.Windows.Controls;
 
 namespace 诊断工具.Methods
 {
@@ -19,7 +20,7 @@ namespace 诊断工具.Methods
         public string Status { get; set; } = "等待";
         public double Timeout { get; set; } = 0;
 
-        public static ObservableCollection<IPScanner> ScanIP(string GateWay, double TimeOut, MainWindow parent)
+        public static ObservableCollection<IPScanner> ScanIP(string GateWay, double TimeOut, Control ctl)
         {
             string[] sub = GateWay.Split('.');
             if (sub.Length != 4)
@@ -30,7 +31,7 @@ namespace 诊断工具.Methods
             ObservableCollection<IPScanner> ret = new ObservableCollection<IPScanner>();
             for (int n = 0; n < byte.MaxValue; n++)
             {
-                ret.Add(new IPScanner($"{sub[0]}.{sub[1]}.{sub[2]}.{n}", ret, TimeOut, parent));
+                ret.Add(new IPScanner($"{sub[0]}.{sub[1]}.{sub[2]}.{n}", ret, TimeOut, ctl));
             }
 
             return ret;
@@ -38,9 +39,9 @@ namespace 诊断工具.Methods
 
         private readonly double xot = 3000;
         private readonly ObservableCollection<IPScanner> Parent = null;
-        private readonly MainWindow father = null;
+        private readonly Control father = null;
 
-        public IPScanner(string ip, ObservableCollection<IPScanner> op, double tout, MainWindow fa)
+        public IPScanner(string ip, ObservableCollection<IPScanner> op, double tout, Control fa)
         {
             IP = ip;
             xot = tout;
@@ -51,39 +52,41 @@ namespace 诊断工具.Methods
 
         private void ScanThread()
         {
-            Ping ping = new Ping();
-            Status = "检测中";
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Status"));
-            long TotalTimeout = 0;
-            for (int n = 0; n < 10; n++)
+            using (Ping ping = new Ping())
             {
-                try
+                Status = "检测中";
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Status"));
+                long TotalTimeout = 0;
+                for (int n = 0; n < 10; n++)
                 {
-                    Send++;
-
-                    PingReply replay = ping.Send(IPAddress.Parse(IP), (int)xot);
-                    if (replay.Status == IPStatus.Success)
+                    try
                     {
-                        TotalTimeout += replay.RoundtripTime;
-                        Response++;
+                        Send++;
+
+                        PingReply replay = ping.Send(IPAddress.Parse(IP), (int)xot);
+                        if (replay.Status == IPStatus.Success)
+                        {
+                            TotalTimeout += replay.RoundtripTime;
+                            Response++;
+                        }
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hint"));
                     }
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hint"));
+                    catch
+                    {
+                    }
                 }
-                catch
+                Status = Response == 0 ? "失败!" : "成功";
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Status"));
+                Thread.Sleep(3000);
+                if (Response == 0)
                 {
+                    father.Dispatcher.Invoke(() => Parent.Remove(this));
                 }
-            }
-            Status = Response == 0 ? "失败!" : "成功";
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Status"));
-            Thread.Sleep(3000);
-            if (Response == 0)
-            {
-                father.Dispatcher.Invoke(() => Parent.Remove(this));
-            }
-            else
-            {
-                Timeout = TotalTimeout / Response;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Timeout"));
+                else
+                {
+                    Timeout = TotalTimeout / Response;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Timeout"));
+                }
             }
         }
     }
