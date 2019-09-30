@@ -33,7 +33,8 @@ namespace 诊断工具
             InitializeComponent();
         }
 
-        private readonly Dictionary<ToolStripMenuItem, Form> FormCollection = new Dictionary<ToolStripMenuItem, Form>();
+        ///private readonly Dictionary<ToolStripMenuItem, Form> FormCollection = new Dictionary<ToolStripMenuItem, Form>();
+        private readonly Dictionary<ToolStripMenuItem, Type> FormCollection = new Dictionary<ToolStripMenuItem, Type>();
 
         private readonly Dictionary<CateLogType, ToolStripMenuItem> Catelog = new Dictionary<CateLogType, ToolStripMenuItem>();
 
@@ -41,9 +42,9 @@ namespace 诊断工具
         {
             foreach (Type i in AppDomain.CurrentDomain.ScanType(value => value.GetCustomAttribute<AutoLoadTemplate>() != null, value => true))
             {
-                System.Windows.Controls.UserControl catelog = Activator.CreateInstance(i) as System.Windows.Controls.UserControl;
-                catelog.Margin = new System.Windows.Thickness(0, 0, 0, 0);
-                AutoLoadTemplate template = catelog.GetType().GetCustomAttribute<AutoLoadTemplate>();
+                // System.Windows.Controls.UserControl catelog = Activator.CreateInstance(i) as System.Windows.Controls.UserControl;
+                //  catelog.Margin = new System.Windows.Thickness(0, 0, 0, 0);
+                AutoLoadTemplate template = i.GetCustomAttribute<AutoLoadTemplate>();
                 if (!Catelog.ContainsKey(template.Catalog))
                 {
                     ToolStripMenuItem item = new ToolStripMenuItem
@@ -58,7 +59,7 @@ namespace 诊断工具
                     Text = template.TabName
                 };
                 Catelog[template.Catalog].DropDownItems.Add(menu);
-                Form window = new Form
+                /*Form window = new Form
                 {
                     Text = template.TabName,
                     MdiParent = this,
@@ -70,17 +71,33 @@ namespace 诊断工具
                     Dock = DockStyle.Fill
                 });
                 window.FormClosing += Window_FormClosing;
-                FormCollection[menu] = window;
+                FormCollection[menu] = window;*/
+                FormCollection[menu] = i;
                 menu.Click += Menu_Click;
             }
         }
 
         private void Menu_Click(object sender, EventArgs e)
         {
-            Form form = FormCollection[sender as ToolStripMenuItem];
-            form.Show();
-            form.TopMost = true;
-            form.WindowState = FormWindowState.Maximized;
+            /*  Form form = FormCollection[sender as ToolStripMenuItem];
+              form.Show();
+              form.TopMost = true;
+              form.WindowState = FormWindowState.Maximized;*/
+            Type type = FormCollection[sender as ToolStripMenuItem];
+            AutoLoadTemplate template = type.GetCustomAttribute<AutoLoadTemplate>();
+            Form window = new Form
+            {
+                Text = template.TabName,
+                MdiParent = this,
+            };
+            System.Windows.Controls.UserControl ctl = Activator.CreateInstance(type) as System.Windows.Controls.UserControl;
+            ctl.Margin = new System.Windows.Thickness(0, 0, 0, 0);
+            window.Controls.Add(new ElementHost
+            {
+                Child = ctl,
+                Dock = DockStyle.Fill
+            });
+            window.Show();
         }
 
         private void Window_FormClosing(object sender, FormClosingEventArgs e)
