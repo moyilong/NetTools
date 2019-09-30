@@ -3,4 +3,6 @@
 // Project-level suppressions either have no target or are given
 // a specific target and scoped to a namespace, type, member, etc.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("样式", "IDE1006:命名样式", Justification = "<挂起>")]
+using System.Diagnostics.CodeAnalysis;
+
+[assembly: SuppressMessage("样式", "IDE1006:命名样式", Justification = "<挂起>")]

@@ -4,7 +4,6 @@ using Phenom.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -70,6 +69,7 @@ namespace 诊断工具
                     Child = catelog,
                     Dock = DockStyle.Fill
                 });
+                window.FormClosing += 
                 FormCollection[menu] = window;
                 menu.Click += Menu_Click;
             }
@@ -86,7 +86,7 @@ namespace 诊断工具
         private void Window_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
-            (sender as Form).Visible = false;
+            (sender as Form).Hide();
         }
     }
 }
