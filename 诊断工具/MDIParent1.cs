@@ -69,7 +69,7 @@ namespace 诊断工具
                     Child = catelog,
                     Dock = DockStyle.Fill
                 });
-                window.FormClosing += 
+                window.FormClosing += Window_FormClosing;
                 FormCollection[menu] = window;
                 menu.Click += Menu_Click;
             }

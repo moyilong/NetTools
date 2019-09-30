@@ -26,12 +26,10 @@ namespace 诊断工具.Methods.ImageFormatConvert
             Bitmap map = new Bitmap(int.Parse(array[0]), int.Parse(array[1]));
             for (int y = 0; y < map.Height; y++)
                 for (int x = 0; x < map.Width; x++)
-
                     map.SetPixel(x, y, ColorTranslator.FromHtml(array[map.Width * y + 2 + x]));
             return map;
         }
 
-        override public string ToString()
-              => DisplayName;
+        override public string ToString() => DisplayName;
     }
 }

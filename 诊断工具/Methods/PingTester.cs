@@ -71,7 +71,7 @@ namespace 诊断工具.Methods
             }
         }
 
-        private static System.Timers.Timer timer = new System.Timers.Timer()
+        private static readonly System.Timers.Timer timer = new System.Timers.Timer()
         {
             Interval = 1000,
         };
@@ -92,43 +92,45 @@ namespace 诊断工具.Methods
         {
             RequestCount++;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RequestCount"));
-            Ping ping = new Ping();
-            try
+            using (Ping ping = new Ping())
             {
-                PingReply reply = ping.Send(Domain, 3000);
-                if (reply.Status != IPStatus.Success)
+                try
                 {
+                    PingReply reply = ping.Send(Domain, 3000);
+                    if (reply.Status != IPStatus.Success)
+                    {
+                        FaildCount++;
+                        LastResult = reply.Status.ToString();
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastResult"));
+                    }
+                    else
+                    {
+                        double time = (double)reply.RoundtripTime;
+                        if (time > MaxDelay)
+                        {
+                            MaxDelay = time;
+                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MaxDelay"));
+                        }
+                        if (time < MinDelay)
+                        {
+                            MinDelay = time;
+                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MinDelay"));
+                        }
+                        AvgDelay = AvgDelay * 0.3 + time * 0.7;
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AvgDelay"));
+                        LastDelay = time;
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastDelay"));
+                        LastResult = time.ToString();
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastResult"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LastResult = ex.ToString();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastResult"));
                     FaildCount++;
-                    LastResult = reply.Status.ToString();
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastResult"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FaildCount"));
                 }
-                else
-                {
-                    double time = (double)reply.RoundtripTime;
-                    if (time > MaxDelay)
-                    {
-                        MaxDelay = time;
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MaxDelay"));
-                    }
-                    if (time < MinDelay)
-                    {
-                        MinDelay = time;
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MinDelay"));
-                    }
-                    AvgDelay = AvgDelay * 0.3 + time * 0.7;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AvgDelay"));
-                    LastDelay = time;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastDelay"));
-                    LastResult = time.ToString();
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastResult"));
-                }
-            }
-            catch (Exception ex)
-            {
-                LastResult = ex.ToString();
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastResult"));
-                FaildCount++;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FaildCount"));
             }
         }
 

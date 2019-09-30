@@ -8,6 +8,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace 诊断工具.Methods
 {
@@ -80,13 +81,7 @@ namespace 诊断工具.Methods
 
         private const string node = "Writter";
 
-        public static int BlockSize { get; set; } = 65536;
-
-        private static string ComputeHash(byte[] data)
-        {
-            return BitConverter.ToString(MD5.Create().ComputeHash(data));
-        }
-
+        public static int BlockSize { get; set; } = 512 * 1024; 
         public static void Write(string Path, bool NeedVerify, Stream stream, ProgressProc Progress = null)
         {
             IntPtr handle = CreateFile(Path, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, 0x20000000, IntPtr.Zero);
@@ -95,84 +90,98 @@ namespace 诊断工具.Methods
             {
                 throw new Exception("Open handler faild!");
             }
-
-            Dictionary<long, string> HashTable = new Dictionary<long, string>();
-            using (FileStream xstream = new FileStream(new SafeFileHandle(handle, true), FileAccess.ReadWrite))
+            try
             {
-                if (xstream == null)
-                {
-                    throw new Exception("Open strem faild!");
-                }
+                
 
-                while (!xstream.CanWrite)
+                Dictionary<long, string> HashTable = new Dictionary<long, string>();
+                Task writeTask = null;
+                Task<int> readTask = null;
+                using (FileStream xstream = new FileStream(new SafeFileHandle(handle, true), FileAccess.ReadWrite))
                 {
-                    Thread.Sleep(100);
-                }
-
-                stream.Seek(0, SeekOrigin.Begin);
-                byte[] data = new byte[BlockSize];
-                int size = 0;
-                Progress?.Invoke(stream.Length, 0, 0, "准备", WorkingMode.Writting);
-                int nx = 0;
-                while (true)
-                {
-                    try
+                    if (xstream == null)
                     {
-                        while (!xstream.CanWrite)
-                        {
-                            Thread.Sleep(100);
-                        }
+                        throw new Exception("Open strem faild!");
+                    }
 
-                        for (int n = 0; n < data.Length; n++)
-                        {
-                            data[n] = 0x00;
-                        }
+                    while (!xstream.CanWrite)
+                    {
+                        Thread.Sleep(100);
+                    }
 
-                        size = stream.Read(data, 0, BlockSize);
-                        if (size == 0 || size == -1)
+                    stream.Seek(0, SeekOrigin.Begin);
+                    byte[][] data = new byte[][] {
+                       new byte [BlockSize],
+                        new byte[BlockSize],
+                };
+                    int size = 0;
+                    Progress?.Invoke(stream.Length, 0, 0, "准备", WorkingMode.Writting);
+                    int nx = 0;
+                    int writeId = 0;
+                    while (true)
+                    {
+                        try
                         {
-                            break;
-                        }
+                            Progress?.Invoke(stream.Length, xstream.Position, 0, $"写入 0x{ xstream.Position.ToString("X")}", WorkingMode.Writting);
+                            /*while (!xstream.CanWrite)
+                            {
+                                Thread.Sleep(100);
+                            }*/
+                            /*stream.ReadAsync()
+                            size = stream.Read(data, 0, BlockSize);*/
+                            if (readTask != null)
+                            {
+                                size = readTask.WaitForValue();
+                                if (size == 0 || size == -1)
 
-                        Progress?.Invoke(stream.Length, xstream.Position, 0, null, WorkingMode.Writting);
-                        xstream.Write(data, 0, BlockSize);
-                        HashTable[nx++] = data.Hash<MD5>();
-                        Progress?.Invoke(stream.Length, xstream.Position, 0, null, WorkingMode.Syncing);
-                        xstream.Flush();
-                        if (size != BlockSize)
+                                    break;
+                                writeTask?.Wait();
+                                writeTask = xstream.WriteAsync(data[writeId], 0, BlockSize);
+                                if (NeedVerify)
+                                    HashTable[nx++] = data[writeId].Hash<MD5>();
+                                if (size != BlockSize)
+                                    break;
+                            }
+                            if (writeId == 0)
+                                writeId = 1;
+                            else
+                                writeId = 0;
+                            readTask = stream.ReadAsync(data[writeId], 0, BlockSize);
+                        }
+                        catch (Exception e)
                         {
-                            break;
+                            throw new Exception("写入错误 在" + xstream.Position.ToString("X") + " 区块大小: 0x" + size.ToString("X"), e);
                         }
                     }
-                    catch (Exception e)
+                    node.Log("冲刷缓存");
+                    Progress?.Invoke(0, 0, 0, "写入缓存", WorkingMode.Writting);
+                    xstream.Flush();
+                    if (NeedVerify)
                     {
-                        throw new Exception("写入错误 在" + xstream.Position.ToString("X") + " 区块大小: 0x" + size.ToString("X"), e);
-                    }
-                }
-                node.Log("冲刷缓存");
-                Progress?.Invoke(0, 0, 0, "写入缓存", WorkingMode.Writting);
-                xstream.Flush();
-                if (NeedVerify)
-                {
-                    node.Log("开始校验");
-                    Progress?.Invoke(0, 0, 0, "校验中", WorkingMode.Writting);
-                    xstream.Seek(0, SeekOrigin.Begin);
-                    nx = 0;
-                    for (long n = 0; n < stream.Length; n += BlockSize)
-                    {
-                        size = xstream.Read(data, 0, BlockSize);
-                        Progress?.Invoke(stream.Length, n, 0, "验证 0x" + n.ToString("X"), WorkingMode.Verifying);
-                        string crc = data.Hash<MD5>();
-                        string val = HashTable[nx++];
-                        node.Log("计算值:" + crc + " 参考值:" + val);
-                        if (crc != val)
+                        node.Log("开始校验");
+                        Progress?.Invoke(0, 0, 0, "校验中", WorkingMode.Writting);
+                        xstream.Seek(0, SeekOrigin.Begin);
+                        nx = 0;
+                        for (long n = 0; n < stream.Length; n += BlockSize)
                         {
-                            throw new Exception("校验CRC错误 发生在 0x" + xstream.Position.ToString("X") + Environment.NewLine + "SOURCE=" + val + Environment.NewLine + "READ=" + crc);
+                            size = xstream.Read(data[0], 0, BlockSize);
+                            Progress?.Invoke(stream.Length, n, 0, "验证 0x" + n.ToString("X"), WorkingMode.Verifying);
+                            string crc = data[0].Hash<MD5>();
+                            string val = HashTable[nx++];
+                            node.Log("计算值:" + crc + " 参考值:" + val);
+                            if (crc != val)
+                            {
+                                throw new Exception("校验CRC错误 发生在 0x" + xstream.Position.ToString("X") + Environment.NewLine + "SOURCE=" + val + Environment.NewLine + "READ=" + crc);
+                            }
                         }
                     }
+                    node.Log("关闭文件流");
+                    Progress?.Invoke(stream.Length, xstream.Position, 0, "完成", WorkingMode.Verifying);
                 }
-                node.Log("关闭文件流");
-                Progress?.Invoke(stream.Length, xstream.Position, 0, "完成", WorkingMode.Verifying);
+            }
+            finally
+            {
+                
             }
         }
 
@@ -221,7 +230,7 @@ namespace 诊断工具.Methods
 list disk
 exit
 ");
-                Process cmd = new Process()
+                using (Process cmd = new Process()
                 {
                     StartInfo = new ProcessStartInfo
                     {
@@ -233,34 +242,36 @@ exit
                         FileName = @"Diskpart.exe",
                         Arguments = "-s script.txt"
                     }
-                };
-                cmd.Start();
-                List<DriverInfo> ret = new List<DriverInfo>();
-                cmd.WaitForExit();
-                string data = cmd.StandardOutput.ReadToEnd() + Environment.NewLine + cmd.StandardError.ReadToEnd();
-                foreach (string line in data.Split('\n'))
+                })
                 {
-                    node.Log(line);
-                    if (line.Trim() == string.Empty ||
-                        line.IndexOf("Copyright (C) Microsoft Corporation.") != -1 ||
-                        line.IndexOf("在计算机上") != -1 ||
-                        line.IndexOf("Microsoft DiskPart") != -1 ||
-                        line.IndexOf("----") != -1 ||
-                        line.IndexOf("###") != -1 ||
-                        line.IndexOf("退出") != -1)
+                    cmd.Start();
+                    List<DriverInfo> ret = new List<DriverInfo>();
+                    cmd.WaitForExit();
+                    string data = cmd.StandardOutput.ReadToEnd() + Environment.NewLine + cmd.StandardError.ReadToEnd();
+                    foreach (string line in data.Split('\n'))
                     {
-                        continue;
-                    }
+                        node.Log(line);
+                        if (line.Trim() == string.Empty ||
+                            line.IndexOf("Copyright (C) Microsoft Corporation.") != -1 ||
+                            line.IndexOf("在计算机上") != -1 ||
+                            line.IndexOf("Microsoft DiskPart") != -1 ||
+                            line.IndexOf("----") != -1 ||
+                            line.IndexOf("###") != -1 ||
+                            line.IndexOf("退出") != -1)
+                        {
+                            continue;
+                        }
 
-                    string[] arr = line.Trim().Split(' ');
-                    ret.Add(new DriverInfo()
-                    {
-                        DispName = line,
-                        ID = int.Parse(arr[1]),
-                        PathName = @"\\.\PHYSICALDRIVE" + arr[1]
-                    });
+                        string[] arr = line.Trim().Split(' ');
+                        ret.Add(new DriverInfo()
+                        {
+                            DispName = line,
+                            ID = int.Parse(arr[1]),
+                            PathName = @"\\.\PHYSICALDRIVE" + arr[1]
+                        });
+                    }
+                    return ret.ToArray();
                 }
-                return ret.ToArray();
             }
         }
     }

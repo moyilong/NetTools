@@ -12,6 +12,7 @@ namespace 诊断工具.Controls.Disks
     /// <summary>
     /// ImageWritter.xaml 的交互逻辑
     /// </summary>
+    [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.Disk, TabName = "镜像写入")]
     public partial class ImageWritter : UserControl, HelpedAutoLoad
     {
         public string TabName => "镜像写入";
@@ -67,11 +68,22 @@ namespace 诊断工具.Controls.Disks
                 this.Tips("操作已经取消!");
                 return;
             }
+            string filename = disk_write_image.Text;
             new Action(() =>
             {
-                using (FileStream fs = new FileStream(disk_write_image.Text, FileMode.Open))
+                try
                 {
-                    WriteLib.Write(info.PathName, true, fs, UpdateDiskWriteProgress);
+                    using (FileStream fs = new FileInfo(filename).OpenRead())
+                    {
+                        WriteLib.Write(info.PathName, true, fs, UpdateDiskWriteProgress);
+                    }
+                }catch(Exception ex)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        disk_write_result_run.Text += Environment.NewLine + ex.ToString();
+                        disk_write_result_box.ScrollToEnd();
+                    });
                 }
             }).ThreadStart(() =>
            {
