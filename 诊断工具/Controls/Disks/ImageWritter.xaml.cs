@@ -1,11 +1,13 @@
 ﻿using Microsoft.Win32;
 using Phenom.Extension;
+using Phenom.ImageWriter;
 using Phenom.UI;
 using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using 诊断工具.Methods;
+using static Phenom.ImageWriter.DriverInfo;
 
 namespace 诊断工具.Controls.Disks
 {
@@ -28,7 +30,7 @@ namespace 诊断工具.Controls.Disks
 
         private void disk_write_refresh_Click(object sender, RoutedEventArgs e)
         {
-            disk_write_disk.ItemsSource = WriteLib.DiskList;
+            disk_write_disk.ItemsSource = DriverInfo.CurrentDiskInfo;
         }
 
         private void disk_write_browse_img_Click(object sender, RoutedEventArgs e)
@@ -41,9 +43,7 @@ namespace 诊断工具.Controls.Disks
                 Multiselect = false
             };
             if ((bool)dialog.ShowDialog())
-            {
                 disk_write_image.Text = dialog.FileName;
-            }
         }
 
         private void disk_wrte_Click(object sender, RoutedEventArgs e)
@@ -75,7 +75,7 @@ namespace 诊断工具.Controls.Disks
                 {
                     using (FileStream fs = new FileInfo(filename).OpenRead())
                     {
-                        WriteLib.Write(info.PathName, true, fs, UpdateDiskWriteProgress);
+                        info.WriteImageToDisk(fs, UpdateDiskWriteProgress, true);
                     }
                 }catch(Exception ex)
                 {
