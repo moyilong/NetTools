@@ -163,6 +163,9 @@
     <Compile Include="MDIParent1.Designer.cs">
       <DependentUpon>MDIParent1.cs</DependentUpon>
     </Compile>
+    <Compile Include="MDIWPF.xaml.cs">
+      <DependentUpon>MDIWPF.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Methods\ImageFormatConvert\IFormatConverter.cs" />
     <Compile Include="Methods\ImageFormatConvert\PixelFormater.cs" />
     <Compile Include="PaggedItem.cs" />
@@ -236,6 +239,10 @@
     <Compile Include="Methods\DNSReslove.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Methods\IPScanner.cs" />
+    <Page Include="MDIWPF.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ScreenTest.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using static 诊断工具.AutoLoadTemplate;
@@ -13,6 +14,8 @@ namespace 诊断工具
 {
     public partial class MDIParent1 : Form
     {
+        [DllImport("user32.dll", EntryPoint = "SetParent")]
+        public extern static IntPtr SetParent(IntPtr childPtr, IntPtr parentPtr);
         [STAThread]
         private static void Main()
         {
@@ -42,8 +45,6 @@ namespace 诊断工具
         {
             foreach (Type i in AppDomain.CurrentDomain.ScanType(value => value.GetCustomAttribute<AutoLoadTemplate>() != null, value => true))
             {
-                // System.Windows.Controls.UserControl catelog = Activator.CreateInstance(i) as System.Windows.Controls.UserControl;
-                //  catelog.Margin = new System.Windows.Thickness(0, 0, 0, 0);
                 AutoLoadTemplate template = i.GetCustomAttribute<AutoLoadTemplate>();
                 if (!Catelog.ContainsKey(template.Catalog))
                 {
@@ -59,19 +60,6 @@ namespace 诊断工具
                     Text = template.TabName
                 };
                 Catelog[template.Catalog].DropDownItems.Add(menu);
-                /*Form window = new Form
-                {
-                    Text = template.TabName,
-                    MdiParent = this,
-                    WindowState = FormWindowState.Maximized
-                };
-                window.Controls.Add(new ElementHost
-                {
-                    Child = catelog,
-                    Dock = DockStyle.Fill
-                });
-                window.FormClosing += Window_FormClosing;
-                FormCollection[menu] = window;*/
                 FormCollection[menu] = i;
                 menu.Click += Menu_Click;
             }
@@ -79,23 +67,20 @@ namespace 诊断工具
 
         private void Menu_Click(object sender, EventArgs e)
         {
-            /*  Form form = FormCollection[sender as ToolStripMenuItem];
-              form.Show();
-              form.TopMost = true;
-              form.WindowState = FormWindowState.Maximized;*/
             Type type = FormCollection[sender as ToolStripMenuItem];
             AutoLoadTemplate template = type.GetCustomAttribute<AutoLoadTemplate>();
             Form window = new Form
             {
                 Text = template.TabName,
                 MdiParent = this,
+                WindowState = FormWindowState.Maximized
             };
             System.Windows.Controls.UserControl ctl = Activator.CreateInstance(type) as System.Windows.Controls.UserControl;
             ctl.Margin = new System.Windows.Thickness(0, 0, 0, 0);
             window.Controls.Add(new ElementHost
             {
                 Child = ctl,
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
             });
             window.Show();
         }
