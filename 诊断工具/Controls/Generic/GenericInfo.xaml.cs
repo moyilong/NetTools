@@ -47,5 +47,10 @@ namespace 诊断工具.Controls.Generic
 
             machin_info.ItemsSource = data;
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            refresh_machine_info_Click(null, null);
+        }
     }
 }

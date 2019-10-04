@@ -35,6 +35,7 @@ namespace 诊断工具.Controls.Disks
 
         private void PerformanceTest(DriveInfo info)
         {
+            
         }
 
         private static void HalfRandom(byte[] data)
@@ -265,6 +266,11 @@ namespace 诊断工具.Controls.Disks
                 }
                 fs.Close();
             });
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            disk_write_test_disk_select_refresh_Click(sender, e);
         }
     }
 }

@@ -19,5 +19,10 @@ namespace 诊断工具.Controls.Disks
         {
             disk_info.ItemsSource = DriveInfo.GetDrives();
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            refresh_disk_info_Click(sender, e);
+        }
     }
 }

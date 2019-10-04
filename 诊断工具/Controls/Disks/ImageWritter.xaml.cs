@@ -123,5 +123,10 @@ namespace 诊断工具.Controls.Disks
                 }
             });
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            disk_write_refresh_Click(sender, e);
+        }
     }
 }

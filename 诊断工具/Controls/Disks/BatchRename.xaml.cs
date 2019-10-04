@@ -68,5 +68,10 @@ namespace 诊断工具.Controls.Disks
             }
             RenameOperator.UpdateRegexArray(regex.Text.Trim(), input_regex.Text.Trim(), (rename_list.ItemsSource as ObservableCollection<RenameOperator>).ToArray());
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

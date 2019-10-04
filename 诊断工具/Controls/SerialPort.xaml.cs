@@ -183,5 +183,10 @@ namespace 诊断工具.Controls
         {
             SendData(true);
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            serial_port_assistant_refresh_port_Click(sender, e);
+        }
     }
 }
