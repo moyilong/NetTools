@@ -1,20 +1,9 @@
 ﻿using Phenom.UI;
 using Phenom.UI.Controls;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace 诊断工具.Controls.Generic
 {
@@ -24,7 +13,7 @@ namespace 诊断工具.Controls.Generic
     [AutoLoadTemplate(Catalog = AutoLoadTemplate.CateLogType.System, TabName = "CAPBios分离")]
     public partial class CAPBiosSpliter : UserControl
     {
-        static readonly int[] biosLength =
+        private static readonly int[] biosLength =
       {
             1024*1024,
             2048*1024,
@@ -33,13 +22,14 @@ namespace 诊断工具.Controls.Generic
             16384*1024,
             32768*1024,
         };
+
         public CAPBiosSpliter()
         {
             InitializeComponent();
         }
 
-        byte[] CAPData = null;
-        byte[] RAWData = null;
+        private byte[] CAPData = null;
+        private byte[] RAWData = null;
 
         private void select_file_OnFileSelected(object sender, SelectFileDialog.SelectFileEventArgs e)
         {
@@ -84,7 +74,6 @@ namespace 诊断工具.Controls.Generic
             {
                 this.Error("没有有效的数据");
             }
-
         }
     }
 }

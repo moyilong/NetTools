@@ -6,7 +6,6 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using 诊断工具.Methods;
 using static Phenom.ImageWriter.DriverInfo;
 
 namespace 诊断工具.Controls.Disks
@@ -77,7 +76,8 @@ namespace 诊断工具.Controls.Disks
                     {
                         info.WriteImageToDisk(fs, UpdateDiskWriteProgress, true);
                     }
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Dispatcher.Invoke(() =>
                     {

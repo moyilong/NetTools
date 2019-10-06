@@ -35,7 +35,6 @@ namespace 诊断工具.Controls.Disks
 
         private void PerformanceTest(DriveInfo info)
         {
-            
         }
 
         private static void HalfRandom(byte[] data)

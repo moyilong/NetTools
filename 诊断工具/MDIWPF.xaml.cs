@@ -16,10 +16,12 @@ namespace 诊断工具
     /// </summary>
     public partial class MDIWPF : Window
     {
-        readonly Dictionary<CateLogType, MenuItem> MenuList = new Dictionary<CateLogType, MenuItem>();
-        readonly Dictionary<MenuItem, Type> FormType = new Dictionary<MenuItem, Type>();
+        private readonly Dictionary<CateLogType, MenuItem> MenuList = new Dictionary<CateLogType, MenuItem>();
+        private readonly Dictionary<MenuItem, Type> FormType = new Dictionary<MenuItem, Type>();
+
         [DllImport("user32.dll", EntryPoint = "SetParent")]
         public extern static IntPtr SetParent(IntPtr childPtr, IntPtr parentPtr);
+
         public MDIWPF()
         {
             InitializeComponent();
@@ -43,7 +45,9 @@ namespace 诊断工具
             foreach (MenuItem i in MenuList.Values)
                 main_menu.Items.Add(i);
         }
+
         WindowInteropHelper selfInterop => new WindowInteropHelper(this);
+
         private void Item_Click(object sender, RoutedEventArgs e)
         {
             Type type = FormType[sender as MenuItem];

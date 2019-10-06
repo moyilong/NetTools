@@ -8,7 +8,6 @@
         Title="MDIWPF" Height="450" Width="800">
     <DockPanel>
         <Menu Name="main_menu" DockPanel.Dock="Top">
-
         </Menu>
     </DockPanel>
 </Window>

@@ -16,6 +16,7 @@ namespace 诊断工具
     {
         [DllImport("user32.dll", EntryPoint = "SetParent")]
         public extern static IntPtr SetParent(IntPtr childPtr, IntPtr parentPtr);
+
         [STAThread]
         private static void Main()
         {
