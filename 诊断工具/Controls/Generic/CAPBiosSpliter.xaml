@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="诊断工具.Controls.Generic.CAPBiosSpliter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:诊断工具.Controls.Generic"
+             xmlns:controls="clr-namespace:Phenom.UI.Controls;assembly=Phenom.UI"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Content="bios文件" HorizontalContentAlignment="Right"></Label>
+            <TextBox Name="cap_file" Grid.Column="1"></TextBox>
+            <controls:SelectFileDialog Name="select_file" 
+                                           OnFileSelected="select_file_OnFileSelected"
+                                           TypeDefine="OpenFileDialog" 
+                                           Content="浏览文件" 
+                                           Grid.Column="2"
+                                           CheckFileExist="True"
+                                           CheckPathExist="True"                                           >
+                <controls:SelectFileDialog.FilterType>
+                    <system:String x:Key="CapBios">*.cap</system:String>
+                </controls:SelectFileDialog.FilterType>
+            </controls:SelectFileDialog>
+            <controls:SelectFileDialog Grid.Column="3" Name="save_dialog"
+                                       TypeDefine="SaveFileDialog"
+                                       Content="保存原始文件"
+                                       OnFileSelected="save_dialog_OnFileSelected"
+                                       ></controls:SelectFileDialog>
+        </Grid>
+        <RichTextBox Name="message" IsReadOnly="True" Grid.Row="1">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Name="mesg"></Run>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+    </Grid>
+</UserControl>
